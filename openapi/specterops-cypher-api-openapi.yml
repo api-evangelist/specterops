@@ -1,0 +1,1031 @@
+openapi: 3.0.3
+info:
+  title: BloodHound AD Base Entities Cypher API
+  contact:
+    name: BloodHound Enterprise Support
+    url: https://bloodhound.specterops.io/
+    email: support@specterops.io
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+  description: "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n"
+servers:
+- url: /
+  description: This is the base path for all endpoints, relative to the domain where the API is being hosted.
+security:
+- JWTBearerToken: []
+- SignedRequest: []
+  RequestDate: []
+  HMACSignature: []
+tags:
+- name: Cypher
+paths:
+  /api/v2/saved-queries:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: ListSavedQueries
+      summary: List saved queries
+      description: Get all saved queries for the current user
+      tags:
+      - Cypher
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - name: sort_by
+        description: Sortable columns are user_id, name, query, id, created_at, updated_at, deleted_at.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: query
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: user_id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: scope
+        in: query
+        schema:
+          type: string
+          enum:
+          - all
+          - owned
+          - shared
+          - public
+          default: owned
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.pagination'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        allOf:
+                        - type: object
+                          properties:
+                            scope:
+                              type: string
+                        - $ref: '#/components/schemas/model.saved-query'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      operationId: CreateSavedQuery
+      summary: Create a saved query
+      description: Create a new saved query
+      tags:
+      - Cypher
+      requestBody:
+        description: The request body for creating a saved query
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/model.saved-query'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.saved-query'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/saved-queries/{saved_query_id}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: saved_query_id
+      description: ID of the saved query
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetSavedQuery
+      summary: Return a saved query
+      description: Returns an existing saved query by ID
+      tags:
+      - Cypher
+      parameters:
+      - name: saved_query_id
+        description: ID of the saved query
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.saved-query'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: DeleteSavedQuery
+      summary: Delete a saved query
+      description: Delete an existing saved query by ID
+      tags:
+      - Cypher
+      parameters:
+      - name: saved_query_id
+        description: ID of the saved query
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '204':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    put:
+      operationId: UpdateSavedQuery
+      summary: Update a saved query
+      description: Update an existing saved query by ID
+      tags:
+      - Cypher
+      parameters:
+      - name: saved_query_id
+        description: ID of the saved query
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: The request body for updating a saved query
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/model.saved-query'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.saved-query'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/saved-queries/{saved_query_id}/permissions:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: saved_query_id
+      description: ID of the saved query
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetSavedQueryPermissions
+      summary: Retrieves saved query permissions for provided query id
+      description: Retrieves saved query permissions for provided query id
+      tags:
+      - Cypher
+      parameters:
+      - name: saved_query_id
+        description: ID of the saved query
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.saved-queries-permissions.response'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: DeleteSavedQueryPermissions
+      summary: Revokes permission of a saved query from users
+      description: Revokes permission of a saved query from a given set of users
+      tags:
+      - Cypher
+      parameters:
+      - name: saved_query_id
+        description: ID of the saved query
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: The request body for revoking permissions of a saved query from users
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_ids:
+                  type: array
+                  description: A list of user ids that will have their permission revoked from the given saved query
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    put:
+      operationId: ShareSavedQuery
+      summary: Share a saved query or set it to public
+      description: Shares an existing saved query or makes it public
+      tags:
+      - Cypher
+      parameters:
+      - name: saved_query_id
+        description: ID of the saved query
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: The request body for sharing a saved query or making it public
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                public:
+                  type: boolean
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/model.saved-queries-permissions'
+        '204':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/saved-queries/{saved_query_id}/export:
+    parameters:
+    - name: saved_query_id
+      description: ID of the saved query
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: ExportSavedQuery
+      summary: Export a saved query
+      description: Export an existing saved query by ID
+      tags:
+      - Cypher
+      responses:
+        '200':
+          description: "**OK**\nThis response will contain binary content.\n\nThe response ZIP file will contain JSON files using their query name as the file name.\nThe underlying JSON file is expected to have the following structure:\n```json\n{\n \"name\": \"Return_Nodes\",\n \"query\": \"MATCH (n) RETURN n\",\n \"description\": \"Returns all nodes in a given graph\"\n}\n```\n"
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+              example: '[this request has a binary response]'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/saved-queries/import:
+    post:
+      operationId: ImportSavedQueries
+      summary: Import one or more cypher queries.
+      description: "Import one or more cypher queries.\n\nThe request body should be a json file containing a single query or a Zip consisting of multiple JSON files each containing a single query.\n\nThe underlying JSON file(s) is expected to have the following structure:\n```json\n{\n \"name\": \"Return_Nodes\",\n \"query\": \"MATCH (n) RETURN n\",\n \"description\": \"Returns all nodes in a given graph\"\n}\n```\n"
+      tags:
+      - Cypher
+      requestBody:
+        description: Request body should be a JSON or Zip file.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              format: binary
+          application/zip:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '415':
+          $ref: '#/components/responses/unsupported-media-type'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/saved-queries/export:
+    parameters:
+    - name: scope
+      description: Scope of saved queries, only the first scope parameter is used.
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+        - all
+        - public
+        - shared
+        - owned
+    get:
+      operationId: ExportSavedQueries
+      summary: Export one or more saved queries
+      description: Export existing saved queries using the scope parameter.
+      tags:
+      - Cypher
+      responses:
+        '200':
+          description: "**OK**\nThis response will contain binary content.\n\nThe response ZIP file will contain JSON files using their query name as the file name.\nThe underlying JSON file is expected to have the following structure:\n```json\n{\n \"name\": \"Return_Nodes\",\n \"query\": \"MATCH (n) RETURN n\",\n \"description\": \"Returns all nodes in a given graph\"\n}\n```\n"
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+              example: '[this request has a binary response]'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/graphs/cypher:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    post:
+      operationId: RunCypherQuery
+      summary: Run a cypher query
+      description: Runs a manual cypher query directly against the database.
+      tags:
+      - Cypher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                include_properties:
+                  type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.unified-graph.graph.w.property.keys'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+components:
+  responses:
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    no-content:
+      description: '**No Content**
+
+        This response will contain no response body.
+
+        '
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: '[this request has no response data]'
+    unsupported-media-type:
+      description: '**Unsupported Media Type**
+
+        Content-Type does not match expected formats.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 415
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: 'invalid content-type: [application/incorrect]; Content type must be application/json or application/zip'
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+  schemas:
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    model.saved-queries-permissions.response:
+      type: object
+      properties:
+        shared_to_user_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.components.uuid'
+        query_id:
+          type: integer
+          format: int64
+        public:
+          type: boolean
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    model.components.int64.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    model.saved-queries-permissions:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          shared_to_user_id:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/null.uuid'
+          query_id:
+            type: integer
+            format: int64
+          public:
+            type: boolean
+    model.components.uuid:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    model.saved-query:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          user_id:
+            type: string
+            format: uuid
+            readOnly: true
+          name:
+            type: string
+          query:
+            type: string
+          description:
+            type: string
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    null.uuid:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        valid:
+          description: Valid is true if `uuid` is not `null`.
+          type: boolean
+    model.unified-graph.edge:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        label:
+          type: string
+        kind:
+          type: string
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+    model.unified-graph.node:
+      type: object
+      properties:
+        label:
+          type: string
+        kind:
+          type: string
+        kinds:
+          type: array
+          items:
+            type: string
+        objectId:
+          type: string
+        isTierZero:
+          type: boolean
+        isOwnedObject:
+          type: boolean
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    model.unified-graph.graph.w.property.keys:
+      type: object
+      properties:
+        node_keys:
+          type: array
+          items:
+            type: string
+        edge_keys:
+          type: array
+          items:
+            type: string
+        nodes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/model.unified-graph.node'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.unified-graph.edge'
+        literals:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              value:
+                type: object
+                nullable: true
+                anyOf:
+                - type: string
+                - type: number
+                - type: boolean
+                - type: array
+                - type: object
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+    query.skip:
+      name: skip
+      description: This query parameter is used for determining the number of objects to skip in pagination.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.skip'
+    query.limit:
+      name: limit
+      description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.limit'
+  securitySchemes:
+    JWTBearerToken:
+      description: '`Authorization: Bearer $JWT_TOKEN`
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    SignedRequest:
+      description: '`Authorization: bhesignature $TOKEN_ID`
+
+        '
+      type: apiKey
+      name: Authorization
+      in: header
+    RequestDate:
+      description: '`RequestDate: $RFC3339_DATETIME`
+
+        '
+      type: apiKey
+      name: RequestDate
+      in: header
+    HMACSignature:
+      description: '`Signature: $BASE64ENCODED_HMAC_SIGNATURE`
+
+        '
+      type: apiKey
+      name: Signature
+      in: header
+x-tagGroups:
+- name: Community & Enterprise
+  tags:
+  - Auth
+  - Roles
+  - Permissions
+  - API Tokens
+  - BloodHound Users
+  - Collectors
+  - Collection Uploads
+  - Custom Node Management
+  - API Info
+  - Search
+  - Audit
+  - Config
+  - Asset Isolation
+  - Graph
+  - Azure Entities
+  - AD Base Entities
+  - Computers
+  - Containers
+  - Domains
+  - GPOs
+  - AIA CAs
+  - Root CAs
+  - Enterprise CAs
+  - NT Auth Stores
+  - Cert Templates
+  - OUs
+  - AD Users
+  - Groups
+  - Data Quality
+  - Datapipe
+  - Cypher
+  - OpenGraph (Experimental)
+- name: Enterprise Only
+  tags:
+  - EULA
+  - BHE Users
+  - Analysis
+  - Client Ingest
+  - Clients
+  - Jobs
+  - Tasks
+  - Events (Schedules)
+  - Attack Paths
+  - Risk Posture
+  - Meta Entities
+  - Alerts

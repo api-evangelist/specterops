@@ -1,0 +1,565 @@
+openapi: 3.0.3
+info:
+  title: BloodHound AD Base Entities Risk Posture API
+  contact:
+    name: BloodHound Enterprise Support
+    url: https://bloodhound.specterops.io/
+    email: support@specterops.io
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+  description: "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n"
+servers:
+- url: /
+  description: This is the base path for all endpoints, relative to the domain where the API is being hosted.
+security:
+- JWTBearerToken: []
+- SignedRequest: []
+  RequestDate: []
+  HMACSignature: []
+tags:
+- name: Risk Posture
+paths:
+  /api/v2/posture-stats:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: GetPostureStats
+      summary: Get Posture Statistics
+      description: Gets the history of database stats saved in the database
+      tags:
+      - Risk Posture
+      parameters:
+      - name: sort_by
+        description: Sortable columns are `domain_sid`, `exposure_index`, `tier_zero_count`, `critical_risk_count`, `id`, `created_at`, `updated_at`, `deleted_at`.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: from
+        deprecated: true
+        x-go-name: fromDeprecated
+        description: Lower bound for created_at; to return posture stats starting at a specific date/time. This filter has been deprecated, please use created_at instead.
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        deprecated: true
+        x-go-name: toDeprecated
+        description: Upper bound for created_at; to return posture stats upto a specific date/time. This filter has been deprecated, please use created_at instead.
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: domain_sid
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: exposure_index
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: asset_group_tag_id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: tier_zero_count
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: critical_risk_count
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: created_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: updated_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: deleted_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.pagination'
+                - $ref: '#/components/schemas/api.response.time-window'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/model.risk-posture-stat'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/posture-history/{data_type}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: data_type
+      description: The type of posture data to return
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/enum.posture-history-type'
+    - $ref: '#/components/parameters/query.asset-group-tag-id'
+    get:
+      operationId: PostureHistoryForEnvironments
+      summary: Get Posture History
+      description: Gets posture data count changes over a time period
+      tags:
+      - Risk Posture
+      parameters:
+      - name: environments
+        description: Environment IDs
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: start
+        description: Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        description: Ending datetime of range (exclusive) in RFC-3339 format; Defaults to current datetime
+        in: query
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.time-window'
+                - type: object
+                  properties:
+                    environments:
+                      type: array
+                      items:
+                        type: string
+                    data_type:
+                      $ref: '#/components/schemas/enum.posture-history-type'
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          date:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          value:
+                            type: number
+                            format: double
+                            readOnly: true
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+components:
+  responses:
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+  schemas:
+    model.risk-posture-stat:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          domain_sid:
+            type: string
+          exposure_index:
+            type: number
+            format: double
+          tier_zero_count:
+            type: integer
+            format: int64
+          critical_risk_count:
+            type: integer
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    api.params.predicate.filter.time:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
+      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
+
+        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    api.params.predicate.filter.integer:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?-?[0-9]+$
+      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    enum.posture-history-type:
+      type: string
+      description: This enum describes the valid data types for posture history results.
+      enum:
+      - findings
+      - exposure
+      - assets
+      - session-completeness
+      - group-completeness
+      - attack-paths
+      - archived-findings
+    model.components.int64.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    api.response.time-window:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp to describe the beginning of a time range
+        end:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp to describe the end of a time range
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+    query.asset-group-tag-id:
+      name: asset_group_tag_id
+      description: The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used.
+      in: query
+      schema:
+        type: integer
+  securitySchemes:
+    JWTBearerToken:
+      description: '`Authorization: Bearer $JWT_TOKEN`
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    SignedRequest:
+      description: '`Authorization: bhesignature $TOKEN_ID`
+
+        '
+      type: apiKey
+      name: Authorization
+      in: header
+    RequestDate:
+      description: '`RequestDate: $RFC3339_DATETIME`
+
+        '
+      type: apiKey
+      name: RequestDate
+      in: header
+    HMACSignature:
+      description: '`Signature: $BASE64ENCODED_HMAC_SIGNATURE`
+
+        '
+      type: apiKey
+      name: Signature
+      in: header
+x-tagGroups:
+- name: Community & Enterprise
+  tags:
+  - Auth
+  - Roles
+  - Permissions
+  - API Tokens
+  - BloodHound Users
+  - Collectors
+  - Collection Uploads
+  - Custom Node Management
+  - API Info
+  - Search
+  - Audit
+  - Config
+  - Asset Isolation
+  - Graph
+  - Azure Entities
+  - AD Base Entities
+  - Computers
+  - Containers
+  - Domains
+  - GPOs
+  - AIA CAs
+  - Root CAs
+  - Enterprise CAs
+  - NT Auth Stores
+  - Cert Templates
+  - OUs
+  - AD Users
+  - Groups
+  - Data Quality
+  - Datapipe
+  - Cypher
+  - OpenGraph (Experimental)
+- name: Enterprise Only
+  tags:
+  - EULA
+  - BHE Users
+  - Analysis
+  - Client Ingest
+  - Clients
+  - Jobs
+  - Tasks
+  - Events (Schedules)
+  - Attack Paths
+  - Risk Posture
+  - Meta Entities
+  - Alerts

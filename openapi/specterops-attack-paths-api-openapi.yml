@@ -1,0 +1,1676 @@
+openapi: 3.0.3
+info:
+  title: BloodHound AD Base Entities Attack Paths API
+  contact:
+    name: BloodHound Enterprise Support
+    url: https://bloodhound.specterops.io/
+    email: support@specterops.io
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+  description: "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n"
+servers:
+- url: /
+  description: This is the base path for all endpoints, relative to the domain where the API is being hosted.
+security:
+- JWTBearerToken: []
+- SignedRequest: []
+  RequestDate: []
+  HMACSignature: []
+tags:
+- name: Attack Paths
+paths:
+  /api/v2/domains/{domain_id}/attack-path-findings:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: domain_id
+      description: Domain ID
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: ExportAttackPathFindings
+      summary: Export attack path findings
+      description: Export the finding table for a given attack path
+      deprecated: true
+      tags:
+      - Attack Paths
+      parameters:
+      - name: finding
+        description: Finding Type
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: filterAccepted
+        description: Risk acceptance filter
+        in: query
+        schema:
+          $ref: '#/components/schemas/enum.risk-acceptance'
+      - name: sort_by
+        description: Sort by column. The only sortable column is `finding`.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      responses:
+        '200':
+          $ref: '#/components/responses/csv-response'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/attack-paths/finding-trends:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: FindingTrendsForEnvironment
+      summary: List finding trends
+      description: Lists findings and their changes in between two dates for an environment
+      tags:
+      - Attack Paths
+      parameters:
+      - name: environments
+        description: Environment IDs
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: start
+        description: Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        description: Ending datetime of range (exclusive) in RFC-3339 format; Defaults to current datetime
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - $ref: '#/components/parameters/query.asset-group-tag-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.time-window'
+                - type: object
+                  properties:
+                    environments:
+                      type: array
+                      items:
+                        type: string
+                    data:
+                      type: object
+                      properties:
+                        findings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              environment_ids:
+                                type: array
+                                items:
+                                  type: string
+                              finding:
+                                type: string
+                              display_title:
+                                type: string
+                              display_type:
+                                type: string
+                              composite_risk:
+                                type: number
+                                format: double
+                              finding_count_start:
+                                type: integer
+                              finding_count_end:
+                                type: integer
+                              finding_count_increase:
+                                type: integer
+                              finding_count_decrease:
+                                type: integer
+                              impact_count:
+                                type: integer
+                                nullable: true
+                              exposure_count:
+                                type: integer
+                                nullable: true
+                              archived_count:
+                                type: integer
+                                description: 'Total number of findings of this type that were
+
+                                  archived (deleted during analysis reconciliation)
+
+                                  within the requested time window. Summed across
+
+                                  all snapshots in the window.
+
+                                  '
+                        total_finding_count_start:
+                          type: integer
+                        total_finding_count_end:
+                          type: integer
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/attack-path-types:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: ListAttackPathTypes
+      summary: List all attack path types
+      description: Lists all possible attack path types
+      tags:
+      - Attack Paths
+      parameters:
+      - name: sort_by
+        description: Sort by column. The only sortable column is `finding`.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: finding
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/attack-paths:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    put:
+      operationId: StartAnalysisBhe
+      summary: Start analysis
+      description: Starts generating attack paths
+      tags:
+      - Attack Paths
+      responses:
+        '202':
+          $ref: '#/components/responses/no-content'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/attack-paths/details:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: GetAllAttackPathFindings
+      summary: Get all attack path findings
+      description: Fetches all attack path findings and their associated details, including documentation.
+      tags:
+      - Attack Paths
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.response.all-findings'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/attack-paths/findings:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: ListAttackPathFindings
+      summary: List attack path findings
+      description: 'Returns a unified, paginated list of attack path findings. Defaults to active findings of both relationship and list types unless filtered otherwise.
+
+        '
+      tags:
+      - Attack Paths
+      parameters:
+      - name: sort_by
+        description: 'Sortable columns are `severity`, `finding_type`, `finding`, `title`, `platform`, `environment_id`, `environment_name`,
+
+          `zone_id`, `zone_name`, `source_principal_id`, `source_principal_kind`, `source_principal_name`, `target_principal_id`, `target_principal_kind`, `target_principal_name`, `status`, `first_seen`, `last_seen`.
+
+          '
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: severity
+        description: Filter by severity level.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: finding_type
+        description: Filter by finding type. When not provided, both types are returned.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: finding
+        description: Filter by finding name.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: title
+        description: Filter by human-readable finding title.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: platform
+        description: Filter by platform.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: environment_id
+        description: 'Filter by one or more environment identifiers. Repeat the parameter to include multiple environments — results are the union of all specified values.
+
+          '
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: environment_name
+        description: Filter by environment display name.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: asset_group_tag_id
+        description: 'Filter by one or more asset group tag identifiers. Repeat the parameter to include multiple asset group tags — results are the union of all specified values.
+
+          Cannot be combined with the `zone_id` filter.
+
+          '
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: zone_id
+        description: Filter by a single zone identifier. Cannot be combined with `asset_group_tag_id`.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: zone_name
+        description: Filter by zone name (e.g. "Tier Zero").
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: source_principal_id
+        description: Filter by source principal identifier.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: source_principal_kind
+        description: Filter by source principal kind.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: source_principal_name
+        description: Filter by source principal display name.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: target_principal_id
+        description: Filter by target principal identifier.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: target_principal_kind
+        description: Filter by target principal kind.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: target_principal_name
+        description: Filter by target principal display name.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: status
+        description: Filter by finding status.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: first_seen
+        description: Filter by first seen timestamp.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: last_seen
+        description: Filter by last seen timestamp.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+              examples:
+                Unified CSV export:
+                  value: 'Severity,Finding,Title,FindingType,Platform,EnvironmentID,EnvironmentName,ZoneID,ZoneName,SourcePrincipalID,SourcePrincipalKind,SourcePrincipalName,TargetPrincipalID,TargetPrincipalKind,TargetPrincipalName,Status,FirstSeen,LastSeen
+
+                    critical,T0GenericWrite,GenericWrite Privileges on Tier Zero Objects,relationship,Active Directory,S-1-5-21-1974516972-3116780949-2584384717,CORP1.LAB.HOME-LABS.LOL,1,Tier Zero,RPATTON@CORP1.LAB.HOME-LABS.LOL,User,Robert Patton,ADMIN@CORP1.LAB.HOME-LABS.LOL,User,Domain Admin,active,2026-04-11T00:30:18Z,2026-04-14T16:57:35Z
+
+                    high,Kerberoasting,Kerberoastable User Accounts,list,Active Directory,S-1-5-21-1974516972-3116780949-2584384717,CORP1.LAB.HOME-LABS.LOL,1,Tier Zero,,,, PSX_D_BA@CORP1.LAB.HOME-LABS.LOL,User,Backup Admin,accepted,2026-04-11T00:30:18Z,2026-04-14T16:57:35Z
+
+                    '
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.pagination'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          severity:
+                            type: string
+                            description: Severity level.
+                            enum:
+                            - critical
+                            - high
+                            - moderate
+                            - low
+                          finding_type:
+                            type: string
+                            description: The type of finding.
+                            enum:
+                            - relationship
+                            - list
+                          finding:
+                            type: string
+                            description: Finding name.
+                          title:
+                            type: string
+                            description: Human-readable finding title. May vary based on the zone context (e.g., "Tier Zero" vs "Privilege Zone" variants).
+                          platform:
+                            type: string
+                            description: Platform the finding belongs to.
+                          environment_id:
+                            type: string
+                            description: Environment identifier.
+                          environment_name:
+                            type: string
+                            description: Human-readable environment display name resolved from the graph. Falls back to environment_id when unavailable.
+                          zone_id:
+                            type: integer
+                            description: Zone identifier (asset group tag id).
+                          zone_name:
+                            type: string
+                            description: Human-readable zone name. Empty when the finding is not tied to a named zone.
+                          source_principal_id:
+                            type: string
+                            description: Source principal identifier. Omitted for list findings.
+                          source_principal_kind:
+                            type: string
+                            description: Source principal kind. Omitted for list findings.
+                          source_principal_name:
+                            type: string
+                            description: Source principal display name resolved from principal properties. Empty when unavailable or for list findings.
+                          target_principal_id:
+                            type: string
+                            description: Target principal identifier.
+                          target_principal_kind:
+                            type: string
+                            description: Target principal kind.
+                          target_principal_name:
+                            type: string
+                            description: Target principal display name resolved from principal properties. Empty when unavailable.
+                          status:
+                            type: string
+                            description: Finding status.
+                            enum:
+                            - active
+                            - accepted
+                            - remediated
+                            - deprecated
+                          first_seen:
+                            type: string
+                            format: date-time
+                            description: Timestamp of when the finding was first created.
+                          last_seen:
+                            type: string
+                            format: date-time
+                            description: Timestamp of last update.
+              examples:
+                Mixed findings (relationship and list):
+                  summary: Unified response with both finding types
+                  value:
+                    count: 2
+                    skip: 0
+                    limit: 10
+                    data:
+                    - severity: critical
+                      finding: T0GenericWrite
+                      title: GenericWrite Privileges on Tier Zero Objects
+                      finding_type: relationship
+                      platform: Active Directory
+                      environment_id: S-1-5-21-1974516972-3116780949-2584384717
+                      environment_name: CORP1.LAB.HOME-LABS.LOL
+                      zone_id: 1
+                      zone_name: Tier Zero
+                      source_principal_id: RPATTON@CORP1.LAB.HOME-LABS.LOL
+                      source_principal_kind: User
+                      source_principal_name: Robert Patton
+                      target_principal_id: ADMIN@CORP1.LAB.HOME-LABS.LOL
+                      target_principal_kind: User
+                      target_principal_name: Domain Admin
+                      status: active
+                      first_seen: '2026-04-11T00:30:18.491666Z'
+                      last_seen: '2026-04-14T16:57:35.675609Z'
+                    - severity: high
+                      finding: Kerberoasting
+                      title: Kerberoastable User Accounts
+                      finding_type: list
+                      platform: Active Directory
+                      environment_id: S-1-5-21-1974516972-3116780949-2584384717
+                      environment_name: CORP1.LAB.HOME-LABS.LOL
+                      zone_id: 1
+                      zone_name: Tier Zero
+                      source_principal_id: ''
+                      source_principal_kind: ''
+                      source_principal_name: ''
+                      target_principal_id: PSX_D_BA@CORP1.LAB.HOME-LABS.LOL
+                      target_principal_kind: User
+                      target_principal_name: Backup Admin
+                      status: accepted
+                      first_seen: '2026-04-11T00:30:18.491666Z'
+                      last_seen: '2026-04-14T16:57:35.675609Z'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/domains/{domain_id}/available-types:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: domain_id
+      description: Domain ID
+      in: path
+      required: true
+      schema:
+        type: string
+    - $ref: '#/components/parameters/query.asset-group-tag-id'
+    get:
+      operationId: ListAvailableAttackPathTypesForDomain
+      summary: List available attack paths
+      description: Lists available attack path types for a domain
+      tags:
+      - Attack Paths
+      parameters:
+      - name: sort_by
+        description: Sort by column. The only sortable column is `finding`.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: finding
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/domains/{domain_id}/details:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: domain_id
+      description: Domain, Tenant, or Environment ID
+      in: path
+      required: true
+      schema:
+        type: string
+    - $ref: '#/components/parameters/query.asset-group-tag-id'
+    get:
+      operationId: ListDomainAttackPathsDetails
+      summary: List domain attack paths details
+      description: 'Lists detailed data about attack paths for a domain.
+
+
+        __Note:__ `ImpactCount`, `ImpactPercentage`, `ExposureCount`, `ExposurePercentage` and `Severity` will have a value other than zero when butterfly analysis is enabled.
+
+        '
+      tags:
+      - Attack Paths
+      parameters:
+      - name: Accept
+        in: query
+        description: Media type to determine the response format (application/json or text/csv).
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+          enum:
+          - application/json
+          - text/csv
+      - name: finding
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: sort_by
+        description: Sortable columns are `domain_sid`, `index`, `AcceptedUntil`, `id`, `created_at`, `updated_at`, `deleted_at`, `exposure_percentage`, `impact_percentage`. Relationship risks can be sorted on `FromPrincipal` and `ToPrincipal` in addition to the sortable columns for List Risks.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: FromPrincipal
+        deprecated: true
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: ToPrincipal
+        deprecated: true
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: from_principal
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: to_principal
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: principals_hash
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: Accepted
+        deprecated: true
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: AcceptedUntil
+        deprecated: true
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: accepted_until
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: Principal
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: domain_sid
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - $ref: '#/components/parameters/query.created-at'
+      - $ref: '#/components/parameters/query.updated-at'
+      - $ref: '#/components/parameters/query.deleted-at'
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+        enum:
+        - application/json
+        - text/csv
+      responses:
+        '200':
+          description: OK
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+              examples:
+                Butterfly Relationship Finding:
+                  value: 'id,finding_type,exposure_count,exposure_percentage,impact_count,impact_percentage,domain_sid,from_principal_name,from_principal,from_principal_kind,to_principal_name,to_principal,to_principal_kind,combo_graph_relation_id,domain,accepted,accepted_until,principals_hash,created_at,updated_at,is_inherited
+
+                    1,Tier Zero Generic Write,500,0.6711,1000,0.9961,5,S-1-5-21-123-123-123,RPATTON@TITANCORP.LOCAL,S-1-5-21-123-123-123,User,RPATTON DELEGATION TEST@TITANCORP.LOCAL,S-1-5-21-124-124-124,User,2,TITANCORP,true,0001-01-01T00:00:00Z,1lQiVG3hOuM=,2022-08-17T23:44:24Z,2024-12-18T15:01:00.176572729Z,Yes
+
+                    '
+                Metatree Relationship Finding:
+                  value: 'id,finding_type,exposure_count,exposure_percentage,impact_count,impact_percentage,domain_sid,from_principal_name,from_principal,from_principal_kind,to_principal_name,to_principal,to_principal_kind,combo_graph_relation_id,domain,accepted,accepted_until,principals_hash,created_at,updated_at,is_inherited
+
+                    1,Tier Zero Generic Write,0,0,0,0,5,S-1-5-21-123-123-123,RPATTON@TITANCORP.LOCAL,S-1-5-21-123-123-123,User,RPATTON DELEGATION TEST@TITANCORP.LOCAL,S-1-5-21-124-124-124,User,0,TITANCORP,true,0001-01-01T00:00:00Z,1lQiVG3hOuM=,2022-08-17T23:44:24Z,2024-12-18T15:01:00.176572729Z,Yes
+
+                    '
+                Butterfly List Finding:
+                  value: 'id,finding_type,impact_count,impact_percentage,domain,domain_sid,principal_name,principal_kind,principal,accepted,accepted_until,created_at,updated_at
+
+                    1,Kerberoasting,800,0.9961,TITANCORP,S-1-5-21-123-123-123,RPATTON@TITANCORP.LOCAL,User,S-1-5-21-124-124-124,true,0001-01-01T00:00:00Z,2022-08-17T23:44:24Z,2024-12-18T15:01:00.176572729Z
+
+                    '
+                Metatree List Finding:
+                  value: 'id,finding_type,impact_count,impact_percentage,domain,domain_sid,principal_name,principal_kind,principal,accepted,accepted_until,created_at,updated_at
+
+                    1,Kerberoasting,0,0,TITANCORP,S-1-5-21-123-123-123,RPATTON@TITANCORP.LOCAL,User,S-1-5-21-124-124-124,true,0001-01-01T00:00:00Z,2022-08-17T23:44:24Z,2024-12-18T15:01:00.176572729Z
+
+                    '
+            application/json:
+              schema:
+                oneOf:
+                - allOf:
+                  - $ref: '#/components/schemas/api.response.pagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.relationship-finding'
+                          type: object
+                          properties:
+                            Accepted:
+                              type: boolean
+                - allOf:
+                  - $ref: '#/components/schemas/api.response.pagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.list-finding'
+                          type: object
+                          properties:
+                            Accepted:
+                              type: boolean
+              examples:
+                Butterfly Relationship Finding:
+                  summary: Butterfly Relationship Finding
+                  description: When the butterfly analysis feature flag is on, impact count/percentage and exposure count/percentage will have a value other than zero.
+                  value:
+                    count: 0
+                    skip: 0
+                    limit: 0
+                    data:
+                    - id: 0
+                      created_at: '2024-08-28T21:21:40.845Z'
+                      updated_at: '2024-08-28T21:21:40.845Z'
+                      deleted_at:
+                        time: '2024-08-28T21:21:40.845Z'
+                        valid: true
+                      FromPrincipal: string
+                      ToPrincipal: string
+                      FromPrincipalProps:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      FromPrincipalKind: string
+                      ToPrincipalProps:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      ToPrincipalKind: string
+                      RelProps:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      ComboGraphRelationID:
+                        int64: 0
+                        valid: true
+                      Finding: string
+                      DomainSID: string
+                      PrincipalHash: string
+                      AcceptedUntil: '2024-08-28T21:21:40.845Z'
+                      ImpactPercentage: 0.12
+                      ImpactCount: 2
+                      ExposurePercentage: 0.24
+                      ExposureCount: 4
+                      Severity: high
+                      Accepted: true
+                Metatree Relationship Finding:
+                  summary: Metatree Relationship Finding
+                  description: When the butterfly analysis feature flag is off and metatree is running, impact count/percentage and exposure count/percentage will have a value of zero.
+                  value:
+                    count: 0
+                    skip: 0
+                    limit: 0
+                    data:
+                    - id: 0
+                      created_at: '2024-08-28T21:21:40.845Z'
+                      updated_at: '2024-08-28T21:21:40.845Z'
+                      deleted_at:
+                        time: '2024-08-28T21:21:40.845Z'
+                        valid: true
+                      FromPrincipal: string
+                      ToPrincipal: string
+                      FromPrincipalProps:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      FromPrincipalKind: string
+                      ToPrincipalProps:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      ToPrincipalKind: string
+                      RelProps:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      ComboGraphRelationID:
+                        int64: 0
+                        valid: true
+                      Finding: string
+                      DomainSID: string
+                      PrincipalHash: string
+                      AcceptedUntil: '2024-08-28T21:21:40.845Z'
+                      ImpactPercentage: 0
+                      ImpactCount: 0
+                      ExposurePercentage: 0
+                      ExposureCount: 0
+                      Severity: ''
+                      Accepted: true
+                Butterfly List Finding:
+                  summary: Butterfly List Finding
+                  description: When the butterfly analysis feature flag is on, impact count/percentage and exposure count/percentage will have a value other than zero.
+                  value:
+                    count: 0
+                    skip: 0
+                    limit: 0
+                    data:
+                    - id: 0
+                      created_at: '2024-08-28T21:42:18.844Z'
+                      updated_at: '2024-08-28T21:42:18.844Z'
+                      deleted_at:
+                        time: '2024-08-28T21:42:18.844Z'
+                        valid: true
+                      Principal: string
+                      PrincipalKind: string
+                      Finding: string
+                      DomainSID: string
+                      Props:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      AcceptedUntil: '2024-08-28T21:42:18.844Z'
+                      ImpactPercentage: 0.12
+                      ImpactCount: 2
+                      Severity: high
+                      Accepted: true
+                Metatree List Finding:
+                  summary: Metatree List Finding
+                  description: When the butterfly analysis feature flag is off and metatree is running, impact count/percentage and exposure count/percentage will have a value of zero.
+                  value:
+                    count: 0
+                    skip: 0
+                    limit: 0
+                    data:
+                    - id: 0
+                      created_at: '2024-08-28T21:42:18.844Z'
+                      updated_at: '2024-08-28T21:42:18.844Z'
+                      deleted_at:
+                        time: '2024-08-28T21:42:18.844Z'
+                        valid: true
+                      Principal: string
+                      PrincipalKind: string
+                      Finding: string
+                      DomainSID: string
+                      Props:
+                        additionalProp1: {}
+                        additionalProp2: {}
+                        additionalProp3: {}
+                      AcceptedUntil: '2024-08-28T21:42:18.844Z'
+                      ImpactPercentage: 0
+                      ImpactCount: 0
+                      Severity: ''
+                      Accepted: true
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/domains/{domain_id}/sparkline:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: domain_id
+      description: Domain ID
+      in: path
+      required: true
+      schema:
+        type: string
+    - $ref: '#/components/parameters/query.asset-group-tag-id'
+    get:
+      operationId: ListAttackPathSparklineValues
+      summary: List attack path sparkline values
+      description: List the values that represent the sparklines for individual attack paths
+      tags:
+      - Attack Paths
+      parameters:
+      - name: sort_by
+        description: Sortable columns are `CompositeRisk`, `FindingCount`, `ImpactedAssetCount`, `domain_sid`, `id`, `created_at`, `updated_at`, `deleted_at`.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: finding
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: from
+        description: Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+        in: query
+      - name: to
+        description: Ending datetime of range (exclusive) in RFC-3339 format; Defaults to current datetime
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+        in: query
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.time-window'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/model.risk-counts'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/attack-paths/{attack_path_id}/acceptance:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: attack_path_id
+      description: Attack Path ID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    put:
+      operationId: UpdateAttackPathRisk
+      summary: Update attack path risk
+      description: Updates an attack path as an accepted or unaccepted risk until a given time.
+      tags:
+      - Attack Paths
+      requestBody:
+        description: The request body for updating risk acceptance
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                risk_type:
+                  type: string
+                accept_until:
+                  type: string
+                  format: date-time
+                accepted:
+                  type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.response.finding'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+components:
+  responses:
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    csv-response:
+      description: '**OK**
+
+        This response will contain csv text content.
+
+        '
+      content:
+        text/csv:
+          schema:
+            type: string
+          example: 'header1,header2,header3
+
+            cell1,cell2,cell3
+
+            cell4,cell5,cell6
+
+            ...
+
+            '
+    no-content:
+      description: '**No Content**
+
+        This response will contain no response body.
+
+        '
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: '[this request has no response data]'
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+  parameters:
+    query.created-at:
+      name: created_at
+      in: query
+      description: Filter results by `created_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+    query.asset-group-tag-id:
+      name: asset_group_tag_id
+      description: The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used.
+      in: query
+      schema:
+        type: integer
+    query.skip:
+      name: skip
+      description: This query parameter is used for determining the number of objects to skip in pagination.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.skip'
+    query.updated-at:
+      name: updated_at
+      in: query
+      description: Filter results by `updated_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.deleted-at:
+      name: deleted_at
+      in: query
+      description: Filter results by `deleted_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.limit:
+      name: limit
+      description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.limit'
+  schemas:
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    api.params.predicate.filter.time:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
+      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
+
+        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    api.params.predicate.filter.integer:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?-?[0-9]+$
+      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    model.unified-finding:
+      oneOf:
+      - type: object
+        required:
+        - target_id
+        - target_kind
+        - target_properties
+        - finding_name
+        - environment_id
+        - impact_percentage
+        - impact_count
+        - accepted_until
+        - asset_group
+        properties:
+          target_id:
+            type: string
+          target_kind:
+            type: string
+          target_properties:
+            type: object
+            additionalProperties:
+              type: object
+          finding_name:
+            type: string
+          environment_id:
+            type: object
+            additionalProperties:
+              type: object
+          impact_percentage:
+            type: number
+            format: double
+          impact_count:
+            type: number
+            format: double
+          accepted_until:
+            type: integer
+            format: int64
+          asset_group:
+            type: string
+      - type: object
+        required:
+        - target_id
+        - target_kind
+        - target_properties
+        - source_id
+        - source_kind
+        - source_properties
+        - attack_path_edge_id
+        - finding_name
+        - environment_id
+        - impact_percentage
+        - impact_count
+        - exposure_percentage
+        - exposure_count
+        - accepted_until
+        - asset_group
+        properties:
+          target_id:
+            type: string
+          target_kind:
+            type: string
+          target_properties:
+            type: string
+            additionalProperties:
+              type: object
+          source_id:
+            type: string
+          source_kind:
+            type: string
+          source_properties:
+            type: object
+            additionalProperties:
+              type: object
+          attack_path_edge_id:
+            type: number
+            format: int64
+          finding_name:
+            type: string
+          environment_id:
+            type: object
+            additionalProperties:
+              type: object
+          impact_percentage:
+            type: number
+            format: double
+          impact_count:
+            type: number
+            format: int64
+          exposure_percentage:
+            type: number
+            format: double
+          exposure_count:
+            type: number
+            format: int64
+          accepted_until:
+            type: integer
+            format: int64
+          asset_group:
+            type: string
+    model.risk-counts:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          CompositeRisk:
+            type: number
+            format: double
+          FindingCount:
+            type: integer
+          ImpactedAssetCount:
+            type: integer
+          DomainSID:
+            type: string
+          Finding:
+            type: string
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    model.components.int64.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    api.response.finding:
+      type: object
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/model.list-finding'
+          - $ref: '#/components/schemas/model.relationship-finding'
+    null.int64:
+      type: object
+      properties:
+        int64:
+          type: integer
+          format: int64
+        valid:
+          description: Valid is true if `int64` is not `null`.
+          type: boolean
+    api.response.time-window:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp to describe the beginning of a time range
+        end:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp to describe the end of a time range
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    model.components.int32.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+          description: This is the unique identifier for this object.
+    model.list-finding:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          Principal:
+            type: string
+          PrincipalKind:
+            type: string
+          Finding:
+            type: string
+          DomainSID:
+            type: string
+          Props:
+            type: object
+            additionalProperties:
+              type: object
+          AcceptedUntil:
+            type: string
+            format: date-time
+          ImpactPercentage:
+            type: number
+            format: double
+          ImpactCount:
+            type: integer
+            format: int64
+          Severity:
+            type: string
+            enum:
+            - critical
+            - high
+            - moderate
+            - low
+            - ''
+    enum.risk-acceptance:
+      type: string
+      enum:
+      - accepted
+      - unaccepted
+      - all
+      - ''
+    model.relationship-finding:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          FromPrincipal:
+            type: string
+          ToPrincipal:
+            type: string
+          FromPrincipalProps:
+            type: object
+            additionalProperties:
+              type: object
+          FromPrincipalKind:
+            type: string
+          ToPrincipalProps:
+            type: object
+            additionalProperties:
+              type: object
+          ToPrincipalKind:
+            type: string
+          RelProps:
+            type: object
+            additionalProperties:
+              type: object
+          ComboGraphRelationID:
+            $ref: '#/components/schemas/null.int64'
+          Finding:
+            type: string
+          DomainSID:
+            type: string
+          PrincipalHash:
+            type: string
+          AcceptedUntil:
+            type: string
+            format: date-time
+          ImpactPercentage:
+            type: number
+            format: double
+          ImpactCount:
+            type: integer
+            format: int64
+          ExposurePercentage:
+            type: number
+            format: double
+          ExposureCount:
+            type: integer
+            format: int64
+          Severity:
+            type: string
+            enum:
+            - critical
+            - high
+            - moderate
+            - low
+            - ''
+    api.response.all-findings:
+      type: object
+      properties:
+        findings:
+          type: array
+          description: List of unified findings.
+          items:
+            $ref: '#/components/schemas/model.unified-finding'
+        finding_assets:
+          type: object
+          description: Directory structure of Base64 encoded assets related to each finding organized by finding name.
+          additionalProperties:
+            type: object
+      required:
+      - findings
+      - finding_assets
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+  securitySchemes:
+    JWTBearerToken:
+      description: '`Authorization: Bearer $JWT_TOKEN`
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    SignedRequest:
+      description: '`Authorization: bhesignature $TOKEN_ID`
+
+        '
+      type: apiKey
+      name: Authorization
+      in: header
+    RequestDate:
+      description: '`RequestDate: $RFC3339_DATETIME`
+
+        '
+      type: apiKey
+      name: RequestDate
+      in: header
+    HMACSignature:
+      description: '`Signature: $BASE64ENCODED_HMAC_SIGNATURE`
+
+        '
+      type: apiKey
+      name: Signature
+      in: header
+x-tagGroups:
+- name: Community & Enterprise
+  tags:
+  - Auth
+  - Roles
+  - Permissions
+  - API Tokens
+  - BloodHound Users
+  - Collectors
+  - Collection Uploads
+  - Custom Node Management
+  - API Info
+  - Search
+  - Audit
+  - Config
+  - Asset Isolation
+  - Graph
+  - Azure Entities
+  - AD Base Entities
+  - Computers
+  - Containers
+  - Domains
+  - GPOs
+  - AIA CAs
+  - Root CAs
+  - Enterprise CAs
+  - NT Auth Stores
+  - Cert Templates
+  - OUs
+  - AD Users
+  - Groups
+  - Data Quality
+  - Datapipe
+  - Cypher
+  - OpenGraph (Experimental)
+- name: Enterprise Only
+  tags:
+  - EULA
+  - BHE Users
+  - Analysis
+  - Client Ingest
+  - Clients
+  - Jobs
+  - Tasks
+  - Events (Schedules)
+  - Attack Paths
+  - Risk Posture
+  - Meta Entities
+  - Alerts

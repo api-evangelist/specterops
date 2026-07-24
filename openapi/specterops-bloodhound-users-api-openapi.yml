@@ -1,0 +1,1015 @@
+openapi: 3.0.3
+info:
+  title: BloodHound AD Base Entities BloodHound Users API
+  contact:
+    name: BloodHound Enterprise Support
+    url: https://bloodhound.specterops.io/
+    email: support@specterops.io
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+  description: "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n"
+servers:
+- url: /
+  description: This is the base path for all endpoints, relative to the domain where the API is being hosted.
+security:
+- JWTBearerToken: []
+- SignedRequest: []
+  RequestDate: []
+  HMACSignature: []
+tags:
+- name: BloodHound Users
+paths:
+  /api/v2/bloodhound-users:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: ListUsers
+      summary: List Users
+      description: Gets all BloodHound user details.
+      tags:
+      - BloodHound Users
+      parameters:
+      - name: sort_by
+        description: Sortable columns are first_name, last_name, email_address, principal_name, last_login, created_at, updated_at, deleted_at.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: first_name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: last_name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: email_address
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: principal_name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.uuid'
+      - name: last_login
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - $ref: '#/components/parameters/query.created-at'
+      - $ref: '#/components/parameters/query.updated-at'
+      - $ref: '#/components/parameters/query.deleted-at'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.user'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      operationId: CreateUser
+      summary: Create a New User
+      description: Create a new BloodHound user.
+      tags:
+      - BloodHound Users
+      requestBody:
+        description: The request body for creating a user
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/api.requests.user.update'
+              - $ref: '#/components/schemas/api.requests.user.set-secret'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.user'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/bloodhound-users-minimal:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: ListUsersMinimal
+      summary: List Users Minimal
+      description: Returns all BloodHound user details without any sensitive data.
+      tags:
+      - BloodHound Users
+      parameters:
+      - name: sort_by
+        description: Sortable columns are id, first_name, last_name and email_address.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: first_name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: last_name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: email_address
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.uuid'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.users-minimal'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/bloodhound-users/{user_id}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: user_id
+      description: User ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    get:
+      operationId: GetUser
+      summary: Get a user
+      description: Get a BloodHound user's details.
+      tags:
+      - BloodHound Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.user'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    patch:
+      operationId: UpdateUser
+      summary: Update a User
+      description: Update a BloodHound user's properties'.
+      tags:
+      - BloodHound Users
+      requestBody:
+        description: The request body for updating a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.requests.user.update'
+      responses:
+        '200':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: DeleteUser
+      summary: Delete a User
+      description: Deletes an existing BloodHound user.
+      tags:
+      - BloodHound Users
+      responses:
+        '200':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+        default:
+          $ref: '#/components/responses/error-response'
+  /api/v2/bloodhound-users/{user_id}/secret:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: user_id
+      description: User ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    put:
+      operationId: CreateOrSetUserSecret
+      summary: Create or Set User Secret
+      description: Create or set a user's secret to use as a login password.
+      tags:
+      - BloodHound Users
+      requestBody:
+        description: The request body for creating or setting a user secret
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.requests.user.set-secret'
+      responses:
+        '200':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: DeleteUserSecret
+      summary: Expire User Secret
+      description: Expire a user's secret to use as a login password.
+      tags:
+      - BloodHound Users
+      responses:
+        '200':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/bloodhound-users/{user_id}/mfa:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: user_id
+      description: User ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    post:
+      operationId: AddUserMfa
+      summary: Enrolls user in multi-factor authentication
+      description: Enrolls user in multi-factor authentication
+      tags:
+      - BloodHound Users
+      requestBody:
+        description: The request body for enrolling a user in multi-factor authentication
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                secret:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      qr_code:
+                        type: string
+                      totp_secret:
+                        type: string
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: RemoveUserMfa
+      summary: Unenroll user from multi-factor authentication
+      description: Unenrolls user from multi-factor authentication
+      tags:
+      - BloodHound Users
+      requestBody:
+        description: The request body for unenrolling a user from multi-factor authentication
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                secret:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        $ref: '#/components/schemas/enum.mfa-activation-status'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/bloodhound-users/{user_id}/mfa-activation:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: user_id
+      description: User ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    get:
+      operationId: GetMfaActivationStatus
+      summary: Returns MFA activation status for a user
+      description: Returns multi-factor authentication status for a user
+      tags:
+      - BloodHound Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        $ref: '#/components/schemas/enum.mfa-activation-status'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      operationId: ActivateUserMfa
+      summary: Activates MFA for an enrolled user
+      description: Activates multi-factor authentication for an enrolled user
+      tags:
+      - BloodHound Users
+      requestBody:
+        description: The request body for activating multi-factor authentication for an enrolled user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                otp:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        $ref: '#/components/schemas/enum.mfa-activation-status'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+components:
+  responses:
+    error-response:
+      description: The standard error response wrapper.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    no-content:
+      description: '**No Content**
+
+        This response will contain no response body.
+
+        '
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: '[this request has no response data]'
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+  parameters:
+    query.created-at:
+      name: created_at
+      in: query
+      description: Filter results by `created_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+    query.updated-at:
+      name: updated_at
+      in: query
+      description: Filter results by `updated_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.deleted-at:
+      name: deleted_at
+      in: query
+      description: Filter results by `deleted_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+  schemas:
+    api.params.predicate.filter.time:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
+      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
+
+        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    api.requests.user.set-secret:
+      type: object
+      properties:
+        secret:
+          type: string
+        needs_password_reset:
+          type: boolean
+    model.permission:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          authority:
+            type: string
+            readOnly: true
+          name:
+            type: string
+            readOnly: true
+    enum.mfa-activation-status:
+      type: string
+      description: The activation status of multi-factor authentication on a BloodHound user.
+      enum:
+      - activated
+      - deactivated
+      - pending
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    model.user:
+      allOf:
+      - $ref: '#/components/schemas/model.components.uuid'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          saml_provider_id:
+            readOnly: true
+            deprecated: true
+            description: Deprecated. Use sso_provider_id instead.
+            allOf:
+            - $ref: '#/components/schemas/null.int32'
+          sso_provider_id:
+            readOnly: true
+            description: ID of the SSO provider for this user
+            allOf:
+            - $ref: '#/components/schemas/null.int32'
+          AuthSecret:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/model.auth-secret'
+          roles:
+            type: array
+            readOnly: true
+            items:
+              $ref: '#/components/schemas/model.role'
+          first_name:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/null.string'
+          last_name:
+            $ref: '#/components/schemas/null.string'
+          email_address:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/null.string'
+          principal_name:
+            type: string
+            readOnly: true
+          last_login:
+            type: string
+            readOnly: true
+            format: date-time
+          is_disabled:
+            type: boolean
+            readOnly: true
+          eula_accepted:
+            type: boolean
+            readOnly: true
+    null.string:
+      type: object
+      properties:
+        string:
+          type: string
+        valid:
+          description: Valid is true if `string` is not `null`
+          type: boolean
+    model.auth-secret:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          digest_method:
+            type: string
+          expires_at:
+            type: string
+            format: date-time
+          totp_activated:
+            type: boolean
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    null.int32:
+      type: object
+      properties:
+        int32:
+          type: integer
+          format: int32
+        valid:
+          description: Valid is true if `int32` is not `null`.
+          type: boolean
+    model.components.uuid:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    api.requests.user.update:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email_address:
+          type: string
+          format: email
+        principal:
+          type: string
+        roles:
+          type: array
+          items:
+            type: integer
+            format: int32
+        saml_provider_id:
+          type: string
+          deprecated: true
+          description: Deprecated. Use sso_provider_id instead.
+        sso_provider_id:
+          allOf:
+          - $ref: '#/components/schemas/null.int32'
+          description: ID of the SSO provider for this user
+        is_disabled:
+          type: boolean
+    model.components.int32.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+          description: This is the unique identifier for this object.
+    model.users-minimal:
+      allOf:
+      - $ref: '#/components/schemas/model.components.uuid'
+      - type: object
+        properties:
+          first_name:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/null.string'
+          last_name:
+            $ref: '#/components/schemas/null.string'
+          email:
+            type: string
+            readOnly: true
+    model.role:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          name:
+            type: string
+            readOnly: true
+          description:
+            type: string
+            readOnly: true
+          permissions:
+            type: array
+            readOnly: true
+            items:
+              $ref: '#/components/schemas/model.permission'
+    api.params.predicate.filter.uuid:
+      type: string
+      pattern: ^((eq|neq):)?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$
+      description: 'Filter results by column string-formatted uuid value. Valid filter predicates are `eq`, `neq`.
+
+        '
+  securitySchemes:
+    JWTBearerToken:
+      description: '`Authorization: Bearer $JWT_TOKEN`
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    SignedRequest:
+      description: '`Authorization: bhesignature $TOKEN_ID`
+
+        '
+      type: apiKey
+      name: Authorization
+      in: header
+    RequestDate:
+      description: '`RequestDate: $RFC3339_DATETIME`
+
+        '
+      type: apiKey
+      name: RequestDate
+      in: header
+    HMACSignature:
+      description: '`Signature: $BASE64ENCODED_HMAC_SIGNATURE`
+
+        '
+      type: apiKey
+      name: Signature
+      in: header
+x-tagGroups:
+- name: Community & Enterprise
+  tags:
+  - Auth
+  - Roles
+  - Permissions
+  - API Tokens
+  - BloodHound Users
+  - Collectors
+  - Collection Uploads
+  - Custom Node Management
+  - API Info
+  - Search
+  - Audit
+  - Config
+  - Asset Isolation
+  - Graph
+  - Azure Entities
+  - AD Base Entities
+  - Computers
+  - Containers
+  - Domains
+  - GPOs
+  - AIA CAs
+  - Root CAs
+  - Enterprise CAs
+  - NT Auth Stores
+  - Cert Templates
+  - OUs
+  - AD Users
+  - Groups
+  - Data Quality
+  - Datapipe
+  - Cypher
+  - OpenGraph (Experimental)
+- name: Enterprise Only
+  tags:
+  - EULA
+  - BHE Users
+  - Analysis
+  - Client Ingest
+  - Clients
+  - Jobs
+  - Tasks
+  - Events (Schedules)
+  - Attack Paths
+  - Risk Posture
+  - Meta Entities
+  - Alerts

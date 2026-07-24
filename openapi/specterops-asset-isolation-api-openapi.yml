@@ -1,0 +1,2637 @@
+openapi: 3.0.3
+info:
+  title: BloodHound AD Base Entities Asset Isolation API
+  contact:
+    name: BloodHound Enterprise Support
+    url: https://bloodhound.specterops.io/
+    email: support@specterops.io
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+  description: "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n"
+servers:
+- url: /
+  description: This is the base path for all endpoints, relative to the domain where the API is being hosted.
+security:
+- JWTBearerToken: []
+- SignedRequest: []
+  RequestDate: []
+  HMACSignature: []
+tags:
+- name: Asset Isolation
+paths:
+  /api/v2/asset-groups:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: ListAssetGroups
+      summary: List all asset isolation groups
+      description: Lists all asset isolation groups.
+      tags:
+      - Asset Isolation
+      parameters:
+      - name: sort_by
+        description: Sortable columns are `name`, `tag`, and `member_count`.
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: tag
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: system_group
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: member_count
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - $ref: '#/components/parameters/query.created-at'
+      - $ref: '#/components/parameters/query.updated-at'
+      - $ref: '#/components/parameters/query.deleted-at'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      asset_groups:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      operationId: CreateAssetGroup
+      summary: Create an asset group
+      description: Creates an asset group
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for creating an asset group
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/model.asset-group'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.asset-group'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-groups/{asset_group_id}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_id
+      description: ID of the asset group record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetAssetGroup
+      summary: Get asset group by ID
+      description: Retrieve asset group by ID
+      tags:
+      - Asset Isolation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.asset-group'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    put:
+      operationId: UpdateAssetGroup
+      summary: Update an asset group
+      description: Updates an asset group
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for updating an asset group.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.asset-group'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: DeleteAssetGroup
+      summary: Delete an asset group
+      description: Deletes an asset group
+      tags:
+      - Asset Isolation
+      responses:
+        '200':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '409':
+          description: '**Conflict**
+
+            The client tried to delete a system defined asset group.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.error-wrapper'
+              example:
+                http_status: 409
+                timestamp: '2024-02-19T19:27:43.866Z'
+                request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                errors:
+                - context: agi
+                  message: Cannot delete a system defined asset group.
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-groups/{asset_group_id}/collections:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_id
+      description: ID of the asset_group record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: ListAssetGroupCollections
+      summary: List asset group collections
+      description: Returns all historical memberships if no URL params are specified.
+      tags:
+      - Asset Isolation
+      parameters:
+      - name: sort_by
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - $ref: '#/components/parameters/query.created-at'
+      - $ref: '#/components/parameters/query.updated-at'
+      - $ref: '#/components/parameters/query.deleted-at'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/model.asset-group-collection'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-groups/{asset_group_id}/selectors:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_id
+      description: ID of the asset_group record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    post:
+      operationId: UpdateAssetGroupSelectorsDeprecated
+      deprecated: true
+      summary: Update asset group selectors
+      description: DEPRECATED use PUT instead. Updates asset group selectors.
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for updating asset group selectors
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/model.asset-group-selector-spec'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      added_selectors:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group-selector'
+                      removed_selectors:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group-selector'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    put:
+      operationId: UpdateAssetGroupSelectors
+      summary: Update asset group selectors
+      description: Updates asset group selectors
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for updating asset group selectors
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/model.asset-group-selector-spec'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      added_selectors:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group-selector'
+                      removed_selectors:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group-selector'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-groups/{asset_group_id}/selectors/{asset_group_selector_id}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_id
+      description: ID of the asset_group record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: asset_group_selector_id
+      description: ID of the asset_group_selector record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    delete:
+      operationId: DeleteAssetGroupSelector
+      summary: Delete an asset group selector
+      description: Deletes an asset group selector
+      tags:
+      - Asset Isolation
+      responses:
+        '200':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '409':
+          description: '**Conflict**
+
+            System defined asset group selectors cannot be deleted.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.error-wrapper'
+              example:
+                http_status: 409
+                timestamp: '2024-02-19T19:27:43.866Z'
+                request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                errors:
+                - context: agi
+                  message: Cannot delete system defined asset group selector.
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-groups/{asset_group_id}/custom-selectors:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_id
+      description: ID of the asset_group record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetAssetGroupCustomMemberCount
+      summary: Get asset group custom member count
+      description: Get asset group custom member count
+      tags:
+      - Asset Isolation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_member_count:
+                    type: integer
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-groups/{asset_group_id}/members:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_id
+      description: ID of the asset_group record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: ListAssetGroupMembers
+      deprecated: true
+      summary: List all asset isolation group members
+      description: '**Deprecated**: This endpoint will no longer be supported in a future release. Please use `GET /api/v2/asset-group-tags/{asset_group_tag_id}/members` or `GET /api/v2/asset-group-tags/{asset_group_tag_id}/selectors/{asset_group_tag_selector_id}/members` instead.
+
+        '
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - name: sort_by
+        in: query
+        description: 'Sortable columns are `object_id`, `asset_group_id`, `primary_kind`, `environment_id`, `environment_kind`, and `name`.
+
+          '
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: object_id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: primary_kind
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: environment_id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: environment_kind
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: custom_member
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.pagination'
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        members:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/model.asset-group-member'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-groups/{asset_group_id}/members/counts:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_id
+      description: ID of the asset_group record to retrieve
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: ListAssetGroupMemberCountByKind
+      summary: List asset group member count by kind
+      description: List counts of members of an asset isolation group by primary kind.
+      tags:
+      - Asset Isolation
+      parameters:
+      - name: object_id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: environment_id
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: primary_kind
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: environment_kind
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: name
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: custom_member
+        in: query
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      total_count:
+                        type: integer
+                      counts:
+                        type: object
+                        additionalProperties:
+                          type: integer
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}/members/{asset_group_member_id}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of the asset_group_tag of a selector
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: asset_group_member_id
+      description: ID of member to list selectors
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetAssetGroupSelectorsByMemberId
+      summary: Get asset group tag selectors of a specific object by member id
+      description: Get a list of selectors for an object by member id.
+      tags:
+      - Asset Isolation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      member:
+                        allOf:
+                        - $ref: '#/components/schemas/model.asset-group-tags-member'
+                        - type: object
+                          properties:
+                            selectors:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: GetAssetGroupTags
+      summary: Get Asset Group Tags
+      description: Get a list of asset groups
+      tags:
+      - Asset Isolation
+      parameters:
+      - name: type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer-strict'
+      - name: counts
+        description: Whether to include counts of selectors and members for each tag
+        in: query
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: description
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: created_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: created_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string-strict'
+      - name: updated_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: updated_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string-strict'
+      - name: deleted_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: deleted_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string-strict'
+      - name: require_certify
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          oneOf:
+                          - $ref: '#/components/schemas/model.asset-group-tag'
+                          - allOf:
+                            - $ref: '#/components/schemas/model.asset-group-tag'
+                            - type: object
+                              properties:
+                                counts:
+                                  type: object
+                                  properties:
+                                    members:
+                                      type: integer
+                                      format: int64
+                                    selectors:
+                                      type: integer
+                                    custom_selectors:
+                                      type: integer
+                                    default_selectors:
+                                      type: integer
+                                    disabled_selectors:
+                                      type: integer
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      operationId: CreateAssetGroupTag
+      summary: Create Asset Group Tag
+      description: Creates an asset group tag ie. a tier or label
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for creating an asset group tag. Name and type fields are required.
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/model.asset-group-tag-request'
+              - type: object
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - name
+                - type
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.asset-group-tag'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of an asset group tag
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetAssetGroupTag
+      summary: Get Asset Group Tag
+      description: Retrieves an asset group tag by ID
+      tags:
+      - Asset Isolation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tag:
+                        $ref: '#/components/schemas/model.asset-group-tag'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    patch:
+      operationId: UpdateAssetGroupTag
+      summary: Update Asset Group Tag
+      description: Updates an asset group tag by ID
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for updating an asset group tag. At least one field is required.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/model.asset-group-tag-update'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.asset-group-tag'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: DeleteAssetGroupTag
+      summary: Delete an Asset Group Tag
+      description: Deletes an asset group tag
+      tags:
+      - Asset Isolation
+      responses:
+        '204':
+          $ref: '#/components/responses/no-content'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}/members:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of an asset group tag
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: ListAssetGroupTagMembersById
+      summary: List asset group tag members by ID
+      description: List members of an asset group tag by ID
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - $ref: '#/components/parameters/query.environments'
+      - name: sort_by
+        in: query
+        description: 'Sortable columns are `id`, `objectid`, and `name`.
+
+          '
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: primary_kind
+        in: query
+        description: Filter by primary_kind
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: name
+        in: query
+        description: Filter by name
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: object_id
+        in: query
+        description: Filter by object_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.pagination'
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        members:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/model.asset-group-tags-member'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}/members/counts:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of an asset group tag
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: ListAssetGroupTagMemberCountByKind
+      summary: List asset group tag member count by kind
+      description: List counts of members of an asset group tag by primary kind.
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.environments'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      total_count:
+                        type: integer
+                      counts:
+                        type: object
+                        additionalProperties:
+                          type: integer
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}/selectors/{asset_group_tag_selector_id}/members:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of an asset group tag
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: asset_group_tag_selector_id
+      description: ID of an asset group tag selector
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: ListAssetGroupTagMembersBySelector
+      summary: List asset group tag members by selector
+      description: List members of an asset group tag by selector
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - $ref: '#/components/parameters/query.environments'
+      - name: sort_by
+        in: query
+        description: 'Sortable columns are `id`, `objectid`, and `name`.
+
+          '
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/api.params.query.sort-by'
+          - enum:
+            - id
+            - objectid
+            - name
+      - name: primary_kind
+        in: query
+        description: Filter by primary_kind
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: name
+        in: query
+        description: Filter by name
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: object_id
+        in: query
+        description: Filter by object_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/api.response.pagination'
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        members:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/model.asset-group-tags-member'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '409':
+          description: Conflict. Selector is disabled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.error-wrapper'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}/selectors/{asset_group_tag_selector_id}/members/counts:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of an asset group tag
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: asset_group_tag_selector_id
+      description: ID of an asset group tag selector
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetAssetGroupSelectorMemberCountsByKind
+      summary: List asset group tag selector member count by kind
+      description: List counts of members of an asset group tag selector by primary kind.
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.environments'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      total_count:
+                        type: integer
+                      counts:
+                        type: object
+                        additionalProperties:
+                          type: integer
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '409':
+          description: Conflict. Selector is disabled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.error-wrapper'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}/selectors:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of the asset_group_tag to create a selector
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetAssetGroupTagSelectors
+      summary: Get Asset Group Tag selectors
+      description: Get a list of selectors for this group.
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - $ref: '#/components/parameters/query.environments'
+      - name: sort_by
+        in: query
+        description: 'Sortable columns are `id`, `name`, and `created_at`.
+
+          '
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: auto_certify
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+      - name: created_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: created_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: description
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: disabled_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: disabled_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: is_default
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+      - name: name
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: updated_at
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: updated_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: type
+        description: Filter results by column integer value. Valid filter predicates are `eq`, `neq`. Valid values are either ObjectID = 1 or Cypher = 2.
+        in: query
+        required: false
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 2
+      - name: counts
+        description: Whether to include counts of members for each selector
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      selectors:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+                          - type: object
+                            properties:
+                              counts:
+                                type: object
+                                properties:
+                                  members:
+                                    type: integer
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      operationId: CreateAssetGroupTagSelector
+      summary: Create Asset Group Tag Selector
+      description: Creates an asset group tag selector.
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for creating an asset group tag selector. Only the name and seeds fields are required.
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/model.asset-group-tags-selector-request'
+              - type: object
+              required:
+              - name
+              - seeds
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/{asset_group_tag_id}/selectors/{asset_group_tag_selector_id}:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    - name: asset_group_tag_id
+      description: ID of the asset_group_tag to update a selector on
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: asset_group_tag_selector_id
+      description: Selector ID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    get:
+      operationId: GetAssetGroupTagSelector
+      summary: Get Asset Group Tag Selector
+      description: Retrieves an asset group tag selector by ID
+      tags:
+      - Asset Isolation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      selector:
+                        $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    patch:
+      operationId: UpdateAssetGroupTagSelector
+      summary: Update Asset Group Tag Selector
+      description: Update an asset group tag selector's properties
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for updating an asset group tag selector. At least one field must be provided in the request body. Any combination of fields from the original schema can be included, and only the fields that are provided will be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/model.asset-group-tags-selector-request'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      operationId: DeleteAssetGroupTagSelector
+      summary: Delete Asset Group Tag Selector
+      description: Delete an asset group tag selector
+      tags:
+      - Asset Isolation
+      responses:
+        '204':
+          description: Successfully deleted. No content is returned.
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/preview-selectors:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    post:
+      operationId: PreviewSelectors
+      summary: Preview Selectors
+      description: Sample preview of members selected by provided selector seeds.
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body of seeds for previewing what a selector will select.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                seeds:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/model.asset-group-tags-selector-seed'
+                expansion:
+                  description: Determine which expansion approach to use for member seeds. 0 - No expansion, 1 - Expand all, 2 - Expand containing members, 3 - Expand containing members and members containing the seed. Default fallback will be 1 - Expand all
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  - 2
+                  - 3
+              required:
+              - seeds
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      member:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          object_id:
+                            type: string
+                          primary_kind:
+                            type: string
+                          name:
+                            type: string
+                          properties:
+                            type: object
+                            additionalProperties: true
+                          source:
+                            description: Describes which phase of tagging resulted in this member being tagged, 1 - direct object, 2 - expanded downward, 3 - expanded upward
+                            type: integer
+                            enum:
+                            - 1
+                            - 2
+                            - 3
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/search:
+    post:
+      operationId: AssetGroupTagSearch
+      summary: Search Asset Group Tags
+      description: Supports searching by name on asset group tags and selectors, and by name or object ID on members.
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for searching asset group tags. `query` represents being able to query by either name or object id. `tag_type` can be either 1(zone), 2(label), or 3(owned). And `asset_group_tag_id` is the ID of a tag (zone or label).
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                tag_type:
+                  type: integer
+                asset_group_tag_id:
+                  type: integer
+              required:
+              - query
+              - tag_type
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group-tag'
+                      selectors:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+                      members:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/model.asset-group-tags-member'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags-history:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    get:
+      operationId: GetAssetGroupTagHistory
+      summary: Get history records
+      description: Retrieves history records for actions on asset group tags
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - name: sort_by
+        in: query
+        description: Sortable columns are `created_at`.
+        schema:
+          $ref: '#/components/schemas/api.params.query.sort-by'
+      - name: created_at
+        in: query
+        description: For example, you can filter a date range of records by doing `created_at=gt:2025-07-08T17:00:00Z&created_at=lt:2025-07-30T17:00:00Z`
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: actor
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: email
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: action
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: target
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: asset_group_tag_id
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: environment_id
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: note
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/model.asset-group-tags-history'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      operationId: SearchAssetGroupTagHistory
+      summary: Search history records
+      description: Retrieves history records via search string input and filtering by action, asset_group_tag_id, email, and actor
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for searching asset group tag history records
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  minLength: 3
+                  example: UpdateTag
+              required:
+              - query
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - name: sort_by
+        in: query
+        description: Sortable columns are `created_at`.
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/api.params.query.sort-by'
+          - enum:
+            - created_at
+      - name: actor
+        in: query
+        description: Filter by actor
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: email
+        in: query
+        description: Filter by email
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: action
+        in: query
+        description: Filter by action
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: asset_group_tag_id
+        in: query
+        description: Filter by asset_group_tag_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/model.asset-group-tags-history'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /api/v2/asset-group-tags/certifications:
+    parameters:
+    - $ref: '#/components/parameters/header.prefer'
+    post:
+      operationId: CertifyOrRevokeObjects
+      summary: Certify or Revoke Certification of Objects
+      description: Manually certify/revoke certification of objects as belonging to the Zone they're selected by
+      tags:
+      - Asset Isolation
+      requestBody:
+        description: The request body for certifying or revoking certification of objects.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                member_ids:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                  minItems: 1
+                  uniqueItems: true
+                action:
+                  type: integer
+                  enum:
+                  - 1
+                  - 2
+                note:
+                  type: string
+              additionalProperties: false
+              required:
+              - member_ids
+              - action
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    get:
+      operationId: GetAssetGroupTagsCertifications
+      summary: Get certifications for privilege zones
+      description: Retrieves certification status for nodes selected by a zone
+      tags:
+      - Asset Isolation
+      parameters:
+      - $ref: '#/components/parameters/query.skip'
+      - $ref: '#/components/parameters/query.limit'
+      - name: asset_group_tag_id
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: certified
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.integer'
+      - name: certified_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: created_at
+        in: query
+        description: For example, you can filter a date range of records by doing `created_at=gt:2025-07-08T17:00:00Z&created_at=lt:2025-07-30T17:00:00Z` (UTC)
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.time'
+      - name: environments
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: name
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: object_id
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      - name: primary_kind
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api.params.predicate.filter.string'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/model.asset-group-tags-certification-response'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '429':
+          $ref: '#/components/responses/too-many-requests'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+components:
+  schemas:
+    model.asset-group-tags-certification-response:
+      allOf:
+      - $ref: '#/components/schemas/api.response.pagination'
+      - type: object
+        properties:
+          data:
+            type: object
+            properties:
+              members:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      description: The graph ID of this node
+                    object_id:
+                      type: string
+                    environment_id:
+                      type: string
+                    primary_kind:
+                      type: string
+                    name:
+                      type: string
+                    asset_group_tag_id:
+                      type: integer
+                      format: int32
+                    created_at:
+                      type: string
+                      format: date-time
+                    certified_by:
+                      type: string
+                    certified:
+                      type: integer
+                      description: 0 = cert pending, 1 = cert revoked, 2 = manual cert, 3 = auto cert
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    api.params.predicate.filter.boolean:
+      type: string
+      pattern: ^((eq|neq):)?(t|T|TRUE|true|True|f|F|FALSE|false|False)$
+      description: 'Filter results by column boolean value. Valid filter predicates are `eq`, `neq`.
+
+        '
+    api.params.predicate.filter.time:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
+      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
+
+        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    model.asset-group-tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: integer
+        kind_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+        position:
+          $ref: '#/components/schemas/null.int32'
+        require_certify:
+          $ref: '#/components/schemas/null.boolean'
+        analysis_enabled:
+          $ref: '#/components/schemas/null.boolean'
+        glyph:
+          $ref: '#/components/schemas/null.string'
+    api.params.predicate.filter.integer:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?-?[0-9]+$
+      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    model.asset-group-member:
+      type: object
+      properties:
+        asset_group_id:
+          type: integer
+        object_id:
+          type: string
+        primary_kind:
+          type: string
+        kinds:
+          type: array
+          items:
+            type: string
+        environment_id:
+          type: string
+        environment_kind:
+          type: string
+        name:
+          type: string
+        custom_member:
+          type: boolean
+    model.asset-group-tag-request:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Only alphanumeric characters, underscores, and spaces are allowed.
+        type:
+          type: integer
+        description:
+          type: string
+        require_certify:
+          type: boolean
+        position:
+          type: integer
+        glyph:
+          $ref: '#/components/schemas/null.string'
+    model.asset-group-tags-history:
+      type: object
+      properties:
+        count:
+          type: integer
+        limit:
+          type: integer
+        skip:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              records:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    created_at:
+                      type: string
+                      format: date-time
+                    actor:
+                      type: string
+                    email:
+                      $ref: '#/components/schemas/null.string'
+                    action:
+                      type: string
+                    target:
+                      type: string
+                    asset_group_tag_id:
+                      type: integer
+                    environment_id:
+                      $ref: '#/components/schemas/null.string'
+                    note:
+                      $ref: '#/components/schemas/null.string'
+    model.asset-group-tag-update:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Only alphanumeric characters, underscores, and spaces are allowed.
+        description:
+          type: string
+        require_certify:
+          type: boolean
+        position:
+          type: integer
+    model.asset-group-tags-member:
+      type: object
+      properties:
+        id:
+          type: integer
+        object_id:
+          type: string
+        environment_id:
+          type: string
+        primary_kind:
+          type: string
+        name:
+          type: string
+        properties:
+          type: object
+          additionalProperties: true
+        source:
+          type: integer
+    model.asset-group-collection:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          entries:
+            type: array
+            readOnly: true
+            items:
+              $ref: '#/components/schemas/model.asset-group-collection-entry'
+    model.asset-group-tags-selector-request:
+      allOf:
+      - $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+      - type: object
+        properties:
+          auto_certify:
+            type: integer
+            enum:
+            - 0
+            - 1
+            - 2
+            description: auto_certify must be an input value of 0 (Disabled), 1 (AllMembers), or 2 (SeedsOnly)
+          description:
+            type: string
+          disabled:
+            type: boolean
+    model.asset-group-selector-spec:
+      type: object
+      properties:
+        selector_name:
+          type: string
+        sid:
+          type: string
+        action:
+          type: string
+          enum:
+          - add
+          - remove
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    model.asset-group-tags-selector-seed:
+      type: object
+      properties:
+        type:
+          type: integer
+          description: The type of selector, valid types are 1 - object id or 2 - cypher.
+          enum:
+          - 1
+          - 2
+        value:
+          description: The string value representing either an objectid or cypher query depending on the selector type.
+          type: string
+    model.components.int64.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    model.asset-group-tags-selector-response:
+      type: object
+      properties:
+        id:
+          type: integer
+        asset_group_tag_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+        disabled_at:
+          $ref: '#/components/schemas/null.time.response'
+        disabled_by:
+          $ref: '#/components/schemas/null.string.response'
+        name:
+          type: string
+        description:
+          type: string
+        auto_certify:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          description: auto_certify must be an input value of 0 (Disabled), 1 (AllMembers), or 2 (SeedsOnly)
+        is_default:
+          type: boolean
+        allow_disable:
+          type: boolean
+        seeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.asset-group-tags-selector-seed'
+    null.string:
+      type: object
+      properties:
+        string:
+          type: string
+        valid:
+          description: Valid is true if `string` is not `null`
+          type: boolean
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    api.params.predicate.filter.integer-strict:
+      type: string
+      pattern: ^((eq|neq):)?-?[0-9]+$
+      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`.
+
+        '
+    null.string.response:
+      type: string
+      nullable: true
+    null.int32:
+      type: object
+      properties:
+        int32:
+          type: integer
+          format: int32
+        valid:
+          description: Valid is true if `int32` is not `null`.
+          type: boolean
+    api.params.query.environments:
+      type: array
+      items:
+        type: string
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    null.time.response:
+      type: string
+      nullable: true
+      format: date-time
+      description: An RFC-3339 formatted string
+    model.asset-group-collection-entry:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          asset_group_collection_id:
+            type: integer
+            format: int64
+            writeOnly: true
+          object_id:
+            type: string
+            readOnly: true
+          node_label:
+            type: string
+            readOnly: true
+          properties:
+            type: object
+            readOnly: true
+    model.components.int32.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+          description: This is the unique identifier for this object.
+    null.boolean:
+      type: object
+      properties:
+        bool:
+          type: boolean
+        valid:
+          description: Valid is true if `boolean` is not `null`
+          type: boolean
+    model.asset-group-selector:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          asset_group_id:
+            type: integer
+            format: int32
+          name:
+            type: string
+          selector:
+            type: string
+          system_selector:
+            type: boolean
+    api.params.predicate.filter.string-strict:
+      type: string
+      pattern: ^((eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `neq`.
+
+        '
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+    model.asset-group:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          name:
+            type: string
+          tag:
+            type: string
+          system_group:
+            type: boolean
+            readOnly: true
+          selectors:
+            type: array
+            readOnly: true
+            items:
+              $ref: '#/components/schemas/model.asset-group-selector'
+          member_count:
+            type: integer
+            readOnly: true
+  parameters:
+    query.environments:
+      name: environments
+      description: Environment IDs to filter response by
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.environments'
+    query.created-at:
+      name: created_at
+      in: query
+      description: Filter results by `created_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+    query.skip:
+      name: skip
+      description: This query parameter is used for determining the number of objects to skip in pagination.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.skip'
+    query.updated-at:
+      name: updated_at
+      in: query
+      description: Filter results by `updated_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.deleted-at:
+      name: deleted_at
+      in: query
+      description: Filter results by `deleted_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.limit:
+      name: limit
+      description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.limit'
+  responses:
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    no-content:
+      description: '**No Content**
+
+        This response will contain no response body.
+
+        '
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: '[this request has no response data]'
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+  securitySchemes:
+    JWTBearerToken:
+      description: '`Authorization: Bearer $JWT_TOKEN`
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    SignedRequest:
+      description: '`Authorization: bhesignature $TOKEN_ID`
+
+        '
+      type: apiKey
+      name: Authorization
+      in: header
+    RequestDate:
+      description: '`RequestDate: $RFC3339_DATETIME`
+
+        '
+      type: apiKey
+      name: RequestDate
+      in: header
+    HMACSignature:
+      description: '`Signature: $BASE64ENCODED_HMAC_SIGNATURE`
+
+        '
+      type: apiKey
+      name: Signature
+      in: header
+x-tagGroups:
+- name: Community & Enterprise
+  tags:
+  - Auth
+  - Roles
+  - Permissions
+  - API Tokens
+  - BloodHound Users
+  - Collectors
+  - Collection Uploads
+  - Custom Node Management
+  - API Info
+  - Search
+  - Audit
+  - Config
+  - Asset Isolation
+  - Graph
+  - Azure Entities
+  - AD Base Entities
+  - Computers
+  - Containers
+  - Domains
+  - GPOs
+  - AIA CAs
+  - Root CAs
+  - Enterprise CAs
+  - NT Auth Stores
+  - Cert Templates
+  - OUs
+  - AD Users
+  - Groups
+  - Data Quality
+  - Datapipe
+  - Cypher
+  - OpenGraph (Experimental)
+- name: Enterprise Only
+  tags:
+  - EULA
+  - BHE Users
+  - Analysis
+  - Client Ingest
+  - Clients
+  - Jobs
+  - Tasks
+  - Events (Schedules)
+  - Attack Paths
+  - Risk Posture
+  - Meta Entities
+  - Alerts
