@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/specterops-bloodhound-openapi.json
+skills:
+- file: specterops-run-cypher-query.md
+  name: Run a Cypher query against the BloodHound graph
+  api: openapi/specterops-bloodhound-openapi.json
+  operations: [Login, GetSelf, RunCypherQuery]
+- file: specterops-ingest-and-analyze.md
+  name: Ingest collection data and run analysis
+  api: openapi/specterops-bloodhound-openapi.json
+  operations: [CreateFileUploadJob, UploadFileToJob, EndFileUploadJob, StartAnalysis, GetDatapipeStatus]
+- file: specterops-manage-api-tokens.md
+  name: Create and manage API tokens
+  api: openapi/specterops-bloodhound-openapi.json
+  operations: [ListAuthTokens, CreateAuthToken, DeleteAuthToken]

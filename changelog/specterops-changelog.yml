@@ -1,0 +1,45 @@
+generated: '2026-07-21'
+method: searched
+source: https://bloodhound.specterops.io/resources/release-notes/overview
+scheme: semver
+current_version: 9.4.0
+entries:
+- version: 9.4.0
+  date: '2026-07-07'
+  breaking: false
+  highlights: [Graph ID Lookup APIs for targeted automation, Auditor access to File Ingest and SSO Configuration,
+    Resilient OpenHound operations, Higher memory limits for Cypher queries]
+- version: 9.3.0
+  date: '2026-06-17'
+  breaking: false
+  highlights: [Jamf API client authentication, GitHub Enterprise SSO support, Role-based access hardening,
+    Expanded audit logging, Full-path highlighting in Explore]
+- version: 9.2.2
+  date: '2026-06-01'
+  breaking: false
+  highlights: [Fixed prolonged ingestion job runtimes on BloodHound Enterprise]
+- version: 9.2.0
+  date: '2026-05-28'
+  breaking: false
+  highlights: [Eligible Roles in Entity Panel, Automatic node selection from search, Enhanced Cypher functions
+      (UNWIND, head/tail, sorting), Stronger OpenGraph validation]
+- version: 9.1.0
+  date: '2026-05-06'
+  breaking: false
+  highlights: [Optimized graph indices for post-processing performance, Incremental edge updates, Custom
+      OpenGraph icons]
+- version: 9.0.2
+  date: '2026-04-21'
+  breaking: false
+  highlights: [Fixed Azure post-processing failures, Expanded TLS cipher suite support, OpenHound download
+      link]
+- version: 9.0.1
+  date: '2026-04-13'
+  breaking: true
+  highlights: [OpenGraph payload modifications (breaking), OpenHound collector framework launch, Privilege
+      Zones general availability, Environment-targeted access control]
+- version: 8.9.1
+  date: '2026-03-26'
+  breaking: false
+  highlights: [Resolved analysis failures, Fixed PostgreSQL Cypher path length limits, Deprecated SHA-1
+      cipher suites]

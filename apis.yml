@@ -1,27 +1,746 @@
 aid: specterops
 name: SpecterOps
-description: 'SpecterOps is a company surfaced as a portfolio company of insight-partners and added to
-  the API Evangelist network as a stub for enrichment. Sector: cybersecurity. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: 'SpecterOps is a cybersecurity company specializing in identity attack path management and
+  offensive security. Its flagship BloodHound platform continuously maps identity relationships and permissions
+  across Active Directory, Entra ID, and cloud/SaaS environments to reveal and eliminate hidden attack
+  paths before they are exploited. Offerings include BloodHound Enterprise (SaaS), BloodHound Community
+  Edition (open source), OpenGraph for custom data sources, Privilege Zones, and the SharpHound/AzureHound
+  collectors, alongside adversary-focused services (red team, penetration testing, attack path assessments)
+  and training. The BloodHound API is a documented REST API (OpenAPI 3.0.3, v2) covering 270+ operations
+  for data ingest, Cypher graph queries, analysis, attack-path findings, and administration.'
 url: https://raw.githubusercontent.com/api-evangelist/specterops/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - insight-partners
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: has-openapi
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Cybersecurity
-apis: []
+- Identity
+- Active Directory
+- Attack Path Management
+- Offensive Security
+- Graph
+- BloodHound
+image: https://specterops.io/wp-content/uploads/sites/3/2022/04/SO-Icon-Color.png
+apis:
+- aid: specterops:specterops-ad-base-entities-api
+  name: SpecterOps AD Base Entities API
+  description: The AD Base Entities API from SpecterOps — 3 operation(s) for ad base entities.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - AD Base Entities
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-ad-base-entities-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-ad-users-api
+  name: SpecterOps AD Users API
+  description: The AD Users API from SpecterOps — 11 operation(s) for ad users.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - AD Users
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-ad-users-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-aia-cas-api
+  name: SpecterOps AIA CAs API
+  description: The AIA CAs API from SpecterOps — 3 operation(s) for aia cas.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - AIA CAs
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-aia-cas-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-analysis-api
+  name: SpecterOps Analysis API
+  description: The Analysis API from SpecterOps — 3 operation(s) for analysis.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Analysis
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-analysis-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-api-info-api
+  name: SpecterOps API Info API
+  description: The API Info API from SpecterOps — 2 operation(s) for api info.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - API Info
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-api-info-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-api-tokens-api
+  name: SpecterOps API Tokens API
+  description: The API Tokens API from SpecterOps — 2 operation(s) for api tokens.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - API Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-api-tokens-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-asset-isolation-api
+  name: SpecterOps Asset Isolation API
+  description: The Asset Isolation API from SpecterOps — 21 operation(s) for asset isolation.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Asset Isolation
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-asset-isolation-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-attack-paths-api
+  name: SpecterOps Attack Paths API
+  description: The Attack Paths API from SpecterOps — 10 operation(s) for attack paths.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Attack Paths
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-attack-paths-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-audit-api
+  name: SpecterOps Audit API
+  description: The Audit API from SpecterOps — 1 operation(s) for audit.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Audit
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-audit-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-auth-api
+  name: SpecterOps Auth API
+  description: The Auth API from SpecterOps — 12 operation(s) for auth.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-auth-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-azure-entities-api
+  name: SpecterOps Azure Entities API
+  description: The Azure Entities API from SpecterOps — 1 operation(s) for azure entities.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Azure Entities
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-azure-entities-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-bloodhound-users-api
+  name: SpecterOps BloodHound Users API
+  description: The BloodHound Users API from SpecterOps — 6 operation(s) for bloodhound users.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - BloodHound Users
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-bloodhound-users-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-cert-templates-api
+  name: SpecterOps Cert Templates API
+  description: The Cert Templates API from SpecterOps — 3 operation(s) for cert templates.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Cert Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-cert-templates-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-client-ingest-api
+  name: SpecterOps Client Ingest API
+  description: The Client Ingest API from SpecterOps — 1 operation(s) for client ingest.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Client Ingest
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-client-ingest-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-clients-api
+  name: SpecterOps Clients API
+  description: The Clients API from SpecterOps — 11 operation(s) for clients.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Clients
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-clients-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-collection-uploads-api
+  name: SpecterOps Collection Uploads API
+  description: The Collection Uploads API from SpecterOps — 6 operation(s) for collection uploads.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Collection Uploads
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-collection-uploads-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-collectors-api
+  name: SpecterOps Collectors API
+  description: The Collectors API from SpecterOps — 6 operation(s) for collectors.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Collectors
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-collectors-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-community-api
+  name: SpecterOps Community API
+  description: The Community API from SpecterOps — 177 operation(s) for community.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Community
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-community-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-computers-api
+  name: SpecterOps Computers API
+  description: The Computers API from SpecterOps — 16 operation(s) for computers.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Computers
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-computers-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-config-api
+  name: SpecterOps Config API
+  description: The Config API from SpecterOps — 3 operation(s) for config.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Config
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-config-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-containers-api
+  name: SpecterOps Containers API
+  description: The Containers API from SpecterOps — 2 operation(s) for containers.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Containers
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-containers-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-custom-node-management-api
+  name: SpecterOps Custom Node Management API
+  description: >-
+    The Custom Node Management API from SpecterOps — 2 operation(s) for custom node management.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Custom Node Management
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-custom-node-management-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-cypher-api
+  name: SpecterOps Cypher API
+  description: The Cypher API from SpecterOps — 7 operation(s) for cypher.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Cypher
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-cypher-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-data-quality-api
+  name: SpecterOps Data Quality API
+  description: The Data Quality API from SpecterOps — 6 operation(s) for data quality.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Data Quality
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-data-quality-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-database-api
+  name: SpecterOps Database API
+  description: The Database API from SpecterOps — 1 operation(s) for database.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Database
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-database-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-datapipe-api
+  name: SpecterOps Datapipe API
+  description: The Datapipe API from SpecterOps — 2 operation(s) for datapipe.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Datapipe
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-datapipe-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-domains-api
+  name: SpecterOps Domains API
+  description: The Domains API from SpecterOps — 16 operation(s) for domains.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Domains
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-domains-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-enterprise-api
+  name: SpecterOps Enterprise API
+  description: The Enterprise API from SpecterOps — 230 operation(s) for enterprise.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Enterprise
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-enterprise-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-enterprise-cas-api
+  name: SpecterOps Enterprise CAs API
+  description: The Enterprise CAs API from SpecterOps — 4 operation(s) for enterprise cas.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Enterprise CAs
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-enterprise-cas-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-eula-api
+  name: SpecterOps EULA API
+  description: The EULA API from SpecterOps — 1 operation(s) for eula.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - EULA
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-eula-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-events-schedules-api
+  name: SpecterOps Events (Schedules) API
+  description: The Events (Schedules) API from SpecterOps — 2 operation(s) for events (schedules).
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Events (Schedules)
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-events-schedules-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-gpos-api
+  name: SpecterOps GPOs API
+  description: The GPOs API from SpecterOps — 6 operation(s) for gpos.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - GPOs
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-gpos-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-graph-api
+  name: SpecterOps Graph API
+  description: The Graph API from SpecterOps — 7 operation(s) for graph.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Graph
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-graph-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-groups-api
+  name: SpecterOps Groups API
+  description: The Groups API from SpecterOps — 10 operation(s) for groups.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-groups-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-jobs-api
+  name: SpecterOps Jobs API
+  description: The Jobs API from SpecterOps — 9 operation(s) for jobs.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-jobs-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-meta-entities-api
+  name: SpecterOps Meta Entities API
+  description: The Meta Entities API from SpecterOps — 1 operation(s) for meta entities.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Meta Entities
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-meta-entities-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-nt-auth-stores-api
+  name: SpecterOps NT Auth Stores API
+  description: The NT Auth Stores API from SpecterOps — 3 operation(s) for nt auth stores.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - NT Auth Stores
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-nt-auth-stores-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-opengraph-experimental-api
+  name: SpecterOps OpenGraph (Experimental) API
+  description: >-
+    The OpenGraph (Experimental) API from SpecterOps — 5 operation(s) for opengraph (experimental).
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - OpenGraph (Experimental)
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-opengraph-experimental-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-ous-api
+  name: SpecterOps OUs API
+  description: The OUs API from SpecterOps — 5 operation(s) for ous.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - OUs
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-ous-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-permissions-api
+  name: SpecterOps Permissions API
+  description: The Permissions API from SpecterOps — 2 operation(s) for permissions.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Permissions
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-permissions-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-risk-posture-api
+  name: SpecterOps Risk Posture API
+  description: The Risk Posture API from SpecterOps — 2 operation(s) for risk posture.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Risk Posture
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-risk-posture-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-roles-api
+  name: SpecterOps Roles API
+  description: The Roles API from SpecterOps — 2 operation(s) for roles.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Roles
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-roles-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-root-cas-api
+  name: SpecterOps Root CAs API
+  description: The Root CAs API from SpecterOps — 3 operation(s) for root cas.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Root CAs
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-root-cas-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-search-api
+  name: SpecterOps Search API
+  description: The Search API from SpecterOps — 2 operation(s) for search.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-search-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- aid: specterops:specterops-tasks-api
+  name: SpecterOps Tasks API
+  description: The Tasks API from SpecterOps — 9 operation(s) for tasks.
+  humanURL: https://bloodhound.specterops.io/reference/overview
+  baseURL: https://bloodhoundenterprise.io/api/v2
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/specterops-tasks-api-openapi.yml
+  - type: APIReference
+    url: https://bloodhound.specterops.io/reference/overview
+  - type: Documentation
+    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DeveloperPortal
+  url: https://bloodhound.specterops.io/
+- type: Documentation
+  url: https://bloodhound.specterops.io/
+- type: APIReference
+  url: https://bloodhound.specterops.io/reference/overview
+- type: GettingStarted
+  url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+- type: Blog
+  url: https://specterops.io/blog/
+- type: GitHubOrganization
+  url: https://github.com/SpecterOps
+- type: Support
+  url: https://slack.specterops.io/
+- type: SignUp
+  url: https://specterops.io/get-a-demo/
+- type: TermsOfService
+  url: https://specterops.io/terms-of-service/
+- type: PrivacyPolicy
+  url: https://specterops.io/privacy-policy/
+- type: Authentication
+  url: authentication/specterops-authentication.yml
+- type: Packages
+  url: packages/specterops-packages.yml
+- type: SDKs
+  url: packages/specterops-packages.yml
+- type: MCPServer
+  url: mcp/specterops-mcp.yml
+- type: LLMsTxt
+  url: llms/specterops-llms.txt
+- type: Overlay
+  url: overlays/specterops-bloodhound-overlay.yaml
+- type: Conformance
+  url: conformance/specterops-conformance.yml
+- type: Compliance
+  url: https://trust.specterops.io/
+- type: ErrorCatalog
+  url: errors/specterops-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/specterops-lifecycle.yml
+- type: Deprecation
+  url: lifecycle/specterops-lifecycle.yml
+- type: ChangeLog
+  url: changelog/specterops-changelog.yml
+- type: Conventions
+  url: conventions/specterops-conventions.yml
+- type: DataModel
+  url: data-model/specterops-data-model.yml
+- type: DomainSecurity
+  url: security/specterops-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/specterops-vulnerability-disclosure.yml
+- type: Security
+  url: https://trust.specterops.io/
+- type: TrustCenter
+  url: https://trust.specterops.io/
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://specterops.io/
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 17
+  pass: local-v1

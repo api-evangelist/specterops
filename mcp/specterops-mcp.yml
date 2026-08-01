@@ -1,0 +1,35 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/specterops-bloodhound-openapi.json
+notes: No official hosted/remote MCP server was found for the BloodHound API (searched SpecterOps GitHub
+  org, docs, and MCP registries). The following is a candidate tool list derived from high-value read/query
+  operations in the OpenAPI spec — a starting point for an MCP wrapper, not a published server.
+server:
+  name: bloodhound
+  transport: http
+tools:
+- name: run_cypher_query
+  description: Run a read-only Cypher query against the BloodHound graph
+  source_operation: openapi/specterops-bloodhound-openapi.json#RunCypherQuery
+- name: search_nodes
+  description: Search for nodes (users, computers, groups) by name
+  source_operation: openapi/specterops-bloodhound-openapi.json#Search
+- name: get_shortest_path
+  description: Return the shortest attack path between two nodes
+  source_operation: openapi/specterops-bloodhound-openapi.json#GetShortestPath
+- name: get_available_domains
+  description: List domains/tenants available in the environment
+  source_operation: openapi/specterops-bloodhound-openapi.json#GetAvailableDomains
+- name: export_attack_path_findings
+  description: Export attack-path findings for a domain
+  source_operation: openapi/specterops-bloodhound-openapi.json#ExportAttackPathFindings
+- name: start_analysis
+  description: Trigger a graph analysis run
+  source_operation: openapi/specterops-bloodhound-openapi.json#StartAnalysis
+- name: get_datapipe_status
+  description: Read the status of the ingest/analysis data pipeline
+  source_operation: openapi/specterops-bloodhound-openapi.json#GetDatapipeStatus
+- name: get_api_version
+  description: Return the BloodHound API version
+  source_operation: openapi/specterops-bloodhound-openapi.json#GetApiVersion

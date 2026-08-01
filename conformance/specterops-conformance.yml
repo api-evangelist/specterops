@@ -1,0 +1,37 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/specterops-bloodhound-openapi.json
+standards:
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 security scheme; API uses JWT bearer and HMAC-signed API keys.
+- id: oidc
+  conforms: true
+  evidence: BloodHound supports OIDC (and SAML/ADFS) for SSO user authentication per the platform auth docs.
+- id: jwt
+  conforms: true
+  evidence: JWTBearerToken securityScheme (http bearer, bearerFormat JWT).
+- id: hmac-signed-requests
+  conforms: true
+  evidence: SignedRequest + RequestDate + HMACSignature schemes; HMAC-SHA-256 chain over method+URI, RFC3339
+    date, and body.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom api.error-wrapper envelope (application/json), not application/problem+json.
+- id: rfc3339-timestamps
+  conforms: true
+  evidence: Error timestamps and RequestDate header use RFC-3339 datetime.
+- id: openapi-3.0
+  conforms: true
+  evidence: Published OpenAPI 3.0.3 document with 270 operations and 135 schemas.
+- id: pagination-offset
+  conforms: true
+  evidence: skip/limit query parameters with sort-by across list endpoints.
+- id: cypher-opencypher
+  conforms: true
+  evidence: Graph query endpoint accepts openCypher syntax (/api/v2/graphs/cypher).
+compliance:
+  published: true
+  source: https://trust.specterops.io/
+  certifications: [SOC 2 Type 2, 'ISO/IEC 27001:2022', 'ISO/IEC 27017:2015', FedRAMP, TX-RAMP Level 2,
+    CREST, Cyber Essentials, EU-US DPF, GDPR]

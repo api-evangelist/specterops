@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: searched
+notes: All standard /.well-known/ discovery endpoints probed on both the marketing host (specterops.io)
+  and the docs host (bloodhound.specterops.io) returned 404. The BloodHound API is customer-hosted (self-managed
+  or per-tenant SaaS at *.bloodhoundenterprise.io), so no central well-known catalog is published. Absence
+  is a valid, recorded result — no WellKnown/SecurityTxt pointer is wired.
+hosts:
+- host: https://specterops.io
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://bloodhound.specterops.io
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}

@@ -1,0 +1,14 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/SpecterOps/bloodhound-python-sdk
+packages:
+- language: python
+  registry: pypi
+  name: blood-hound-python-client
+  version: 2.0.0
+  url: https://pypi.org/project/blood-hound-python-client/
+  install: pip install blood-hound-python-client
+  repo: https://github.com/SpecterOps/bloodhound-python-sdk
+  official: true
+  description: Official SpecterOps client library for the BloodHound API, auto-generated from the OpenAPI
+    spec with HMAC (HMACAuthenticatedClient) and JWT auth support; sync and async methods. Apache-2.0.

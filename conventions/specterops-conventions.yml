@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: searched
+source: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
+authentication:
+  styles: [JWT bearer token, HMAC-signed request]
+  jwt: 'Authorization: Bearer $JWT_TOKEN (8-hour TTL, obtained via Login).'
+  signed_request:
+    scheme: bhesignature
+    headers:
+      Authorization: bhesignature $TOKEN_ID
+      RequestDate: $RFC3339_DATETIME
+      Signature: $BASE64ENCODED_HMAC_SIGNATURE
+    algorithm: HMAC-SHA-256 chained digest over (method+URI) -> (RFC3339 date to the hour) -> (body).
+    ref: authentication/specterops-authentication.yml
+idempotency:
+  supported: false
+  note: No documented Idempotency-Key header or parameter in the OpenAPI spec; the signed-request scheme
+    protects integrity/replay via RequestDate + HMAC rather than an idempotency key.
+pagination:
+  style: offset
+  params: [skip, limit]
+  sort_param: sort-by
+  note: List endpoints accept skip/limit offset paging with sort-by; some entity endpoints use entity-scoped
+    variants (entity.skip / entity.limit / entity.sort-by).
+request_tracing:
+  field: request_id
+  note: Error responses (api.error-wrapper) carry a request_id UUID identifying the failed request.
+prefer_header:
+  supported: true
+  note: A Prefer request header (RFC 7240) is accepted on some operations.
+versioning:
+  style: uri-path
+  current: v2
+  ref: lifecycle/specterops-lifecycle.yml
+error_envelope:
+  schema: api.error-wrapper
+  fields: [http_status, timestamp, request_id, 'errors[]']
+  ref: errors/specterops-problem-types.yml
+rate_limiting:
+  signal: HTTP 429 Too Many Requests
+  note: 429 responses are defined across the API; no explicit RateLimit-* headers are documented in the
+    spec.
+content_types: [application/json, application/octet-stream, text/csv, text/plain, text/x-yaml]

@@ -1,0 +1,42 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/specterops-bloodhound-openapi.json
+format: custom
+envelope:
+  schema: api.error-wrapper
+  content_type: application/json
+  fields:
+    http_status: The HTTP status code (integer)
+    timestamp: RFC-3339 timestamp the error response was sent
+    request_id: UUID of the request that failed (request tracing)
+    errors: Array of api.error-detail { context, message }
+  note: BloodHound does not use RFC 9457 application/problem+json; it wraps one or more error details in
+    a consistent api.error-wrapper object.
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Malformed request body or parameters.
+- status: 401
+  title: Unauthorized
+  meaning: Missing or invalid JWT / HMAC signature / RequestDate.
+- status: 403
+  title: Forbidden
+  meaning: Authenticated principal lacks the required role/permission.
+- status: 404
+  title: Not Found
+  meaning: The requested resource or entity does not exist.
+- status: 409
+  title: Conflict
+  meaning: Request conflicts with current state (e.g. duplicate or concurrent modification).
+- status: 410
+  title: Gone
+  meaning: The resource is no longer available.
+- status: 415
+  title: Unsupported Media Type
+  meaning: Request content type is not accepted by the endpoint.
+- status: 429
+  title: Too Many Requests
+  meaning: Rate limit exceeded.
+- status: 500
+  title: Internal Server Error
+  meaning: Unexpected server-side error.

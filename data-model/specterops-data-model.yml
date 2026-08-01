@@ -1,0 +1,59 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/specterops-bloodhound-openapi.json
+notes: BloodHound is a graph platform; its core "entities" are node kinds in an identity attack-path graph
+  (Active Directory + Azure/Entra) connected by 100+ edge/relationship types. This model is derived from
+  the OpenAPI tags and entity endpoints, not from foreign-key style $refs.
+graph_model: true
+node_kinds:
+- name: Domain
+  api_tag: Domains
+  description: Active Directory domain / collection root.
+- name: User
+  api_tag: AD Users
+  description: Active Directory user principal.
+- name: Computer
+  api_tag: Computers
+  description: Domain-joined computer.
+- name: Group
+  api_tag: Groups
+  description: Security/distribution group.
+- name: GPO
+  api_tag: GPOs
+  description: Group Policy Object.
+- name: OU
+  api_tag: OUs
+  description: Organizational Unit.
+- name: Container
+  api_tag: Containers
+  description: AD container object.
+- name: CertTemplate
+  api_tag: Cert Templates
+  description: AD CS certificate template (ADCS attack surface).
+- name: EnterpriseCA
+  api_tag: Enterprise CAs
+  description: Enterprise Certificate Authority.
+- name: AzureEntity
+  api_tag: Azure Entities
+  description: Azure/Entra ID principals and resources.
+relationships:
+- from: User
+  to: Group
+  kind: belongs_to
+  via: MemberOf
+- from: Group
+  to: Domain
+  kind: belongs_to
+  via: domain
+- from: User
+  to: Computer
+  kind: has_many
+  via: attack-path edges (e.g. AdminTo, HasSession)
+- from: Domain
+  to: AttackPathFinding
+  kind: has_many
+  via: /api/v2/domains/{domain_id}/attack-path-findings
+query_surface:
+- Cypher (openCypher) via /api/v2/graphs/cypher
+- shortest-path / edge-composition / acl-inheritance graph endpoints
+- entity search via /api/v2/search and /api/v2/graph-search

@@ -1,0 +1,28 @@
+generated: '2026-07-21'
+method: searched
+source: https://bloodhound.specterops.io/resources/release-notes/overview
+versioning:
+  scheme: uri-path
+  current: v2
+  api_version_endpoint: /api/version
+  spec_endpoint: /api/v2/spec
+  product_version: 9.4.0
+deprecation:
+  policy_url: https://bloodhound.specterops.io/resources/release-notes/overview
+  note: BloodHound marks superseded operations as deprecated in the OpenAPI spec (22 operations currently
+    flagged, e.g. the legacy SAML-provider and client-task endpoints, Pathfinding, ExportAttackPathFindings).
+    Breaking changes are called out per release (e.g. v9.0.1 OpenGraph payload changes).
+  sunset_header: false
+status_page: null
+status_page_note: No public status page found (status.specterops.io / status.bloodhound.specterops.io
+  do not resolve); BloodHound Enterprise is delivered per-tenant.
+release_notes: https://bloodhound.specterops.io/resources/release-notes/overview
+deprecated_operations:
+- openapi/specterops-bloodhound-openapi.json#ListSamlProviders
+- openapi/specterops-bloodhound-openapi.json#CreateSamlProvider
+- openapi/specterops-bloodhound-openapi.json#GetSamlProvider
+- openapi/specterops-bloodhound-openapi.json#DeleteSamlProvider
+- openapi/specterops-bloodhound-openapi.json#DeleteCustomNode
+- openapi/specterops-bloodhound-openapi.json#Pathfinding
+- openapi/specterops-bloodhound-openapi.json#ExportAttackPathFindings
+- openapi/specterops-bloodhound-openapi.json#UpdateAssetGroupSelectorsDeprecated

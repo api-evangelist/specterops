@@ -1,0 +1,17 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for BloodHound API
+  version: 1.0.0
+extends: openapi/specterops-bloodhound-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: specterops
+    x-apievangelist-product: BloodHound
+    x-apievangelist-auth: [JWT bearer, HMAC signed request (bhesignature)]
+    x-apievangelist-error-envelope: api.error-wrapper
+    x-apievangelist-pagination: skip/limit offset paging with sort-by
+- target: $.servers
+  update:
+    x-apievangelist-note: The published server URL is "/" (relative); the API is hosted per-tenant at
+      https://<tenant>.bloodhoundenterprise.io or on a self-managed BloodHound instance.

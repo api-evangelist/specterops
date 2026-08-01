@@ -1,0 +1,20 @@
+generated: '2026-07-21'
+method: searched
+probe: true
+source: https://trust.specterops.io/
+url: https://trust.specterops.io/
+certifications:
+- SOC 2
+- ISO 27001
+- ISO 27017
+- FedRAMP
+- GDPR
+evidence:
+- source: https://trust.specterops.io/
+  keywords:
+  - soc 2
+  - iso/iec 27001
+  - fedramp
+  - trust center
+  - compliance certification
+  - gdpr
