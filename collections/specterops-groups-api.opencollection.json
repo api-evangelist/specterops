@@ -1,0 +1,496 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Groups API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Group entity info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "counts",
+                "value": "",
+                "type": "query",
+                "description": "Include counts of related entities. Default value is `true`."
+              }
+            ]
+          },
+          "docs": "Get info and counts for this Group node."
+        },
+        {
+          "info": {
+            "name": "Get Group entity admin rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/admin-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this group has admin rights to."
+        },
+        {
+          "info": {
+            "name": "Get Group entity controllables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/controllables",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals this group can control."
+        },
+        {
+          "info": {
+            "name": "Get Group entity controllers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/controllers",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that can control this group."
+        },
+        {
+          "info": {
+            "name": "Get Group entity DCOMRights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/dcom-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this group can execute DCOM on."
+        },
+        {
+          "info": {
+            "name": "Get Group entity members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/members",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that are a member of this group."
+        },
+        {
+          "info": {
+            "name": "Get Group entity memberships",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/memberships",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the groups this group is a member of."
+        },
+        {
+          "info": {
+            "name": "Get Group entity PowerShell remote rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/ps-remote-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this group can execute PowerShell remote on."
+        },
+        {
+          "info": {
+            "name": "Get Group entity RDP rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/rdp-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this group can RDP to."
+        },
+        {
+          "info": {
+            "name": "Get Group entity sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/groups/:object_id/sessions",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the active sessions for users that belong to this group."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

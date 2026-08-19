@@ -1,0 +1,2180 @@
+{
+  "item": [
+    {
+      "id": "17086b0a-6242-42b6-9ac8-a9afeccb808c",
+      "name": "Collection Uploads",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab244222-f412-40c0-b235-afe54caac87d",
+          "name": "List File Upload Jobs",
+          "request": {
+            "name": "List File Upload Jobs",
+            "description": {
+              "content": "Lists available file upload jobs",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "file-upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "<string>",
+                  "description": "Sortable columns are `user_email_address`, `status`, `status_message`, `start_time`, `end_time`, `last_ingest`, `id`, `created_at`, `updated_at`, and `deleted_at`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_email_address",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "status_message",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "last_ingest",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at",
+                  "value": "<string>",
+                  "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at",
+                  "value": "<string>",
+                  "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted_at",
+                  "value": "<string>",
+                  "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+                },
+                {
+                  "disabled": false,
+                  "key": "skip",
+                  "value": "<integer>",
+                  "description": "This query parameter is used for determining the number of objects to skip in pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4d748d6d-2cbe-4607-8fb9-883b9a71bb20",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_email_address",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status_message",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "last_ingest",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2826,\n  \"skip\": \"<integer>\",\n  \"limit\": \"<integer>\",\n  \"data\": [\n    {\n      \"id\": 6912,\n      \"created_at\": \"1975-11-03T12:11:40.855Z\",\n      \"updated_at\": \"2013-09-06T00:55:14.917Z\",\n      \"deleted_at\": {\n        \"time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"valid\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"user_id\": \"bd236aa3-a77b-5ba6-8408-747711c2b2dd\",\n      \"user_email_address\": \"M1YS4l1Eg0@jyUJSqSnkSqCCxvrlcgnhE.dfay\",\n      \"status\": 4,\n      \"status_message\": \"string\",\n      \"start_time\": \"1959-08-09T12:49:00.975Z\",\n      \"end_time\": \"1991-12-06T00:51:05.757Z\",\n      \"last_ingest\": \"2013-12-29T09:39:36.372Z\",\n      \"total_files\": 2855,\n      \"failed_files\": 7703\n    },\n    {\n      \"id\": 7524,\n      \"created_at\": \"1988-05-09T04:20:25.689Z\",\n      \"updated_at\": \"1968-03-18T00:23:43.582Z\",\n      \"deleted_at\": {\n        \"time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"valid\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"user_id\": \"75bf9d9a-5548-d228-c28f-43bff1c982d4\",\n      \"user_email_address\": \"POYD-58m@pkblrhzid.xhv\",\n      \"status\": 8,\n      \"status_message\": \"string\",\n      \"start_time\": \"2002-02-04T00:28:57.493Z\",\n      \"end_time\": \"1978-09-06T23:30:41.705Z\",\n      \"last_ingest\": \"2009-10-28T18:55:44.652Z\",\n      \"total_files\": 7288,\n      \"failed_files\": 155\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1dc2ba8f-bf18-4f2c-8158-62f33f0e80a8",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_email_address",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status_message",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "last_ingest",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2b4ccbb-dff3-4f00-ac62-f8a1609147f0",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_email_address",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status_message",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "last_ingest",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d8d2ff7-c179-4bae-a225-9ff24e3ef7ae",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_email_address",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status_message",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "last_ingest",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ecbc3fa3-7b9d-4db4-9fd9-6d0bd8fe55b2",
+          "name": "Create File Upload Job",
+          "request": {
+            "name": "Create File Upload Job",
+            "description": {
+              "content": "Creates a file upload job for sending collection files",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "file-upload",
+                "start"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "28548bd0-aa6f-46aa-beb1-20b9e8f2927c",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 5314,\n    \"created_at\": \"1962-02-15T07:11:31.503Z\",\n    \"updated_at\": \"2003-06-07T13:24:36.082Z\",\n    \"deleted_at\": {\n      \"time\": \"2013-11-28T03:34:28.398Z\",\n      \"valid\": false\n    },\n    \"user_id\": \"55439b85-6d9c-5256-5326-3b0ff84f5d56\",\n    \"user_email_address\": \"J6vzA@opZtSNbmiTpGsdkLK.xph\",\n    \"status\": 5,\n    \"status_message\": \"string\",\n    \"start_time\": \"1947-09-07T23:50:39.170Z\",\n    \"end_time\": \"1997-07-11T01:54:04.777Z\",\n    \"last_ingest\": \"2025-01-23T00:21:44.328Z\",\n    \"total_files\": 662,\n    \"failed_files\": 2125\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c25da650-9193-4a92-af14-341142236cb2",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bff69c47-f135-4bef-8f77-424ccf880b6e",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4246f03-16bc-42c5-83a9-a6d96276e244",
+          "name": "Upload File To Job",
+          "request": {
+            "name": "Upload File To Job",
+            "description": {
+              "content": "Saves a collection file to a file upload job",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "file-upload",
+                ":file_upload_job_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "file_upload_job_id",
+                  "description": "(Required) The ID for the file upload job."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "disabled": false,
+                "description": "File upload name header, used to specify the name of the file being uploaded to improve error reporting.",
+                "key": "X-File-Upload-Name",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "131f7ed0-1051-480e-a5c5-9e0d29cfd5be",
+              "name": "**No Content**\nThis response will contain no response body.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Content type header, used to specify the type of content being sent by the client.",
+                    "key": "Content-Type",
+                    "value": "application/zip-compressed"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "File upload name header, used to specify the name of the file being uploaded to improve error reporting.",
+                    "key": "X-File-Upload-Name",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "[this request has no response data]",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a73c5649-ba62-4132-8197-bb71ae08ac06",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Content type header, used to specify the type of content being sent by the client.",
+                    "key": "Content-Type",
+                    "value": "application/zip-compressed"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "File upload name header, used to specify the name of the file being uploaded to improve error reporting.",
+                    "key": "X-File-Upload-Name",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69456664-0b28-4caa-abd7-d153a2acf687",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Content type header, used to specify the type of content being sent by the client.",
+                    "key": "Content-Type",
+                    "value": "application/zip-compressed"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "File upload name header, used to specify the name of the file being uploaded to improve error reporting.",
+                    "key": "X-File-Upload-Name",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a2edf64-525b-4c25-b7ea-978927401daf",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Content type header, used to specify the type of content being sent by the client.",
+                    "key": "Content-Type",
+                    "value": "application/zip-compressed"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "File upload name header, used to specify the name of the file being uploaded to improve error reporting.",
+                    "key": "X-File-Upload-Name",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c95e09b2-0fe4-45c6-b7b7-272d9d18cd6f",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Content type header, used to specify the type of content being sent by the client.",
+                    "key": "Content-Type",
+                    "value": "application/zip-compressed"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "File upload name header, used to specify the name of the file being uploaded to improve error reporting.",
+                    "key": "X-File-Upload-Name",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d33d81bd-4b9e-45ac-b640-25656cd9853b",
+          "name": "Get Completed Tasks",
+          "request": {
+            "name": "Get Completed Tasks",
+            "description": {
+              "content": "Get information about the individual completed file upload tasks associated with a job",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "file-upload",
+                ":file_upload_job_id",
+                "completed-tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "file_upload_job_id",
+                  "description": "(Required) The ID for the file upload job."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2843af96-4a9b-405e-99ae-7b559e6b5eed",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "completed-tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 9270,\n      \"created_at\": \"1982-03-25T09:39:18.829Z\",\n      \"updated_at\": \"1997-03-26T11:58:45.734Z\",\n      \"deleted_at\": {\n        \"time\": \"1951-04-22T08:49:41.170Z\",\n        \"valid\": true\n      },\n      \"file_name\": \"string\",\n      \"parent_file_name\": \"string\",\n      \"errors\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": 9916,\n      \"created_at\": \"2005-03-12T18:17:47.041Z\",\n      \"updated_at\": \"1950-10-15T20:06:49.294Z\",\n      \"deleted_at\": {\n        \"time\": \"1990-11-13T11:24:01.702Z\",\n        \"valid\": true\n      },\n      \"file_name\": \"string\",\n      \"parent_file_name\": \"string\",\n      \"errors\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17330908-dee8-4aa7-aa4f-40625fb32779",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "completed-tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2f409f81-07c1-4521-bfdc-36575f82a2d2",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "completed-tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38279fac-7054-4a58-9ee4-e6c55368e11a",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "completed-tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "433ff998-c709-42ce-a623-858bf9364969",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "completed-tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "56eac7bb-6eae-4b4a-afdd-de83abb98c71",
+          "name": "End File Upload Job",
+          "request": {
+            "name": "End File Upload Job",
+            "description": {
+              "content": "End a file upload job",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "file-upload",
+                ":file_upload_job_id",
+                "end"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "file_upload_job_id",
+                  "description": "(Required) The ID for the file upload job."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1505f03-4198-4552-a308-e74a81f772f3",
+              "name": "**No Content**\nThis response will contain no response body.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "end"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "[this request has no response data]",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "20549cf8-4c20-489f-9872-47041dd7f30e",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "end"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6056e5d2-070b-4b7d-89f0-8f2a3bdb3c31",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "end"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "699e343c-4565-481b-8be7-ea7c5103b064",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "end"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1baf838-f546-41da-92e0-9c0e5d68bcf2",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    ":file_upload_job_id",
+                    "end"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "file_upload_job_id",
+                      "description": "(Required) The ID for the file upload job."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d48371fc-2a3f-4859-b4f4-886ae69fdd9e",
+          "name": "List accepted file upload types",
+          "request": {
+            "name": "List accepted file upload types",
+            "description": {
+              "content": "List accepted file types for collection file uploads",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "file-upload",
+                "accepted-types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c40faf8f-c0c9-454e-a600-c46e9dcfca9c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    "accepted-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dff79e9e-a867-4d66-a0eb-70d632313104",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    "accepted-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82f97ca0-0a19-4af1-8bf5-312dbeebdb8d",
+              "name": "**Too Many Requests**\nThe client has sent too many requests within a certain time window\nand tripped the rate limiting middleware.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "file-upload",
+                    "accepted-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 429,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"middleware\",\n      \"message\": \"Too many requests. Please try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b86f72a0-0ba6-413e-8caa-ed92c13fb543",
+    "name": "BloodHound AD Base Entities Collection Uploads API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n\n\nContact Support:\n Name: BloodHound Enterprise Support\n Email: support@specterops.io",
+      "type": "text/plain"
+    }
+  }
+}

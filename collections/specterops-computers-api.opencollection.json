@@ -1,0 +1,790 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Computers API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Computers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get computer entity info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "counts",
+                "value": "",
+                "type": "query",
+                "description": "Include counts of related entities. Default value is `true`."
+              }
+            ]
+          },
+          "docs": "Get info and counts for this computer node."
+        },
+        {
+          "info": {
+            "name": "Get computer entity admin rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/admin-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this computer has admin rights to."
+        },
+        {
+          "info": {
+            "name": "Get computer entity admins",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/admin-users",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that have admin rights on this computer."
+        },
+        {
+          "info": {
+            "name": "Get computer entity constrained delegation rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/constrained-delegation-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that this computer has constrained delegations rights to."
+        },
+        {
+          "info": {
+            "name": "Get computer entity constrained users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/constrained-users",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that have constrained delegation rights to this computer."
+        },
+        {
+          "info": {
+            "name": "Get computer entity controllables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/controllables",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals this computer can control."
+        },
+        {
+          "info": {
+            "name": "Get computer entity controllers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/controllers",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that can control this computer."
+        },
+        {
+          "info": {
+            "name": "Get computer entity DCOM rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/dcom-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this computer can execute DCOM on."
+        },
+        {
+          "info": {
+            "name": "Get computer entity DCOM users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/dcom-users",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that can execute DCOM on this computer."
+        },
+        {
+          "info": {
+            "name": "Get computer entity group membership",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/group-membership",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the groups this computer is a member of."
+        },
+        {
+          "info": {
+            "name": "Get computer entity remote PowerShell rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/ps-remote-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this computer has remote PowerShell rights on."
+        },
+        {
+          "info": {
+            "name": "Get computer entity remote PowerShell users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/ps-remote-users",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that have remote PowerShell rights on this computer."
+        },
+        {
+          "info": {
+            "name": "Get computer entity RDP rights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/rdp-rights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the systems this computer can RDP to."
+        },
+        {
+          "info": {
+            "name": "Get computer entity RDP users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/rdp-users",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that have RDP rights on this computer."
+        },
+        {
+          "info": {
+            "name": "Get computer entity sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/sessions",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals with active sessions on this computer."
+        },
+        {
+          "info": {
+            "name": "Get computer entity SQL admins",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/computers/:object_id/sql-admins",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that have SQL admin rights on this computer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

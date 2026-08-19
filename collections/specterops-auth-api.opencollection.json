@@ -1,0 +1,347 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Auth API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Login to BloodHound",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/login",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Login to BloodHound with user credentials or a one time password."
+        },
+        {
+          "info": {
+            "name": "Logout of BloodHound",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/logout",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Logout of BloodHound and delete the user session JWT."
+        },
+        {
+          "info": {
+            "name": "Get self",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/self",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get the currently authenticated requester details. For Community, this will only ever be valid for users. In Enterprise, this could be either a BloodHound user or a client (collector).\n"
+        },
+        {
+          "info": {
+            "name": "List SAML Providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saml",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in a future release. Please use `GET /api/v2/sso-providers` instead.\n"
+        },
+        {
+          "info": {
+            "name": "Get all SAML sign on endpoints",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saml/sso",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in a future release. Please use `GET /api/v2/sso-providers` instead to list available SSO endpoints.\n"
+        },
+        {
+          "info": {
+            "name": "Create a New SAML Provider from Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/saml/providers",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "name",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in a future release. Please use `POST /api/v2/sso-providers/saml` instead.\n"
+        },
+        {
+          "info": {
+            "name": "Get SAML Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saml/providers/:saml_provider_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saml_provider_id",
+                "value": "",
+                "type": "path",
+                "description": "SAML Provider ID"
+              }
+            ]
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in a future release. Please use `GET /api/v2/sso-providers` to list all SAML providers instead.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a SAML Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/saml/providers/:saml_provider_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saml_provider_id",
+                "value": "",
+                "type": "path",
+                "description": "SAML Provider ID"
+              }
+            ]
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in a future release. Please use `DELETE /api/v2/sso-providers/{sso_provider_id}` instead.\n"
+        },
+        {
+          "info": {
+            "name": "List SSO Providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/sso-providers",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists all available SSO providers (SAML and OIDC)"
+        },
+        {
+          "info": {
+            "name": "Create OIDC Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/sso-providers/oidc",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new OIDC provider for SSO authentication"
+        },
+        {
+          "info": {
+            "name": "Create a New SAML Provider from Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/sso-providers/saml",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "name",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "config.auto_provision.enabled",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "config.auto_provision.default_role_id",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "config.auto_provision.role_provision",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Creates a new SAML provider with the given name and metadata XML."
+        },
+        {
+          "info": {
+            "name": "Update SSO Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v2/sso-providers/:sso_provider_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sso_provider_id",
+                "value": "",
+                "type": "path",
+                "description": "SSO Provider ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing SSO provider. Updating saml provider requires a \"multipart/form-data\" body. Updating oidc provider requires \"application/json\" body. Response is respective provider"
+        },
+        {
+          "info": {
+            "name": "Delete SSO Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/sso-providers/:sso_provider_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sso_provider_id",
+                "value": "",
+                "type": "path",
+                "description": "SSO Provider ID"
+              }
+            ]
+          },
+          "docs": "Deletes an existing SSO provider"
+        },
+        {
+          "info": {
+            "name": "Get SAML Provider Signing Certificate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/sso-providers/:sso_provider_id/signing-certificate",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sso_provider_id",
+                "value": "",
+                "type": "path",
+                "description": "SSO Provider ID for a SAML provider"
+              }
+            ]
+          },
+          "docs": "Download the SAML Provider Signing Certificate. Only applies to SAML providers."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

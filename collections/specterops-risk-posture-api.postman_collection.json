@@ -1,0 +1,1498 @@
+{
+  "item": [
+    {
+      "id": "f55f03a3-a972-4c51-8c43-40b2e5295116",
+      "name": "Risk Posture",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9ab09173-5bfc-4ca2-a6c9-ecbb9277e48b",
+          "name": "Get Posture Statistics",
+          "request": {
+            "name": "Get Posture Statistics",
+            "description": {
+              "content": "Gets the history of database stats saved in the database",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "posture-stats"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "<string>",
+                  "description": "Sortable columns are `domain_sid`, `exposure_index`, `tier_zero_count`, `critical_risk_count`, `id`, `created_at`, `updated_at`, `deleted_at`."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<dateTime>",
+                  "description": "Lower bound for created_at; to return posture stats starting at a specific date/time. This filter has been deprecated, please use created_at instead."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<dateTime>",
+                  "description": "Upper bound for created_at; to return posture stats upto a specific date/time. This filter has been deprecated, please use created_at instead."
+                },
+                {
+                  "disabled": false,
+                  "key": "domain_sid",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "exposure_index",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "asset_group_tag_id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tier_zero_count",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "critical_risk_count",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted_at",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7a3c4371-7ec2-4d86-95fc-86c41fca452c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "domain_sid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exposure_index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier_zero_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "critical_risk_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2747,\n  \"skip\": 5285,\n  \"limit\": 6028,\n  \"start\": \"1980-10-20T16:35:52.322Z\",\n  \"end\": \"2015-08-14T03:07:13.712Z\",\n  \"data\": [\n    {\n      \"id\": 7110,\n      \"created_at\": \"2018-07-31T00:30:06.578Z\",\n      \"updated_at\": \"1959-01-29T07:32:13.722Z\",\n      \"deleted_at\": {\n        \"time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"valid\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"domain_sid\": \"string\",\n      \"exposure_index\": 7187.465423686398,\n      \"tier_zero_count\": 97,\n      \"critical_risk_count\": 3330\n    },\n    {\n      \"id\": 864,\n      \"created_at\": \"2006-09-26T06:38:38.593Z\",\n      \"updated_at\": \"2015-03-12T11:50:47.837Z\",\n      \"deleted_at\": {\n        \"time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"valid\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"domain_sid\": \"string\",\n      \"exposure_index\": 5176.353334588138,\n      \"tier_zero_count\": 6404,\n      \"critical_risk_count\": 5593\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "129c7668-dc98-44fd-9f7d-bf537b38a7bb",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "domain_sid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exposure_index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier_zero_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "critical_risk_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c35e92f-27ee-4164-a2d9-7502e5895354",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "domain_sid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exposure_index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier_zero_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "critical_risk_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bdb3ab87-23e9-441c-9585-80b2a2a7826e",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "domain_sid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exposure_index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier_zero_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "critical_risk_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a489664d-5a5d-44f4-9e11-0415e93808b8",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "domain_sid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exposure_index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier_zero_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "critical_risk_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1bfe43e0-ef2e-44eb-a0b0-65fbea8fe587",
+              "name": "**Too Many Requests**\nThe client has sent too many requests within a certain time window\nand tripped the rate limiting middleware.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "domain_sid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exposure_index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier_zero_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "critical_risk_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 429,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"middleware\",\n      \"message\": \"Too many requests. Please try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd1dfbce-865c-4e83-9026-244ad0e06d7b",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "domain_sid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exposure_index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier_zero_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "critical_risk_count",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fa1b5795-78a7-46cf-8862-046a5252bf29",
+          "name": "Get Posture History",
+          "request": {
+            "name": "Get Posture History",
+            "description": {
+              "content": "Gets posture data count changes over a time period",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "posture-history",
+                ":data_type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "environments",
+                  "value": "<string>",
+                  "description": "(Required) Environment IDs"
+                },
+                {
+                  "disabled": false,
+                  "key": "environments",
+                  "value": "<string>",
+                  "description": "(Required) Environment IDs"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<dateTime>",
+                  "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<dateTime>",
+                  "description": "Ending datetime of range (exclusive) in RFC-3339 format; Defaults to current datetime"
+                },
+                {
+                  "disabled": false,
+                  "key": "asset_group_tag_id",
+                  "value": "<integer>",
+                  "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "data_type",
+                  "description": "(Required) The type of posture data to return"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5d6b438a-f628-44e9-889f-e9e3283a5be3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-history",
+                    ":data_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "data_type",
+                      "description": "(Required) The type of posture data to return"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"start\": \"1980-10-23T01:39:43.670Z\",\n  \"end\": \"1966-11-17T21:43:10.965Z\",\n  \"environments\": [\n    \"string\",\n    \"string\"\n  ],\n  \"data_type\": \"<string>\",\n  \"data\": [\n    {\n      \"date\": \"1978-01-25T10:32:22.010Z\",\n      \"value\": 5647.604276218625\n    },\n    {\n      \"date\": \"1970-03-08T16:41:37.633Z\",\n      \"value\": 4535.245130967716\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7677b85d-9256-458a-86e4-271d851c3fae",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-history",
+                    ":data_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "data_type",
+                      "description": "(Required) The type of posture data to return"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e2be373-54b8-46aa-a2ef-87732b152cbd",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-history",
+                    ":data_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "data_type",
+                      "description": "(Required) The type of posture data to return"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7890aabe-9d00-4d80-8f95-d22ac5086e63",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-history",
+                    ":data_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "data_type",
+                      "description": "(Required) The type of posture data to return"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68fec69a-04a8-40ef-b485-7cf4f83fdb50",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-history",
+                    ":data_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "data_type",
+                      "description": "(Required) The type of posture data to return"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "734894ad-8827-4a97-9e2f-397e46085364",
+              "name": "**Too Many Requests**\nThe client has sent too many requests within a certain time window\nand tripped the rate limiting middleware.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-history",
+                    ":data_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "data_type",
+                      "description": "(Required) The type of posture data to return"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 429,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"middleware\",\n      \"message\": \"Too many requests. Please try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1afad19f-db63-4617-af55-0d80dd32a606",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "posture-history",
+                    ":data_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "environments",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_group_tag_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "data_type",
+                      "description": "(Required) The type of posture data to return"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ef113221-09f1-4fe3-95ae-5ef77141ca54",
+    "name": "BloodHound AD Base Entities Risk Posture API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n\n\nContact Support:\n Name: BloodHound Enterprise Support\n Email: support@specterops.io",
+      "type": "text/plain"
+    }
+  }
+}

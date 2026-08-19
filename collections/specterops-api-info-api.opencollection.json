@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities API Info API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Info",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get API version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/version",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Returns the supported API versions."
+        },
+        {
+          "info": {
+            "name": "Get API Spec",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/spec",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Returns an Open API 3.0 compatible BloodHound API spec"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

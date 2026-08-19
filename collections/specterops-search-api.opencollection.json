@@ -1,0 +1,107 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Search API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/search",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search parameter for the name or object ID of a node."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Node type. Currently only supports built-in types.\nSome AD examples: `Base`, `User`, `Computer`, `Group`, `Container`.\nSome Azure examples: `AZBase`, `AZApp`, `AZDevice`.\n"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Search for graph objects by name or object ID, filtered by type."
+        },
+        {
+          "info": {
+            "name": "Get available domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/available-domains",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are objectid, name."
+              },
+              {
+                "name": "objectid",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "collected",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Gets available domains along with their collection status"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

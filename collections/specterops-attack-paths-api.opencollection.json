@@ -1,0 +1,583 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Attack Paths API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attack Paths",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Export attack path findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:domain_id/attack-path-findings",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path",
+                "description": "Domain ID"
+              },
+              {
+                "name": "finding",
+                "value": "",
+                "type": "query",
+                "description": "Finding Type"
+              },
+              {
+                "name": "filterAccepted",
+                "value": "",
+                "type": "query",
+                "description": "Risk acceptance filter"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. The only sortable column is `finding`."
+              }
+            ]
+          },
+          "docs": "Export the finding table for a given attack path"
+        },
+        {
+          "info": {
+            "name": "List finding trends",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/attack-paths/finding-trends",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query",
+                "description": "Environment IDs"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (exclusive) in RFC-3339 format; Defaults to current datetime"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+              }
+            ]
+          },
+          "docs": "Lists findings and their changes in between two dates for an environment"
+        },
+        {
+          "info": {
+            "name": "List all attack path types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/attack-path-types",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. The only sortable column is `finding`."
+              },
+              {
+                "name": "finding",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists all possible attack path types"
+        },
+        {
+          "info": {
+            "name": "Start analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/attack-paths",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Starts generating attack paths"
+        },
+        {
+          "info": {
+            "name": "Get all attack path findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/attack-paths/details",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Fetches all attack path findings and their associated details, including documentation."
+        },
+        {
+          "info": {
+            "name": "List attack path findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/attack-paths/findings",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `severity`, `finding_type`, `finding`, `title`, `platform`, `environment_id`, `environment_name`,\n`zone_id`, `zone_name`, `source_principal_id`, `source_principal_kind`, `source_principal_name`, `target_principal_id`, `target_principal_kind`, `target_principal_name`, `status`, `first_seen`, `last_seen`.\n"
+              },
+              {
+                "name": "severity",
+                "value": "",
+                "type": "query",
+                "description": "Filter by severity level."
+              },
+              {
+                "name": "finding_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by finding type. When not provided, both types are returned."
+              },
+              {
+                "name": "finding",
+                "value": "",
+                "type": "query",
+                "description": "Filter by finding name."
+              },
+              {
+                "name": "title",
+                "value": "",
+                "type": "query",
+                "description": "Filter by human-readable finding title."
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Filter by platform."
+              },
+              {
+                "name": "environment_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more environment identifiers. Repeat the parameter to include multiple environments — results are the union of all specified values.\n"
+              },
+              {
+                "name": "environment_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by environment display name."
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more asset group tag identifiers. Repeat the parameter to include multiple asset group tags — results are the union of all specified values.\nCannot be combined with the `zone_id` filter.\n"
+              },
+              {
+                "name": "zone_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by a single zone identifier. Cannot be combined with `asset_group_tag_id`."
+              },
+              {
+                "name": "zone_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by zone name (e.g. \"Tier Zero\")."
+              },
+              {
+                "name": "source_principal_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by source principal identifier."
+              },
+              {
+                "name": "source_principal_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter by source principal kind."
+              },
+              {
+                "name": "source_principal_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by source principal display name."
+              },
+              {
+                "name": "target_principal_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by target principal identifier."
+              },
+              {
+                "name": "target_principal_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter by target principal kind."
+              },
+              {
+                "name": "target_principal_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by target principal display name."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by finding status."
+              },
+              {
+                "name": "first_seen",
+                "value": "",
+                "type": "query",
+                "description": "Filter by first seen timestamp."
+              },
+              {
+                "name": "last_seen",
+                "value": "",
+                "type": "query",
+                "description": "Filter by last seen timestamp."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Returns a unified, paginated list of attack path findings. Defaults to active findings of both relationship and list types unless filtered otherwise.\n"
+        },
+        {
+          "info": {
+            "name": "List available attack paths",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:domain_id/available-types",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path",
+                "description": "Domain ID"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. The only sortable column is `finding`."
+              },
+              {
+                "name": "finding",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists available attack path types for a domain"
+        },
+        {
+          "info": {
+            "name": "List domain attack paths details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:domain_id/details",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path",
+                "description": "Domain, Tenant, or Environment ID"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+              },
+              {
+                "name": "Accept",
+                "value": "",
+                "type": "query",
+                "description": "Media type to determine the response format (application/json or text/csv)."
+              },
+              {
+                "name": "finding",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `domain_sid`, `index`, `AcceptedUntil`, `id`, `created_at`, `updated_at`, `deleted_at`, `exposure_percentage`, `impact_percentage`. Relationship risks can be sorted on `FromPrincipal` and `ToPrincipal` in addition to the sortable columns for List Risks."
+              },
+              {
+                "name": "FromPrincipal",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ToPrincipal",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_principal",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to_principal",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "principals_hash",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "Accepted",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "AcceptedUntil",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "accepted_until",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "Principal",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain_sid",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Lists detailed data about attack paths for a domain.\n\n__Note:__ `ImpactCount`, `ImpactPercentage`, `ExposureCount`, `ExposurePercentage` and `Severity` will have a value other than zero when butterfly analysis is enabled.\n"
+        },
+        {
+          "info": {
+            "name": "List attack path sparkline values",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:domain_id/sparkline",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path",
+                "description": "Domain ID"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `CompositeRisk`, `FindingCount`, `ImpactedAssetCount`, `domain_sid`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "finding",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (exclusive) in RFC-3339 format; Defaults to current datetime"
+              }
+            ]
+          },
+          "docs": "List the values that represent the sparklines for individual attack paths"
+        },
+        {
+          "info": {
+            "name": "Update attack path risk",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/attack-paths/:attack_path_id/acceptance",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "attack_path_id",
+                "value": "",
+                "type": "path",
+                "description": "Attack Path ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an attack path as an accepted or unaccepted risk until a given time."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

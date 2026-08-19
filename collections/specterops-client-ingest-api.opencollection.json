@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Client Ingest API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Client Ingest",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Endpoint for data ingestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/ingest",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Ingests data from collector clients"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

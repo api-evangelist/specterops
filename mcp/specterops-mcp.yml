@@ -33,3 +33,9 @@ tools:
 - name: get_api_version
   description: Return the BloodHound API version
   source_operation: openapi/specterops-bloodhound-openapi.json#GetApiVersion
+deployment:
+  mode: none
+  verified: derived
+  tools: 8
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Meta Entities API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Meta Entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Meta entity info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/meta/:object_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              }
+            ]
+          },
+          "docs": "Get info and counts for this Meta node."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

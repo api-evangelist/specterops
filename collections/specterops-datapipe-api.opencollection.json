@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Datapipe API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datapipe",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get datapipe status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/datapipe/status",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Gets the current status of the datapipe"
+        },
+        {
+          "info": {
+            "name": "Gets analysis request information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/analysis",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Returns the current analysis request information. Always returns 200 OK with\nthe request details. When no request is pending, returns a zero-valued response\nwith empty strings, false booleans, null arrays, and zero timestamp.\n"
+        },
+        {
+          "info": {
+            "name": "Start analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/analysis",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Submits an analysis request attributed to the authenticated user. The\nendpoint is idempotent — at most one analysis request can be pending at a\ntime. Always returns 202 Accepted with no response body.\n"
+        },
+        {
+          "info": {
+            "name": "Cancels an analysis request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/analysis",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Flags the API to request the cancellation of analyzing ingest data."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

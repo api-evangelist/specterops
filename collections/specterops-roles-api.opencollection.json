@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Roles API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/roles",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `name`, `description`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              }
+            ]
+          },
+          "docs": "List all authorization roles."
+        },
+        {
+          "info": {
+            "name": "Get Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/roles/:role_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "role_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the role record to retrieve info for."
+              }
+            ]
+          },
+          "docs": "Gets an authorization role's details."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

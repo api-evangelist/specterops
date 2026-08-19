@@ -1,0 +1,2451 @@
+{
+  "item": [
+    {
+      "id": "83e88fc1-da13-422e-bad4-38382241adf7",
+      "name": "Events (Schedules)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4ee69c80-2a2e-44eb-bc27-060b532f919d",
+          "name": "List events",
+          "request": {
+            "name": "List events",
+            "description": {
+              "content": "Gets all client scheduled events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "<string>",
+                  "description": "Sortable columns are `next_scheduled_at`, `id`, `created_at`, `updated_at`, `deleted_at`."
+                },
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "rrule",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "next_scheduled_at",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "session_collection",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "local_group_collection",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "ad_structure_collection",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cert_services_collection",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "ca_registry_collection",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "dc_registry_collection",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "hydrate_domains",
+                  "value": "true",
+                  "description": "When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s."
+                },
+                {
+                  "disabled": false,
+                  "key": "hydrate_ous",
+                  "value": "true",
+                  "description": "When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at",
+                  "value": "<string>",
+                  "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at",
+                  "value": "<string>",
+                  "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted_at",
+                  "value": "<string>",
+                  "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+                },
+                {
+                  "disabled": false,
+                  "key": "skip",
+                  "value": "<integer>",
+                  "description": "This query parameter is used for determining the number of objects to skip in pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "afd0b274-b626-4b42-aa46-97a3546073bc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rrule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "next_scheduled_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "local_group_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ad_structure_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cert_services_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ca_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dc_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hydrate_domains",
+                      "value": "true"
+                    },
+                    {
+                      "key": "hydrate_ous",
+                      "value": "true"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 52,\n  \"skip\": \"<integer>\",\n  \"limit\": \"<integer>\",\n  \"data\": [\n    {\n      \"id\": 8268,\n      \"client_id\": \"ff26c79e-5fda-e3c4-4c56-184914418654\",\n      \"rrule\": \"string\",\n      \"session_collection\": true,\n      \"local_group_collection\": true,\n      \"ad_structure_collection\": true,\n      \"cert_services_collection\": false,\n      \"ca_registry_collection\": true,\n      \"dc_registry_collection\": false,\n      \"all_trusted_domains\": false,\n      \"ous\": [\n        {\n          \"distinguishedname\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"distinguishedname\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"domains\": [\n        {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"id\": 7503,\n      \"client_id\": \"cdc8a7fa-4a9e-d583-dea8-70520499e371\",\n      \"rrule\": \"string\",\n      \"session_collection\": false,\n      \"local_group_collection\": false,\n      \"ad_structure_collection\": true,\n      \"cert_services_collection\": true,\n      \"ca_registry_collection\": false,\n      \"dc_registry_collection\": true,\n      \"all_trusted_domains\": true,\n      \"ous\": [\n        {\n          \"distinguishedname\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"distinguishedname\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"domains\": [\n        {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b59e022-6660-49e6-8897-986eab29e38a",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rrule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "next_scheduled_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "local_group_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ad_structure_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cert_services_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ca_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dc_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hydrate_domains",
+                      "value": "true"
+                    },
+                    {
+                      "key": "hydrate_ous",
+                      "value": "true"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94557a13-cc2c-4023-9ff3-0be6f8f3c3e4",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rrule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "next_scheduled_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "local_group_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ad_structure_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cert_services_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ca_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dc_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hydrate_domains",
+                      "value": "true"
+                    },
+                    {
+                      "key": "hydrate_ous",
+                      "value": "true"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "85f24569-e4e0-469d-a7f1-a8699a47621f",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rrule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "next_scheduled_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "local_group_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ad_structure_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cert_services_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ca_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dc_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hydrate_domains",
+                      "value": "true"
+                    },
+                    {
+                      "key": "hydrate_ous",
+                      "value": "true"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54ae38f6-67a0-4be1-81fd-1d390b69f632",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rrule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "next_scheduled_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "local_group_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ad_structure_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cert_services_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ca_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dc_registry_collection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hydrate_domains",
+                      "value": "true"
+                    },
+                    {
+                      "key": "hydrate_ous",
+                      "value": "true"
+                    },
+                    {
+                      "key": "created_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deleted_at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b6d6e764-c31a-4462-91f5-ed8335ebe09f",
+          "name": "Create Event",
+          "request": {
+            "name": "Create Event",
+            "description": {
+              "content": "Creates a scheduled event for data collection",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7d02cefe-a982-4402-bf8b-85a846b08a0a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 9386,\n    \"client_id\": \"2368ea7b-e537-1fb9-13a9-2dc29198f6fe\",\n    \"rrule\": \"string\",\n    \"session_collection\": true,\n    \"local_group_collection\": true,\n    \"ad_structure_collection\": false,\n    \"cert_services_collection\": false,\n    \"ca_registry_collection\": false,\n    \"dc_registry_collection\": false,\n    \"all_trusted_domains\": true,\n    \"ous\": [\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": true,\n        \"distinguishedname\": \"string\",\n        \"type\": \"string\"\n      },\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": true,\n        \"distinguishedname\": \"string\",\n        \"type\": \"string\"\n      }\n    ],\n    \"domains\": [\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": false,\n        \"type\": \"string\"\n      },\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": false,\n        \"type\": \"string\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "481a2d88-f010-41a2-ad03-73d4be4cc110",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3701c1f3-f8b3-454a-b272-4a90da32cdd2",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6f712f8-d01d-4c1c-b65e-93aa582668c7",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3513eefd-2de5-41b3-a1de-8b1377447023",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dc33800a-4561-4678-8f01-6919ea96b56d",
+          "name": "Get Event",
+          "request": {
+            "name": "Get Event",
+            "description": {
+              "content": "Gets a scheduled job event by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "events",
+                ":event_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "event_id",
+                  "description": "(Required) Event ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1356d76d-b3b5-44cf-aede-f2b391a4aa2c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 9386,\n    \"client_id\": \"2368ea7b-e537-1fb9-13a9-2dc29198f6fe\",\n    \"rrule\": \"string\",\n    \"session_collection\": true,\n    \"local_group_collection\": true,\n    \"ad_structure_collection\": false,\n    \"cert_services_collection\": false,\n    \"ca_registry_collection\": false,\n    \"dc_registry_collection\": false,\n    \"all_trusted_domains\": true,\n    \"ous\": [\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": true,\n        \"distinguishedname\": \"string\",\n        \"type\": \"string\"\n      },\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": true,\n        \"distinguishedname\": \"string\",\n        \"type\": \"string\"\n      }\n    ],\n    \"domains\": [\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": false,\n        \"type\": \"string\"\n      },\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": false,\n        \"type\": \"string\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c629e67-65a6-4636-834f-9a460c57b23b",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b52edce-8225-41bc-9200-d8c9f993b555",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4de9622e-9e45-4819-8f2c-9bc1c8255766",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69260a52-1ac0-4313-b8e3-483f717549db",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22fc3cc0-4ca9-4efb-9196-714f77ebad46",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c254d008-449f-49c8-a36c-4eba3e75fdef",
+          "name": "Update Event",
+          "request": {
+            "name": "Update Event",
+            "description": {
+              "content": "Updates a scheduled event",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "events",
+                ":event_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "event_id",
+                  "description": "(Required) Event ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d64036cf-c721-430b-b5cf-ad0236e7ed02",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 9386,\n    \"client_id\": \"2368ea7b-e537-1fb9-13a9-2dc29198f6fe\",\n    \"rrule\": \"string\",\n    \"session_collection\": true,\n    \"local_group_collection\": true,\n    \"ad_structure_collection\": false,\n    \"cert_services_collection\": false,\n    \"ca_registry_collection\": false,\n    \"dc_registry_collection\": false,\n    \"all_trusted_domains\": true,\n    \"ous\": [\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": true,\n        \"distinguishedname\": \"string\",\n        \"type\": \"string\"\n      },\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": true,\n        \"distinguishedname\": \"string\",\n        \"type\": \"string\"\n      }\n    ],\n    \"domains\": [\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": false,\n        \"type\": \"string\"\n      },\n      {\n        \"objectid\": \"string\",\n        \"name\": \"string\",\n        \"exists\": false,\n        \"type\": \"string\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8abfa4f4-64d6-4fba-98e7-4ed1d157d3d9",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2daf4a02-1c96-440a-a139-707160fe5353",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da61a37d-d6bb-4318-ac53-065743244f8f",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8bcc94a7-5bc7-45e6-b556-cf4d985b9f60",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d8307b6-b6f9-4a13-b0f9-981f7d29a8eb",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rrule\": \"<string>\",\n  \"session_collection\": \"<boolean>\",\n  \"local_group_collection\": \"<boolean>\",\n  \"ad_structure_collection\": \"<boolean>\",\n  \"cert_services_collection\": \"<boolean>\",\n  \"ca_registry_collection\": \"<boolean>\",\n  \"dc_registry_collection\": \"<boolean>\",\n  \"all_trusted_domains\": \"<boolean>\",\n  \"ous\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8ae87683-7852-4aa5-8b4a-f7a5876b4444",
+          "name": "Delete Event",
+          "request": {
+            "name": "Delete Event",
+            "description": {
+              "content": "Deletes a scheduled event and associated tasks by id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "events",
+                ":event_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "event_id",
+                  "description": "(Required) Event ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "806cc9c1-17f0-4dda-8ae7-3ef2c4a4a820",
+              "name": "**No Content**\nThis response will contain no response body.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "[this request has no response data]",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "93c6e856-11e5-4a65-821f-7f1bb8365d58",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2cd1ee8-94b7-484a-b153-6d61208f3aa6",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a41b0090-ca48-4867-834e-6d5ef0832ca9",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6cee084-f2ac-4030-94c8-cd85d7b8846b",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "453a95ab-6bca-4949-a4e9-24b6ca28c7cd",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) Event ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3cd6cc86-57da-4e2f-a750-22801b077a70",
+    "name": "BloodHound AD Base Entities Events (Schedules) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n\n\nContact Support:\n Name: BloodHound Enterprise Support\n Email: support@specterops.io",
+      "type": "text/plain"
+    }
+  }
+}

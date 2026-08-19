@@ -1,0 +1,150 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities OpenGraph (Experimental) API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OpenGraph (Experimental)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Relationship by Graph Relationship ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/relationships/:relationship_id",
+            "params": [
+              {
+                "name": "relationship_id",
+                "value": "",
+                "type": "path",
+                "description": "The relationship id assigned by the graph"
+              },
+              {
+                "name": "include-info",
+                "value": "",
+                "type": "query",
+                "description": "When false or omitted, excludes entity panel information.\nWhen true, returns relationship details with entity panel information included.\n"
+              }
+            ]
+          },
+          "docs": "**Experimental** - Returns the details of a graph relationship identified by its graph-assigned integer ID"
+        },
+        {
+          "info": {
+            "name": "Get Node by Graph Node ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/nodes/:node_id",
+            "params": [
+              {
+                "name": "node_id",
+                "value": "",
+                "type": "path",
+                "description": "The node id assigned by the graph"
+              },
+              {
+                "name": "include-info",
+                "value": "",
+                "type": "query",
+                "description": "When true, populates `data.info` with kindinfo objects for the node's registered kinds."
+              }
+            ]
+          },
+          "docs": "**Experimental** - Returns the details of a graph node identified by its graph-assigned integer ID"
+        },
+        {
+          "info": {
+            "name": "List OpenGraph Extensions Information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/extensions"
+          },
+          "docs": "**Experimental** - Lists pertinent OpenGraph extension information such as id, name, version, and if it is a built-in extension"
+        },
+        {
+          "info": {
+            "name": "Upserts the OpenGraph Extension",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/extensions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Experimental** - Upserts the OpenGraph extension"
+        },
+        {
+          "info": {
+            "name": "Delete OpenGraph Extension",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/extensions/:extension_id",
+            "params": [
+              {
+                "name": "extension_id",
+                "value": "",
+                "type": "path",
+                "description": "Extension ID for deletion"
+              }
+            ]
+          },
+          "docs": "**Experimental** - Deletes an OpenGraph Extension by Extension ID"
+        },
+        {
+          "info": {
+            "name": "List Edge Kinds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/extensions-edges",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "schemas",
+                "value": "",
+                "type": "query",
+                "description": "Schema names to filter response by"
+              },
+              {
+                "name": "is_traversable",
+                "value": "",
+                "type": "query",
+                "description": "Filter response by whether or not an edge is traversable"
+              }
+            ]
+          },
+          "docs": "**Experimental** - List all Edge Kinds across OpenGraph Schemas"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

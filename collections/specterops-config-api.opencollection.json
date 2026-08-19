@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Config API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Config",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List application config parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/config",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "parameter",
+                "value": "",
+                "type": "query",
+                "description": "Parameter filter. Must follow the convention: parameter=eq:value\n"
+              }
+            ]
+          },
+          "docs": "Lists application configuration parameters for this instance"
+        },
+        {
+          "info": {
+            "name": "Write application configuration parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/config",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Writes application configuration parameters for this instance"
+        },
+        {
+          "info": {
+            "name": "List feature flags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/features",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists all feature flags for this instance"
+        },
+        {
+          "info": {
+            "name": "Toggle a feature flag's enabled status to either enable or disable it.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/features/:feature_id/toggle",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "feature_id",
+                "value": "",
+                "type": "path",
+                "description": "Feature ID"
+              }
+            ]
+          },
+          "docs": "Writes application configuration parameters for this instance"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,265 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Graph API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Graph",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get kinds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/graphs/kinds",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by type, valid types are node or edge, e.g. \"eq:node\""
+              }
+            ]
+          },
+          "docs": "Gets kinds"
+        },
+        {
+          "info": {
+            "name": "Get pathfinding result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/pathfinding",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "start_node",
+                "value": "",
+                "type": "query",
+                "description": "Start Node"
+              },
+              {
+                "name": "end_node",
+                "value": "",
+                "type": "query",
+                "description": "End Node"
+              }
+            ]
+          },
+          "docs": "DEPRECATED use GetShortestPath instead. Get the result of pathfinding between two nodes in graph format."
+        },
+        {
+          "info": {
+            "name": "Get search result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/graph-search",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of search strategy to use. Default is `fuzzy`."
+              }
+            ]
+          },
+          "docs": "Get the result of searching a graph for a node by name"
+        },
+        {
+          "info": {
+            "name": "Get the shortest path graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/graphs/shortest-path",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "start_node",
+                "value": "",
+                "type": "query",
+                "description": "The start node objectId"
+              },
+              {
+                "name": "end_node",
+                "value": "",
+                "type": "query",
+                "description": "The end node objectId"
+              },
+              {
+                "name": "relationship_kinds",
+                "value": "",
+                "type": "query",
+                "description": "Specific relationship kinds to include in the pathfinding search. If the kinds are not valid kinds, the query will error."
+              },
+              {
+                "name": "only_traversable",
+                "value": "",
+                "type": "query",
+                "description": "Whether or not to only include traversable kinds. If true and no `relationship_kinds` are specified, all traversable kinds will be searched. If true, and `relationship_kinds` param includes non-traversable kinds, the non-traversable kinds will be excluded from the path search. If false or omitted, all kinds will be searched."
+              }
+            ]
+          },
+          "docs": "A graph of the shortest path from `start_node` to `end_node`."
+        },
+        {
+          "info": {
+            "name": "Get path composition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/graphs/edge-composition",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "source_node",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the starting node."
+              },
+              {
+                "name": "target_node",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the ending node."
+              },
+              {
+                "name": "edge_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of edge to show the composition for."
+              }
+            ]
+          },
+          "docs": "Returns a graph representing the various nodes and edges that make up the complex post-processed edge."
+        },
+        {
+          "info": {
+            "name": "Get relay targets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/graphs/relay-targets",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "source_node",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the starting node."
+              },
+              {
+                "name": "target_node",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the ending node."
+              },
+              {
+                "name": "edge_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of edge to show the composition for."
+              }
+            ]
+          },
+          "docs": "Returns a graph representing the various nodes that are valid relay targets for this edge"
+        },
+        {
+          "info": {
+            "name": "Get ACL inheritance path",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/graphs/acl-inheritance",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "source_node",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the starting node."
+              },
+              {
+                "name": "target_node",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the ending node."
+              },
+              {
+                "name": "edge_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of edge the ACL inheritance path is being fetched for."
+              }
+            ]
+          },
+          "docs": "Returns a graph representing the path that an ACE is inherited through for a given edge."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

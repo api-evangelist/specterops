@@ -1,0 +1,240 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Collection Uploads API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collection Uploads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List File Upload Jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/file-upload",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `user_email_address`, `status`, `status_message`, `start_time`, `end_time`, `last_ingest`, `id`, `created_at`, `updated_at`, and `deleted_at`.\n"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_email_address",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status_message",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_ingest",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Lists available file upload jobs"
+        },
+        {
+          "info": {
+            "name": "Create File Upload Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/file-upload/start",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Creates a file upload job for sending collection files"
+        },
+        {
+          "info": {
+            "name": "Upload File To Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/file-upload/:file_upload_job_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "X-File-Upload-Name",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "file_upload_job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID for the file upload job."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Saves a collection file to a file upload job"
+        },
+        {
+          "info": {
+            "name": "Get Completed Tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/file-upload/:file_upload_job_id/completed-tasks",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "file_upload_job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID for the file upload job."
+              }
+            ]
+          },
+          "docs": "Get information about the individual completed file upload tasks associated with a job"
+        },
+        {
+          "info": {
+            "name": "End File Upload Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/file-upload/:file_upload_job_id/end",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "file_upload_job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID for the file upload job."
+              }
+            ]
+          },
+          "docs": "End a file upload job"
+        },
+        {
+          "info": {
+            "name": "List accepted file upload types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/file-upload/accepted-types",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "List accepted file types for collection file uploads"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

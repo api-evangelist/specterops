@@ -1,0 +1,170 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Collectors API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collectors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get collector manifest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/collectors/:collector_type",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "collector_type",
+                "value": "",
+                "type": "path",
+                "description": "Collector type"
+              }
+            ]
+          },
+          "docs": "Retrieves the version manifest for a given collector"
+        },
+        {
+          "info": {
+            "name": "Get collector download by version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/collectors/:collector_type/:release_tag",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "collector_type",
+                "value": "",
+                "type": "path",
+                "description": "Collector type"
+              },
+              {
+                "name": "release_tag",
+                "value": "",
+                "type": "path",
+                "description": "Release tag (semver or \"latest\")"
+              }
+            ]
+          },
+          "docs": "Retrieves the download for a given collector with given version"
+        },
+        {
+          "info": {
+            "name": "Get collector checksum by version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/collectors/:collector_type/:release_tag/checksum",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "collector_type",
+                "value": "",
+                "type": "path",
+                "description": "Collector type"
+              },
+              {
+                "name": "release_tag",
+                "value": "",
+                "type": "path",
+                "description": "Release tag (semver or \"latest\")"
+              }
+            ]
+          },
+          "docs": "Retrieves the checksum file for a given collector with given version"
+        },
+        {
+          "info": {
+            "name": "Get kennel manifest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/kennel/manifest",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves a manifest of community collectors"
+        },
+        {
+          "info": {
+            "name": "Get kennel enterprise manifest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/kennel/enterprise-manifest",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves a manifest of enterprise collectors"
+        },
+        {
+          "info": {
+            "name": "Download asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/kennel/download/:asset_name",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_name",
+                "value": "",
+                "type": "path",
+                "description": "Asset name"
+              }
+            ]
+          },
+          "docs": "Downloads an enterprise asset (collector or checksum)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

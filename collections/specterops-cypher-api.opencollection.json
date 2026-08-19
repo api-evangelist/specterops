@@ -1,0 +1,338 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Cypher API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cypher",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List saved queries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saved-queries",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are user_id, name, query, id, created_at, updated_at, deleted_at."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all saved queries for the current user"
+        },
+        {
+          "info": {
+            "name": "Create a saved query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/saved-queries",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new saved query"
+        },
+        {
+          "info": {
+            "name": "Return a saved query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saved-queries/:saved_query_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saved_query_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the saved query"
+              }
+            ]
+          },
+          "docs": "Returns an existing saved query by ID"
+        },
+        {
+          "info": {
+            "name": "Update a saved query",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/saved-queries/:saved_query_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saved_query_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the saved query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing saved query by ID"
+        },
+        {
+          "info": {
+            "name": "Delete a saved query",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/saved-queries/:saved_query_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saved_query_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the saved query"
+              }
+            ]
+          },
+          "docs": "Delete an existing saved query by ID"
+        },
+        {
+          "info": {
+            "name": "Retrieves saved query permissions for provided query id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saved-queries/:saved_query_id/permissions",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saved_query_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the saved query"
+              }
+            ]
+          },
+          "docs": "Retrieves saved query permissions for provided query id"
+        },
+        {
+          "info": {
+            "name": "Share a saved query or set it to public",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/saved-queries/:saved_query_id/permissions",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saved_query_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the saved query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Shares an existing saved query or makes it public"
+        },
+        {
+          "info": {
+            "name": "Revokes permission of a saved query from users",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/saved-queries/:saved_query_id/permissions",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "saved_query_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the saved query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Revokes permission of a saved query from a given set of users"
+        },
+        {
+          "info": {
+            "name": "Export a saved query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saved-queries/:saved_query_id/export",
+            "params": [
+              {
+                "name": "saved_query_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the saved query"
+              }
+            ]
+          },
+          "docs": "Export an existing saved query by ID"
+        },
+        {
+          "info": {
+            "name": "Import one or more cypher queries.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/saved-queries/import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Import one or more cypher queries.\n\nThe request body should be a json file containing a single query or a Zip consisting of multiple JSON files each containing a single query.\n\nThe underlying JSON file(s) is expected to have the following structure:\n```json\n{\n \"name\": \"Return_Nodes\",\n \"query\": \"MATCH (n) RETURN n\",\n \"description\": \"Returns all nodes in a given graph\"\n}\n```\n"
+        },
+        {
+          "info": {
+            "name": "Export one or more saved queries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/saved-queries/export",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Scope of saved queries, only the first scope parameter is used."
+              }
+            ]
+          },
+          "docs": "Export existing saved queries using the scope parameter."
+        },
+        {
+          "info": {
+            "name": "Run a cypher query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/graphs/cypher",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs a manual cypher query directly against the database."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

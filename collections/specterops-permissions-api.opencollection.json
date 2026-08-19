@@ -1,0 +1,107 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Permissions API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/permissions",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `authority`, `name`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "authority",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              }
+            ]
+          },
+          "docs": "List all authorization permissions."
+        },
+        {
+          "info": {
+            "name": "Get Permission",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/permissions/:permission_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "permission_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the permission record to retrieve details for."
+              }
+            ]
+          },
+          "docs": "Gets an authorization permission's details."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

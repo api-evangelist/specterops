@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Azure Entities API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Azure Entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Azure entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/azure/:entity_type",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entity_type",
+                "value": "",
+                "type": "path",
+                "description": "Entity Type"
+              },
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "query",
+                "description": "The object ID of the entity being operated on."
+              },
+              {
+                "name": "counts",
+                "value": "",
+                "type": "query",
+                "description": "Returns related entity counts. Does not work with `related_entity_type` parameter."
+              },
+              {
+                "name": "related_entity_type",
+                "value": "",
+                "type": "query",
+                "description": "Flags the query to return related entity information based on the type passed."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data expected. Only works with `related_entity_type` parameter."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination.\nOnly compatible with `related_entity_type` and `type=list`\n"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses.\nOnly compatible with `related_entity_type` and `type=list`\n"
+              }
+            ]
+          },
+          "docs": "Retrieves entity information for the given Azure object ID.\nIf `related_entity_type` parameter is not set, this endpoint will return information\nabout a single entity. Using the `counts` boolean parameter will further modify the response.\nIf `related_entity_type` parameter is set, this endpoint will return information about entities\nrelated to a single entity. The `type` parameter will morph the response data structure. The `list`\nvalue for the `type` parameter also accepts `skip` and `limit` pa"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities EULA API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "EULA",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Accept EULA",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/accept-eula",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Accept BloodHound Enterprise EULA for logged in user (EULA applies to BHE customers only)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

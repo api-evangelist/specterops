@@ -1,0 +1,819 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Domains API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Domains",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get domain entity info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "counts",
+                "value": "",
+                "type": "query",
+                "description": "Include counts of related entities. Default value is `true`."
+              }
+            ]
+          },
+          "docs": "Get basic info and counts for this domain node."
+        },
+        {
+          "info": {
+            "name": "Update the Domain entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v2/domains/:object_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the supported properties on the Domain entity."
+        },
+        {
+          "info": {
+            "name": "Get domain entity computers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/computers",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list or count of the computers that belong to this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity controllers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/controllers",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that can control this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity DC Syncers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/dc-syncers",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals that can DC sync this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity foreign admins",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/foreign-admins",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals outside of this domain that have admin\nrights on principals in this domain.\n"
+        },
+        {
+          "info": {
+            "name": "Get domain entity foreign GPO controllers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/foreign-gpo-controllers",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the principals outside of this domain that can control\nGPOs inside this domain.\n"
+        },
+        {
+          "info": {
+            "name": "Get domain entity foregin groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/foreign-groups",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the groups outside of this domain that are members\nof groups inside this domain.\n"
+        },
+        {
+          "info": {
+            "name": "Get domain entity foreign users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/foreign-users",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the users outside of this domain that are members\nof groups inside this domain.\n"
+        },
+        {
+          "info": {
+            "name": "Get domain entity GPOs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/gpos",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list or count of the GPOs in this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/groups",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list or count of the groups in this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity inbound trusts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/inbound-trusts",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the inbound trusts for this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity linked GPOs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/linked-gpos",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the GPOs linked to this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity OUs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/ous",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list or count of the OUs in this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity outbound trusts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/outbound-trusts",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the outbound trusts for this domain."
+        },
+        {
+          "info": {
+            "name": "Get domain entity users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/users",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list or count of the users in this domain."
+        },
+        {
+          "info": {
+            "name": "Get ADCS escalations of Domain entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/domains/:object_id/adcs-escalations",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "path",
+                "description": "The object id of the entity being operated on."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to skip for pagination. Only available for `type=list`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of entries to limit in the response. Only available for `type=list`."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of return data requested. If no type is provided, query will default to `list`.\nThe only supported type is `list`, but the unsupported `graph` type can be used.\nSome entity query endpoints do not support the `graph` type. For those interested in\nusing the undocumented graph type parameter, the response type is described in the schema\n`model.bh-graph.graph`.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available\nfor sorting are dependent on the entity object kind.\n"
+              }
+            ]
+          },
+          "docs": "Get a list, graph, or count of the ADCS escalations of this Domain."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

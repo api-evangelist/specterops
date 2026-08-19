@@ -1,0 +1,120 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Audit API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List audit logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/audit",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `id`, `actor_id`, `actor_name`, `actor_email`, `action`, `request_id`, `created_at`, `source`, and `status`.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Return logs created before the specified time. Value should be in the RFC-3339 format. If not supplied, this will default to the current time."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Return logs created after the specified time. Value should be in the RFC-3339 format. If not supplied, this will default to 1 year before the current time."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "actor_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "actor_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "actor_email",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by column value. Valid filter predicates are `eq`, `neq`. Valid values are `success` and `failure`."
+              }
+            ]
+          },
+          "docs": "Returns a list of audit logs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

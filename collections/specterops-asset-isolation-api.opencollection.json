@@ -1,0 +1,1410 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Asset Isolation API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Asset Isolation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all asset isolation groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-groups",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `name`, `tag`, and `member_count`."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "system_group",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "member_count",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              }
+            ]
+          },
+          "docs": "Lists all asset isolation groups."
+        },
+        {
+          "info": {
+            "name": "Create an asset group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-groups",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an asset group"
+        },
+        {
+          "info": {
+            "name": "Get asset group by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-groups/:asset_group_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset group record to retrieve"
+              }
+            ]
+          },
+          "docs": "Retrieve asset group by ID"
+        },
+        {
+          "info": {
+            "name": "Update an asset group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/asset-groups/:asset_group_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset group record to retrieve"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an asset group"
+        },
+        {
+          "info": {
+            "name": "Delete an asset group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/asset-groups/:asset_group_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset group record to retrieve"
+              }
+            ]
+          },
+          "docs": "Deletes an asset group"
+        },
+        {
+          "info": {
+            "name": "List asset group collections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-groups/:asset_group_id/collections",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group record to retrieve"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              }
+            ]
+          },
+          "docs": "Returns all historical memberships if no URL params are specified."
+        },
+        {
+          "info": {
+            "name": "Update asset group selectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-groups/:asset_group_id/selectors",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group record to retrieve"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "DEPRECATED use PUT instead. Updates asset group selectors."
+        },
+        {
+          "info": {
+            "name": "Update asset group selectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/asset-groups/:asset_group_id/selectors",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group record to retrieve"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates asset group selectors"
+        },
+        {
+          "info": {
+            "name": "Delete an asset group selector",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/asset-groups/:asset_group_id/selectors/:asset_group_selector_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group record to retrieve"
+              },
+              {
+                "name": "asset_group_selector_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group_selector record to retrieve"
+              }
+            ]
+          },
+          "docs": "Deletes an asset group selector"
+        },
+        {
+          "info": {
+            "name": "Get asset group custom member count",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-groups/:asset_group_id/custom-selectors",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group record to retrieve"
+              }
+            ]
+          },
+          "docs": "Get asset group custom member count"
+        },
+        {
+          "info": {
+            "name": "List all asset isolation group members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-groups/:asset_group_id/members",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group record to retrieve"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `object_id`, `asset_group_id`, `primary_kind`, `environment_id`, `environment_kind`, and `name`.\n"
+              },
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "primary_kind",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "environment_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "environment_kind",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "custom_member",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in a future release. Please use `GET /api/v2/asset-group-tags/{asset_group_tag_id}/members` or `GET /api/v2/asset-group-tags/{asset_group_tag_id}/selectors/{asset_group_tag_selector_id}/members` instead.\n"
+        },
+        {
+          "info": {
+            "name": "List asset group member count by kind",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-groups/:asset_group_id/members/counts",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group record to retrieve"
+              },
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "environment_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "primary_kind",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "environment_kind",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "custom_member",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List counts of members of an asset isolation group by primary kind."
+        },
+        {
+          "info": {
+            "name": "Get asset group tag selectors of a specific object by member id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/members/:asset_group_member_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group_tag of a selector"
+              },
+              {
+                "name": "asset_group_member_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of member to list selectors"
+              }
+            ]
+          },
+          "docs": "Get a list of selectors for an object by member id."
+        },
+        {
+          "info": {
+            "name": "Get Asset Group Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "counts",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include counts of selectors and members for each tag"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "description",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "deleted_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "require_certify",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a list of asset groups"
+        },
+        {
+          "info": {
+            "name": "Create Asset Group Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-group-tags",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an asset group tag ie. a tier or label"
+        },
+        {
+          "info": {
+            "name": "Get Asset Group Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag"
+              }
+            ]
+          },
+          "docs": "Retrieves an asset group tag by ID"
+        },
+        {
+          "info": {
+            "name": "Update Asset Group Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an asset group tag by ID"
+        },
+        {
+          "info": {
+            "name": "Delete an Asset Group Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag"
+              }
+            ]
+          },
+          "docs": "Deletes an asset group tag"
+        },
+        {
+          "info": {
+            "name": "List asset group tag members by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/members",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query",
+                "description": "Environment IDs to filter response by"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `id`, `objectid`, and `name`.\n"
+              },
+              {
+                "name": "primary_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter by primary_kind"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by name"
+              },
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by object_id"
+              }
+            ]
+          },
+          "docs": "List members of an asset group tag by ID"
+        },
+        {
+          "info": {
+            "name": "List asset group tag member count by kind",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/members/counts",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag"
+              },
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query",
+                "description": "Environment IDs to filter response by"
+              }
+            ]
+          },
+          "docs": "List counts of members of an asset group tag by primary kind."
+        },
+        {
+          "info": {
+            "name": "List asset group tag members by selector",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/selectors/:asset_group_tag_selector_id/members",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag"
+              },
+              {
+                "name": "asset_group_tag_selector_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag selector"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query",
+                "description": "Environment IDs to filter response by"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `id`, `objectid`, and `name`.\n"
+              },
+              {
+                "name": "primary_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter by primary_kind"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by name"
+              },
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by object_id"
+              }
+            ]
+          },
+          "docs": "List members of an asset group tag by selector"
+        },
+        {
+          "info": {
+            "name": "List asset group tag selector member count by kind",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/selectors/:asset_group_tag_selector_id/members/counts",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag"
+              },
+              {
+                "name": "asset_group_tag_selector_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an asset group tag selector"
+              },
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query",
+                "description": "Environment IDs to filter response by"
+              }
+            ]
+          },
+          "docs": "List counts of members of an asset group tag selector by primary kind."
+        },
+        {
+          "info": {
+            "name": "Get Asset Group Tag selectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/selectors",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group_tag to create a selector"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query",
+                "description": "Environment IDs to filter response by"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `id`, `name`, and `created_at`.\n"
+              },
+              {
+                "name": "auto_certify",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "description",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "disabled_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "disabled_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_default",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by column integer value. Valid filter predicates are `eq`, `neq`. Valid values are either ObjectID = 1 or Cypher = 2."
+              },
+              {
+                "name": "counts",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include counts of members for each selector"
+              }
+            ]
+          },
+          "docs": "Get a list of selectors for this group."
+        },
+        {
+          "info": {
+            "name": "Create Asset Group Tag Selector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/selectors",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group_tag to create a selector"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an asset group tag selector."
+        },
+        {
+          "info": {
+            "name": "Get Asset Group Tag Selector",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/selectors/:asset_group_tag_selector_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group_tag to update a selector on"
+              },
+              {
+                "name": "asset_group_tag_selector_id",
+                "value": "",
+                "type": "path",
+                "description": "Selector ID"
+              }
+            ]
+          },
+          "docs": "Retrieves an asset group tag selector by ID"
+        },
+        {
+          "info": {
+            "name": "Update Asset Group Tag Selector",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/selectors/:asset_group_tag_selector_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group_tag to update a selector on"
+              },
+              {
+                "name": "asset_group_tag_selector_id",
+                "value": "",
+                "type": "path",
+                "description": "Selector ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an asset group tag selector's properties"
+        },
+        {
+          "info": {
+            "name": "Delete Asset Group Tag Selector",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/asset-group-tags/:asset_group_tag_id/selectors/:asset_group_tag_selector_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset_group_tag to update a selector on"
+              },
+              {
+                "name": "asset_group_tag_selector_id",
+                "value": "",
+                "type": "path",
+                "description": "Selector ID"
+              }
+            ]
+          },
+          "docs": "Delete an asset group tag selector"
+        },
+        {
+          "info": {
+            "name": "Preview Selectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-group-tags/preview-selectors",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sample preview of members selected by provided selector seeds."
+        },
+        {
+          "info": {
+            "name": "Search Asset Group Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-group-tags/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Supports searching by name on asset group tags and selectors, and by name or object ID on members."
+        },
+        {
+          "info": {
+            "name": "Get history records",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags-history",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `created_at`."
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "For example, you can filter a date range of records by doing `created_at=gt:2025-07-08T17:00:00Z&created_at=lt:2025-07-30T17:00:00Z`"
+              },
+              {
+                "name": "actor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "target",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "environment_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "note",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves history records for actions on asset group tags"
+        },
+        {
+          "info": {
+            "name": "Search history records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-group-tags-history",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `created_at`."
+              },
+              {
+                "name": "actor",
+                "value": "",
+                "type": "query",
+                "description": "Filter by actor"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "Filter by email"
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query",
+                "description": "Filter by action"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by asset_group_tag_id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves history records via search string input and filtering by action, asset_group_tag_id, email, and actor"
+        },
+        {
+          "info": {
+            "name": "Get certifications for privilege zones",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-group-tags/certifications",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "certified",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "certified_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "For example, you can filter a date range of records by doing `created_at=gt:2025-07-08T17:00:00Z&created_at=lt:2025-07-30T17:00:00Z` (UTC)"
+              },
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "object_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "primary_kind",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves certification status for nodes selected by a zone"
+        },
+        {
+          "info": {
+            "name": "Certify or Revoke Certification of Objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/asset-group-tags/certifications",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manually certify/revoke certification of objects as belonging to the Zone they're selected by"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

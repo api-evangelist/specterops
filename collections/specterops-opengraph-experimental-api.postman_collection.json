@@ -1,0 +1,2408 @@
+{
+  "item": [
+    {
+      "id": "551c312b-5a26-4058-92fd-dd731be21b86",
+      "name": "OpenGraph (Experimental)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "be2e510e-1413-49f4-aaff-b4c62964699c",
+          "name": "Get Relationship by Graph Relationship ID",
+          "request": {
+            "name": "Get Relationship by Graph Relationship ID",
+            "description": {
+              "content": "**Experimental** - Returns the details of a graph relationship identified by its graph-assigned integer ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "relationships",
+                ":relationship_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include-info",
+                  "value": "<boolean>",
+                  "description": "When false or omitted, excludes entity panel information.\nWhen true, returns relationship details with entity panel information included.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "relationship_id",
+                  "description": "(Required) The relationship id assigned by the graph"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8f582ea4-43cc-4544-80b4-48d641ddf6cf",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "relationships",
+                    ":relationship_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "relationship_id",
+                      "description": "(Required) The relationship id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"relationship_id\": 1234567890,\n    \"source_node_id\": 1234567890,\n    \"target_node_id\": 1234567890,\n    \"kind\": {\n      \"relationship_kind_id\": 2002,\n      \"name\": \"string\"\n    },\n    \"properties\": {\n      \"is_traversable\": true,\n      \"lastSeen\": \"1977-08-02T00:28:06.845Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ca814cb-ae17-4257-9120-01f380c97339",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "relationships",
+                    ":relationship_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "relationship_id",
+                      "description": "(Required) The relationship id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84e04ae2-9c82-4a6a-a7f5-4eacf201b8e9",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "relationships",
+                    ":relationship_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "relationship_id",
+                      "description": "(Required) The relationship id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "393e4ec8-39b4-4a73-a302-f6ec81d6fac8",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "relationships",
+                    ":relationship_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "relationship_id",
+                      "description": "(Required) The relationship id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d27674e-1aa9-4f50-9aba-16e26b98de5b",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "relationships",
+                    ":relationship_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "relationship_id",
+                      "description": "(Required) The relationship id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1eeb807-ab74-44ee-9894-16989269ab54",
+              "name": "**Too Many Requests**\nThe client has sent too many requests within a certain time window\nand tripped the rate limiting middleware.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "relationships",
+                    ":relationship_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "relationship_id",
+                      "description": "(Required) The relationship id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 429,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"middleware\",\n      \"message\": \"Too many requests. Please try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee4fed6d-31dc-4ddf-9dbe-c0fa60e88324",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "relationships",
+                    ":relationship_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "relationship_id",
+                      "description": "(Required) The relationship id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cde38b7d-71c6-4ea5-9aaf-0cf7d13989d8",
+          "name": "Get Node by Graph Node ID",
+          "request": {
+            "name": "Get Node by Graph Node ID",
+            "description": {
+              "content": "**Experimental** - Returns the details of a graph node identified by its graph-assigned integer ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "nodes",
+                ":node_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include-info",
+                  "value": "false",
+                  "description": "When true, populates `data.info` with kindinfo objects for the node's registered kinds."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "node_id",
+                  "description": "(Required) The node id assigned by the graph"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1710a4c8-c504-4386-bf73-918138f20e58",
+              "name": "OK\n\nWhen `include-info=true`, the `info` field is populated with kindinfo objects.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "nodes",
+                    ":node_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "node_id",
+                      "description": "(Required) The node id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"node_id\": 1234567890,\n    \"kinds\": [\n      {\n        \"node_kind_id\": 1,\n        \"name\": \"User\"\n      },\n      {\n        \"node_kind_id\": 2,\n        \"name\": \"Entity\"\n      }\n    ],\n    \"properties\": {\n      \"objectid\": \"S-1-5-21-3130019616-2776909439-2417379446-1108\",\n      \"name\": \"ADMIN@CORP.EXAMPLE.COM\",\n      \"displayName\": \"Admin\",\n      \"lastSeen\": \"2026-07-14T18:24:32Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a99f24f-a5e1-441e-acc8-0b7db5996084",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "nodes",
+                    ":node_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "node_id",
+                      "description": "(Required) The node id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40d85e0d-1d3a-44aa-b722-a18352fb4e5f",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "nodes",
+                    ":node_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "node_id",
+                      "description": "(Required) The node id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc19a3fa-fea7-4fb5-84be-30c4a0161281",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "nodes",
+                    ":node_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "node_id",
+                      "description": "(Required) The node id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4bcdeec-5c03-432b-b219-ecbd2b9c8446",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "nodes",
+                    ":node_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "node_id",
+                      "description": "(Required) The node id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04251e1e-cb2c-4d73-b47e-ecc09ee75f8c",
+              "name": "**Too Many Requests**\nThe client has sent too many requests within a certain time window\nand tripped the rate limiting middleware.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "nodes",
+                    ":node_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "node_id",
+                      "description": "(Required) The node id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 429,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"middleware\",\n      \"message\": \"Too many requests. Please try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30db37bc-5fb3-41ef-8012-27f586e6f425",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "nodes",
+                    ":node_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include-info",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "node_id",
+                      "description": "(Required) The node id assigned by the graph"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "10667ae3-d46b-49bf-a9a2-85fe49e18865",
+          "name": "Upserts the OpenGraph Extension",
+          "request": {
+            "name": "Upserts the OpenGraph Extension",
+            "description": {
+              "content": "**Experimental** - Upserts the OpenGraph extension",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "extensions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"schema\": {\n    \"name\": \"<string>\",\n    \"display_name\": \"<string>\",\n    \"version\": \"<string>\",\n    \"namespace\": \"<string>\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"<string>\",\n      \"display_name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"is_display_kind\": \"<boolean>\",\n      \"icon\": \"<string>\",\n      \"color\": \"<string>\",\n      \"info\": {\n        \"key_0\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        },\n        \"key_1\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        },\n        \"key_2\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"display_name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"is_display_kind\": \"<boolean>\",\n      \"icon\": \"<string>\",\n      \"color\": \"<string>\",\n      \"info\": {\n        \"key_0\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        },\n        \"key_1\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        },\n        \"key_2\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        }\n      }\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"is_traversable\": \"<boolean>\",\n      \"info\": {\n        \"key_0\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"is_traversable\": \"<boolean>\",\n      \"info\": {\n        \"key_0\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        },\n        \"key_1\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        },\n        \"key_2\": {\n          \"title\": \"<string>\",\n          \"position\": \"<integer>\",\n          \"markdown\": {\n            \"content\": \"<string>\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"<string>\",\n      \"source_kind\": \"<string>\",\n      \"principal_kinds\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"environment_kind\": \"<string>\",\n      \"source_kind\": \"<string>\",\n      \"principal_kinds\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"<string>\",\n      \"display_name\": \"<string>\",\n      \"relationship_kind\": \"<string>\",\n      \"environment_kind\": \"<string>\",\n      \"remediation\": {\n        \"short_description\": \"<string>\",\n        \"long_description\": \"<string>\",\n        \"short_remediation\": \"<string>\",\n        \"long_remediation\": \"<string>\"\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"display_name\": \"<string>\",\n      \"relationship_kind\": \"<string>\",\n      \"environment_kind\": \"<string>\",\n      \"remediation\": {\n        \"short_description\": \"<string>\",\n        \"long_description\": \"<string>\",\n        \"short_remediation\": \"<string>\",\n        \"long_remediation\": \"<string>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "40a8fb98-f65b-4279-8621-27e56c27cccd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ebc18f8-1153-46f4-a4f3-9c1ca5e7b677",
+              "name": "CREATED",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f682e004-9fac-4fb9-957d-8d4d27b7a5ef",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d157879-ace0-40a5-84aa-a9bbe579f993",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10656859-1dcc-457c-86ce-da8e178be483",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55dacb21-de30-4478-ab94-83cdafd33a23",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d96240b4-d3f0-4ac6-92e6-7f8e36a76dbf",
+              "name": "**Too Many Requests**\nThe client has sent too many requests within a certain time window\nand tripped the rate limiting middleware.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 429,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"middleware\",\n      \"message\": \"Too many requests. Please try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53f3313a-e455-49d0-b135-7445c6be595f",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"schema\": {\n    \"name\": \"OpenGraph_Extension\",\n    \"display_name\": \"OpenGraph Extension\",\n    \"version\": \"v1.0.0\",\n    \"namespace\": \"OGE\"\n  },\n  \"node_kinds\": [\n    {\n      \"name\": \"OGE_Node_Kind_1\",\n      \"display_name\": \"Node Kind 1\",\n      \"description\": \"A generic node kind\",\n      \"is_display_kind\": true,\n      \"icon\": \"computer\",\n      \"color\": \"#FF0000\",\n      \"info\": {\n        \"overview\": {\n          \"title\": \"Overview\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"This is an overview panel for Node Kind 1\"\n          }\n        },\n        \"details\": {\n          \"title\": \"Additional Details\",\n          \"position\": 2,\n          \"markdown\": {\n            \"content\": \"This panel provides additional information about the node\"\n          }\n        }\n      }\n    },\n    {\n      \"name\": \"OGE_Node_Kind_2\",\n      \"display_name\": \"Node Kind 2\",\n      \"description\": \"A secondary generic node kind\",\n      \"is_display_kind\": false\n    },\n    {\n      \"name\": \"OGE_Environment_Kind\",\n      \"display_name\": \"Environment\",\n      \"description\": \"A generic environment kind\",\n      \"icon\": \"sitemap\",\n      \"color\": \"#00FF00\",\n      \"is_display_kind\": true\n    }\n  ],\n  \"relationship_kinds\": [\n    {\n      \"name\": \"OGE_ConnectedTo\",\n      \"description\": \"A generic relationship kind\",\n      \"is_traversable\": true,\n      \"info\": {\n        \"abuse\": {\n          \"title\": \"Abuse Info\",\n          \"position\": 1,\n          \"markdown\": {\n            \"content\": \"Information about how this relationship can be abused\"\n          }\n        }\n      }\n    }\n  ],\n  \"environments\": [\n    {\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"source_kind\": \"OGExtension\",\n      \"principal_kinds\": [\n        \"OGE_Node_Kind_1\",\n        \"OGE_Node_Kind_2\"\n      ]\n    }\n  ],\n  \"relationship_findings\": [\n    {\n      \"name\": \"OGE_Finding_1\",\n      \"display_name\": \"Finding 1\",\n      \"relationship_kind\": \"OGE_ConnectedTo\",\n      \"environment_kind\": \"OGE_Environment_Kind\",\n      \"remediation\": {\n        \"short_description\": \"a remediation\",\n        \"long_description\": \"a remediation to fix Finding 1\",\n        \"short_remediation\": \"Do X\",\n        \"long_remediation\": \"Do X to fix Finding 1\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e4ba68b-3da1-47b6-a40c-a49c5864aac2",
+          "name": "List OpenGraph Extensions Information",
+          "request": {
+            "name": "List OpenGraph Extensions Information",
+            "description": {
+              "content": "**Experimental** - Lists pertinent OpenGraph extension information such as id, name, version, and if it is a built-in extension",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "extensions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ec8bea91-31cf-44ac-a9bd-f84fa2388aaa",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"extensions\": [\n      {\n        \"id\": 1,\n        \"name\": \"Active Directory\",\n        \"version\": \"v1.0.0\",\n        \"is_builtin\": true,\n        \"namespace\": \"AD\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79d75a4b-d0f3-4240-8e8c-aecb33f21cc1",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81aeb7f7-0488-4ff2-8806-a21ef0037f0a",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc38c14a-78c4-4d7f-8f44-9965b36c28ec",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7fa44e4f-9a2b-433b-aff3-42445f1cab7f",
+          "name": "Delete OpenGraph Extension",
+          "request": {
+            "name": "Delete OpenGraph Extension",
+            "description": {
+              "content": "**Experimental** - Deletes an OpenGraph Extension by Extension ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "extensions",
+                ":extension_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "extension_id",
+                  "description": "(Required) Extension ID for deletion"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "efca4dcd-a01b-4fef-ac33-8cb6161566f1",
+              "name": "**No Content**\nThis response will contain no response body.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions",
+                    ":extension_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "extension_id",
+                      "description": "(Required) Extension ID for deletion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "[this request has no response data]",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3aad01dc-256c-437e-bcea-110ceb779f31",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions",
+                    ":extension_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "extension_id",
+                      "description": "(Required) Extension ID for deletion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "178a1569-e5b6-4ad1-92b4-087a8a831e5b",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions",
+                    ":extension_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "extension_id",
+                      "description": "(Required) Extension ID for deletion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e9a05e6-b121-4281-86ea-4000b3761e53",
+              "name": "**Forbidden**\nThis is most commonly caused by an authenticated client trying to\naccess a resource that it does not have permission for.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions",
+                    ":extension_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "extension_id",
+                      "description": "(Required) Extension ID for deletion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 403,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"You do not have permission to access this resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b15f9948-bc8b-4a28-829f-82a7606ea641",
+              "name": "**Not Found**\nThis error typically comes from operations where a valid ID was passed to the request\nto look up an entity but the entity could not be found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions",
+                    ":extension_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "extension_id",
+                      "description": "(Required) Extension ID for deletion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 404,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The requested client could not be found.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7abd06e7-9f39-4d2f-8370-67e7430d0b9b",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions",
+                    ":extension_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "extension_id",
+                      "description": "(Required) Extension ID for deletion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "00faf90f-4abb-446a-98f4-aaec0f1e82e8",
+          "name": "List Edge Kinds",
+          "request": {
+            "name": "List Edge Kinds",
+            "description": {
+              "content": "**Experimental** - List all Edge Kinds across OpenGraph Schemas",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "extensions-edges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "schemas",
+                  "value": "<string>",
+                  "description": "Schema names to filter response by"
+                },
+                {
+                  "disabled": false,
+                  "key": "schemas",
+                  "value": "<string>",
+                  "description": "Schema names to filter response by"
+                },
+                {
+                  "disabled": false,
+                  "key": "is_traversable",
+                  "value": "<string>",
+                  "description": "Filter response by whether or not an edge is traversable"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                "key": "Prefer",
+                "value": "wait=30"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5c457ad9-6afe-460f-9679-23553b38cdaf",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions-edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_traversable",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 9816,\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"is_traversable\": false,\n      \"schema_name\": \"string\",\n      \"is_builtin\": true\n    },\n    {\n      \"id\": 8731,\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"is_traversable\": false,\n      \"schema_name\": \"string\",\n      \"is_builtin\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17fe9ca4-e9bd-4f7f-92cd-516c2e88010f",
+              "name": "**Bad Request**\nThis could be due to one of the following reasons:\n- JSON payload is missing or malformed\n- Path or query parameters are missing or invalid/malformed\n- The data sent is not valid (ex- sending a `string` in an `integer` field)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions-edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_traversable",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 400,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The JSON payload could not be unmarshalled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c0d4a9f-68c6-4d49-938c-b3e9a2300c5d",
+              "name": "**Unauthorized**\nThis endpoint failed an authentication requirement. Either the client tried to access\na protected endpoint without being authenticated, or an auth validation failed (ex- invalid\ncredentials or expired token).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions-edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_traversable",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 401,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"login\",\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d650d8dc-e8d9-4ab6-b538-75da3dd979cc",
+              "name": "**Too Many Requests**\nThe client has sent too many requests within a certain time window\nand tripped the rate limiting middleware.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions-edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_traversable",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 429,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"middleware\",\n      \"message\": \"Too many requests. Please try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6efede7b-903a-4edb-a671-9457b2ca2f67",
+              "name": "**Internal Server Error**\nThis is usually the result of either an unexpected database or application error.\nThe client may try modifying or resending the request, but the error is likely not related to the client\ndoing something wrong.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "extensions-edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "schemas",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_traversable",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.",
+                    "key": "Prefer",
+                    "value": "wait=30"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"http_status\": 500,\n  \"timestamp\": \"2024-02-19T19:27:43.866Z\",\n  \"request_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"errors\": [\n    {\n      \"context\": \"clients\",\n      \"message\": \"The request could not be handled due to an unexpected database error.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "bc1544d3-2f18-4af9-8093-33b3c36efac6",
+    "name": "BloodHound AD Base Entities OpenGraph (Experimental) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n\n\nContact Support:\n Name: BloodHound Enterprise Support\n Email: support@specterops.io",
+      "type": "text/plain"
+    }
+  }
+}

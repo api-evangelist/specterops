@@ -1,0 +1,322 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Data Quality API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Quality",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get database completeness stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/completeness",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get the percentage of local admins and sessions collected"
+        },
+        {
+          "info": {
+            "name": "Get AD domain data quality stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/ad-domains/:domain_id/data-quality-stats",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path",
+                "description": "Domain ID"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are created_at, updated_at."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Time series list of data quality stats for a given AD domain"
+        },
+        {
+          "info": {
+            "name": "Get Azure tenant data quality stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/azure-tenants/:tenant_id/data-quality-stats",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenant_id",
+                "value": "",
+                "type": "path",
+                "description": "Tenant ID"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are created_at, updated_at."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Time series list of data quality stats for a given Azure tenant"
+        },
+        {
+          "info": {
+            "name": "Get platform data quality aggregate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/platform/:platform_id/data-quality-stats",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "platform_id",
+                "value": "",
+                "type": "path",
+                "description": "Platform ID"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are created_at, updated_at."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Time series list of aggregate data quality stats for a given platform"
+        },
+        {
+          "info": {
+            "name": "Get environment-specific data quality stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/data-quality-stats",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment_id",
+                "value": "",
+                "type": "query",
+                "description": "Required. Filters results to the given environment."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are created_at, updated_at."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Time series list of data quality stats for a given environment"
+        },
+        {
+          "info": {
+            "name": "Get data quality aggregations by environment kind",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/data-quality-stats-aggregations",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "schema_environment_kind_id",
+                "value": "",
+                "type": "query",
+                "description": "Required. Scopes the aggregation to a single environment kind id.\n"
+              },
+              {
+                "name": "schema_extension_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional. Scopes the aggregation to a single OpenGraph schema extension id. The extension must exist or a 404 is returned.\n"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are created_at, updated_at.\n"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime"
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Returns data quality metric counts aggregated per environment kind, optionally scoped to an OpenGraph schema extension, combined across environment instances for each collection run. Results can be filtered, sorted, and paginated.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

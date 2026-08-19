@@ -1,0 +1,155 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Risk Posture API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Risk Posture",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Posture Statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/posture-stats",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `domain_sid`, `exposure_index`, `tier_zero_count`, `critical_risk_count`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Lower bound for created_at; to return posture stats starting at a specific date/time. This filter has been deprecated, please use created_at instead."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Upper bound for created_at; to return posture stats upto a specific date/time. This filter has been deprecated, please use created_at instead."
+              },
+              {
+                "name": "domain_sid",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "exposure_index",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tier_zero_count",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "critical_risk_count",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Gets the history of database stats saved in the database"
+        },
+        {
+          "info": {
+            "name": "Get Posture History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/posture-history/:data_type",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "data_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of posture data to return"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+              },
+              {
+                "name": "environments",
+                "value": "",
+                "type": "query",
+                "description": "Environment IDs"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Beginning datetime of range (inclusive) in RFC-3339 format; Defaults to current datetime minus 30 days"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Ending datetime of range (exclusive) in RFC-3339 format; Defaults to current datetime"
+              }
+            ]
+          },
+          "docs": "Gets posture data count changes over a time period"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

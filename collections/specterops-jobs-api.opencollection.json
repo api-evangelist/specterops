@@ -1,0 +1,559 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Jobs API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available client jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/jobs/available",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `event_id`, `execution_time`, `status`, `start_time`, `end_time`, `log_path`, `domain_controller`, `event_title`, `last_ingest`, `id`, `created_at`, `updated_at`, and `deleted_at`."
+              },
+              {
+                "name": "log_path",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "session_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "local_group_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cert_services_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ca_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "dc_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ad_structure_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain_controller",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_title",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "execution_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_ingest",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "hydrate_ous",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s."
+              },
+              {
+                "name": "hydrate_domains",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s."
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              }
+            ]
+          },
+          "docs": "Endpoint for clients to get next available jobs.\n\nNote: caller must be a client. For users, this endpoint will return a 404 as\nthey are not expected or allowed to call this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "List finished jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/jobs/finished",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `client_name`, `event_id`, `execution_time`, `status`, `start_time`, `end_time`, `log_path`, `domain_controller`, `event_title`, `last_ingest`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "log_path",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "session_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "local_group_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cert_services_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ca_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "dc_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ad_structure_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain_controller",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_title",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "execution_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_ingest",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "hydrate_domains",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s."
+              },
+              {
+                "name": "hydrate_ous",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s."
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              }
+            ]
+          },
+          "docs": "Gets all finished jobs"
+        },
+        {
+          "info": {
+            "name": "Get jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/jobs",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `client_name`, `event_id`, `execution_time`, `status`, `start_time`, `end_time`, `log_path`, `domain_controller`, `event_title`, `last_ingest`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "log_path",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "session_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "local_group_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cert_services_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ca_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "dc_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ad_structure_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain_controller",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_title",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "execution_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_ingest",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              }
+            ]
+          },
+          "docs": "Gets client jobs"
+        },
+        {
+          "info": {
+            "name": "Get client current job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/jobs/current",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Gets the current job for the authenticated client.\n\nNote: caller must be a client. For users, this endpoint will return a 404 as\nthey are not expected or allowed to call this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Notifies the API of a job start",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/jobs/start",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for clients to start a new job and mark the start time.\n\nNote: caller must be a client. For users, this endpoint will return a 404 as\nthey are not expected or allowed to call this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Notifies the API of a job ending",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/jobs/end",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Endpoint for clients to end a job and mark the end time.\n\nNote: caller must be a client. For users, this endpoint will return a 404 as\nthey are not expected or allowed to call this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Get client job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/jobs/:job_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "Job ID"
+              }
+            ]
+          },
+          "docs": "Gets client job"
+        },
+        {
+          "info": {
+            "name": "Cancels a scheduled job",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/jobs/:job_id/cancel",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "Job ID"
+              }
+            ]
+          },
+          "docs": "Cancels a scheduled job"
+        },
+        {
+          "info": {
+            "name": "Get Job Log File",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/jobs/:job_id/log",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "Job ID"
+              }
+            ]
+          },
+          "docs": "Get the log file from a SharpHound run"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

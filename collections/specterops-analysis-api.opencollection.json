@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Analysis API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Analysis",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get latest tier zero combo node",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/meta-nodes/:domain_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path",
+                "description": "Domain ID"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+              }
+            ]
+          },
+          "docs": "Get latest tier zero combo node"
+        },
+        {
+          "info": {
+            "name": "Get the graph for meta tree",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/meta-trees/:domain_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path",
+                "description": "Domain ID"
+              },
+              {
+                "name": "asset_group_tag_id",
+                "value": "",
+                "type": "query",
+                "description": "The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used."
+              },
+              {
+                "name": "node_id",
+                "value": "",
+                "type": "query",
+                "description": "Node ID"
+              }
+            ]
+          },
+          "docs": "Gets meta nodes and connecting edges"
+        },
+        {
+          "info": {
+            "name": "Get the combo tree for an asset group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/asset-groups/:asset_group_id/combo-node",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "asset_group_id",
+                "value": "",
+                "type": "path",
+                "description": "Asset Group Object ID"
+              },
+              {
+                "name": "domainsid",
+                "value": "",
+                "type": "query",
+                "description": "Filter by Domain security identifier."
+              }
+            ]
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in future releases.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

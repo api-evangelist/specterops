@@ -1,0 +1,729 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BloodHound AD Base Entities Clients API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Clients",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/clients",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "hydrate_domains",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s."
+              },
+              {
+                "name": "hydrate_ous",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `name`, `ip_address`, `hostname`, `configured_user`, `last_checkin`, `completed_job_count`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ip_address",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "configured_user",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_sid",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_checkin",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "current_job_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "completed_job_count",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain_controller",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists available clients for processing collection events."
+        },
+        {
+          "info": {
+            "name": "Create Client",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/clients",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a client for collection events"
+        },
+        {
+          "info": {
+            "name": "Client Error",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/clients/error",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for clients to log enumeration errors.\n\nNote: caller must be a client. For users, this endpoint will return a 404 as\nthey are not expected or allowed to call this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Update Client Values",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/clients/update",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for clients to update their own information at startup.\n\nNote: caller must be a client. For users, this endpoint will return a 404 as\nthey are not expected or allowed to call this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Get Client",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/clients/:client_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              }
+            ]
+          },
+          "docs": "Gets given client for processing collection events"
+        },
+        {
+          "info": {
+            "name": "Update Client",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/clients/:client_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a client for processing collection events"
+        },
+        {
+          "info": {
+            "name": "Delete Client",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/clients/:client_id",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              }
+            ]
+          },
+          "docs": "Delete a client for processing collection events"
+        },
+        {
+          "info": {
+            "name": "Regenerate the authentication token for a client",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/clients/:client_id/token",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              }
+            ]
+          },
+          "docs": "Regenerate the authentication token for a client"
+        },
+        {
+          "info": {
+            "name": "List all completed tasks for a client",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/clients/:client_id/completed-tasks",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "hydrate_domains",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s."
+              },
+              {
+                "name": "hydrate_ous",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `event_id`, `execution_time`, `status`, `start_time`, `end_time`, `log_path`, `domain_controller`, `event_title`, `last_ingest`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "log_path",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "session_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "local_group_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cert_services_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ca_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "dc_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ad_structure_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain_controller",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_title",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "execution_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_ingest",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in future releases. Please use `GET /api/v2/clients/{client_id}/completed_jobs` instead.\n"
+        },
+        {
+          "info": {
+            "name": "List all completed jobs for a client",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/clients/:client_id/completed-jobs",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `created_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "updated_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `updated_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "deleted_at",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by `deleted_at` value. See filter schema details for valid predicates."
+              },
+              {
+                "name": "hydrate_domains",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s."
+              },
+              {
+                "name": "hydrate_ous",
+                "value": "",
+                "type": "query",
+                "description": "When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for determining the number of objects to skip in pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This query parameter is used for setting an upper limit of objects returned in paginated responses."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sortable columns are `event_id`, `execution_time`, `status`, `start_time`, `end_time`, `log_path`, `domain_controller`, `event_title`, `last_ingest`, `id`, `created_at`, `updated_at`, `deleted_at`."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "log_path",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "session_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "local_group_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cert_services_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ca_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "dc_registry_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ad_structure_collection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain_controller",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_title",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "execution_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_ingest",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List all completed jobs for a client"
+        },
+        {
+          "info": {
+            "name": "Creates a scheduled task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/clients/:client_id/tasks",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Deprecated**: This endpoint will no longer be supported in future releases. Please use `POST /api/v2/clients/{client_id}/jobs` instead.\n"
+        },
+        {
+          "info": {
+            "name": "Creates a scheduled job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/clients/:client_id/jobs",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "path",
+                "description": "Client ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new scheduled job"
+        },
+        {
+          "info": {
+            "name": "Notifies the API of a management operation start",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/clients/management/start",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for clients to start a management operation and mark the start time.\n\nNote: caller must be a client. For users, this endpoint will return a 403 as\nthey are not expected or allowed to call this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Notifies the API of a management operation ending",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/clients/management/end",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for clients to end a management operation and mark the completed time.\n\nNote: caller must be a client. For users, this endpoint will return a 403 as\nthey are not expected or allowed to call this endpoint.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
