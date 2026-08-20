@@ -173,6 +173,8 @@ apis:
   humanURL: https://bloodhound.specterops.io/reference/overview
   baseURL: https://bloodhoundenterprise.io/api/v2
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
@@ -510,6 +512,8 @@ apis:
   humanURL: https://bloodhound.specterops.io/reference/overview
   baseURL: https://bloodhoundenterprise.io/api/v2
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -524,6 +528,8 @@ apis:
   humanURL: https://bloodhound.specterops.io/reference/overview
   baseURL: https://bloodhoundenterprise.io/api/v2
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -665,6 +671,8 @@ apis:
   humanURL: https://bloodhound.specterops.io/reference/overview
   baseURL: https://bloodhoundenterprise.io/api/v2
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
