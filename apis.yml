@@ -281,20 +281,6 @@ apis:
     url: https://bloodhound.specterops.io/reference/overview
   - type: Documentation
     url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
-- aid: specterops:specterops-community-api
-  name: SpecterOps Community API
-  description: The Community API from SpecterOps — 177 operation(s) for community.
-  humanURL: https://bloodhound.specterops.io/reference/overview
-  baseURL: https://bloodhoundenterprise.io/api/v2
-  tags:
-  - Community
-  properties:
-  - type: OpenAPI
-    url: openapi/specterops-community-api-openapi.yml
-  - type: APIReference
-    url: https://bloodhound.specterops.io/reference/overview
-  - type: Documentation
-    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
 - aid: specterops:specterops-computers-api
   name: SpecterOps Computers API
   description: The Computers API from SpecterOps — 16 operation(s) for computers.
@@ -418,20 +404,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/specterops-domains-api-openapi.yml
-  - type: APIReference
-    url: https://bloodhound.specterops.io/reference/overview
-  - type: Documentation
-    url: https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api
-- aid: specterops:specterops-enterprise-api
-  name: SpecterOps Enterprise API
-  description: The Enterprise API from SpecterOps — 230 operation(s) for enterprise.
-  humanURL: https://bloodhound.specterops.io/reference/overview
-  baseURL: https://bloodhoundenterprise.io/api/v2
-  tags:
-  - Enterprise
-  properties:
-  - type: OpenAPI
-    url: openapi/specterops-enterprise-api-openapi.yml
   - type: APIReference
     url: https://bloodhound.specterops.io/reference/overview
   - type: Documentation
