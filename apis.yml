@@ -15,6 +15,18 @@ x-backed-by:
 - insight-partners
 x-tier: profiled
 x-tier-reason: has-openapi
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
@@ -659,6 +671,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/specterops-capability-edges.yml
+  name: SpecterOps Business Capability Map
 - type: DeveloperPortal
   url: https://bloodhound.specterops.io/
 - type: Documentation
