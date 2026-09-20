@@ -1,0 +1,103 @@
+slug: specterops
+provider: SpecterOps
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 8
+edges:
+- tag: Graph
+  spec_file: specterops-graph-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.78
+  evidence: GET /api/v2/pathfinding  Pathfinding  Get pathfinding result ... GET /api/v2/graphs/acl-inheritance  Get
+    ACL inheritance path
+  reason: 'Core attack-path analytics: shortest path, path composition, relay targets and ACL inheritance
+    over the identity graph. This is cybersecurity analysis of access relationships, so BC-620 at L1;
+    it spans IAM analysis and threat/vulnerability discovery so no single L2 is safe.'
+- tag: AD Base Entities
+  spec_file: specterops-ad-base-entities-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.75
+  evidence: GET /api/v2/base/{object_id}/controllers "Get entity controllers" and /controllables "Get
+    entity controllables" in "the API that drives BloodHound Enterprise and Community Edition"
+  reason: Exposes Active Directory object relationships showing which principals control an entity and
+    what it can control — identity attack-path analysis. Clearly cybersecurity, but the evidence sits
+    between identity/access analysis and exposure (vulnerability) analysis, so only the L1 is asserted.
+- tag: Risk Posture
+  spec_file: specterops-risk-posture-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.75
+  evidence: GET /api/v2/posture-stats  Get Posture Statistics; schema model.risk-posture-stat
+  reason: BloodHound reports identity attack-path exposure statistics and history, i.e. security posture
+    measurement over AD/Entra permissions. That is Cybersecurity Management; the two read-only posture
+    endpoints do not clearly name a single sub-capability (governance vs vulnerability remediation), so
+    only the L1 is asserted.
+- tag: AIA CAs
+  spec_file: specterops-aia-cas-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: GET /api/v2/aiacas/{object_id}/pki-hierarchy  Get PKI hierarchy of AIA CA entity
+  reason: Operations expose Active Directory Certificate Services (AIA CA) entity info, controllers and
+    PKI hierarchy — part of BloodHound's identity/permission attack-surface mapping, i.e. identity & access
+    security analysis. Cybersecurity Management is the honest L1; IAM is the closest L2 given certificate-authority/identity
+    trust objects, though it borders on security architecture.
+- tag: Enterprise CAs
+  spec_file: specterops-enterprise-cas-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.72
+  evidence: GET /api/v2/enterprisecas/{object_id}/pki-hierarchy  Get PKI hierarchy of Enterprise CA entity
+  reason: Read-only inspection of Active Directory Certificate Services entities (CA controllers, PKI
+    hierarchy, published certificate templates) as part of BloodHound's identity attack-path mapping.
+    This is cybersecurity analysis of identity/PKI infrastructure; the sub-capability (IAM vs vulnerability
+    analysis) is not cleanly determined, so L1 only.
+- tag: GPOs
+  spec_file: specterops-gpos-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.72
+  evidence: GET /api/v2/gpos/{object_id}/controllers  Get GPO entity controllers ... GetGpoEntityTierZero  Get
+    GPO entity tier-zero
+  reason: Inspection of Active Directory Group Policy Object entities, their controllers and tier-zero
+    exposure — security analysis of identity/directory configuration for attack paths. Maps to Cybersecurity
+    Management at L1; the specific sub-capability is ambiguous.
+- tag: Attack Paths
+  spec_file: specterops-attack-paths-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.7
+  evidence: GET /api/v2/attack-paths/findings  List attack path findings; PUT /api/v2/attack-paths/{attack_path_id}/acceptance  Update
+    attack path risk
+  reason: Findings, trends and risk-acceptance for identity attack paths — exposure identification and
+    remediation tracking, closely analogous to vulnerability management. Confidence moderate because it
+    could also be read as threat detection or security governance.
+- tag: Groups
+  spec_file: specterops-groups-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: GET /api/v2/groups/{object_id}/members  Get Group entity members ... GetGroupEntityAdminRights  Get
+    Group entity admin rights
+  reason: Endpoints expose directory group membership, admin rights, RDP/DCOM/PowerShell-remote rights
+    — i.e. analysis of identity group entitlements and privileged access, which sits under Identity &
+    Access Management. Read-only analytical view rather than IAM administration, hence moderate confidence.
