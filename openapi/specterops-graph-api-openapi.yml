@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: BloodHound AD Base Entities Graph API
+  title: BloodHound Graph API
   contact:
     name: BloodHound Enterprise Support
     url: https://bloodhound.specterops.io/
@@ -9,7 +9,7 @@ info:
     name: Apache-2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
   version: v2
-  description: "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n"
+  description: This is the API that drives BloodHound Enterprise and Community Edition.
 servers:
 - url: /
   description: This is the base path for all endpoints, relative to the domain where the API is being hosted.
@@ -355,22 +355,184 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
+  responses:
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
   schemas:
-    model.bh-graph.link-end:
+    model.bh-graph.graph:
+      type: object
+      additionalProperties:
+        anyOf:
+        - $ref: '#/components/schemas/model.bh-graph.node'
+        - $ref: '#/components/schemas/model.bh-graph.edge'
+    model.bh-graph.item:
       type: object
       properties:
-        arrow:
-          type: boolean
-        backOff:
-          type: integer
         color:
           type: string
+        fade:
+          type: boolean
+        data:
+          type: object
+          additionalProperties: true
         glyphs:
           type: array
           items:
             $ref: '#/components/schemas/model.bh-graph.glyph'
+    model.unified-graph.graph:
+      type: object
+      properties:
+        nodes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/model.unified-graph.node'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.unified-graph.edge'
+    model.unified-graph.edge:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
         label:
-          $ref: '#/components/schemas/model.bh-graph.label'
+          type: string
+        kind:
+          type: string
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    model.unified-graph.node:
+      type: object
+      properties:
+        label:
+          type: string
+        kind:
+          type: string
+        kinds:
+          type: array
+          items:
+            type: string
+        objectId:
+          type: string
+        isTierZero:
+          type: boolean
+        isOwnedObject:
+          type: boolean
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
     model.bh-graph.glyph:
       type: object
       properties:
@@ -394,12 +556,30 @@ components:
           type: integer
         size:
           type: integer
-    model.bh-graph.graph:
-      type: object
-      additionalProperties:
-        anyOf:
-        - $ref: '#/components/schemas/model.bh-graph.node'
-        - $ref: '#/components/schemas/model.bh-graph.edge'
+    model.bh-graph.edge:
+      allOf:
+      - $ref: '#/components/schemas/model.bh-graph.item'
+      - type: object
+        properties:
+          end1:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          end2:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          flow:
+            type: object
+            properties:
+              velocity:
+                type: integer
+          id1:
+            type: string
+          id2:
+            type: string
+          label:
+            $ref: '#/components/schemas/model.bh-graph.label'
+          lineStyle:
+            type: string
+          width:
+            type: integer
     api.error-detail:
       type: object
       properties:
@@ -418,6 +598,12 @@ components:
       properties:
         color:
           type: string
+    api.params.predicate.filter.string-strict:
+      type: string
+      pattern: ^((eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `neq`.
+
+        '
     model.bh-graph.node:
       allOf:
       - $ref: '#/components/schemas/model.bh-graph.item'
@@ -477,30 +663,6 @@ components:
             type: string
           size:
             type: integer
-    model.bh-graph.edge:
-      allOf:
-      - $ref: '#/components/schemas/model.bh-graph.item'
-      - type: object
-        properties:
-          end1:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          end2:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          flow:
-            type: object
-            properties:
-              velocity:
-                type: integer
-          id1:
-            type: string
-          id2:
-            type: string
-          label:
-            $ref: '#/components/schemas/model.bh-graph.label'
-          lineStyle:
-            type: string
-          width:
-            type: integer
     api.error-wrapper:
       type: object
       description: ''
@@ -534,12 +696,21 @@ components:
           type: string
         text:
           type: string
-    api.params.predicate.filter.string-strict:
-      type: string
-      pattern: ^((eq|neq):)?[^:]+$
-      description: 'Filter results by column string value. Valid filter predicates are `eq`, `neq`.
-
-        '
+    model.bh-graph.link-end:
+      type: object
+      properties:
+        arrow:
+          type: boolean
+        backOff:
+          type: integer
+        color:
+          type: string
+        glyphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.bh-graph.glyph'
+        label:
+          $ref: '#/components/schemas/model.bh-graph.label'
     model.bh-graph.font-icon:
       type: object
       properties:
@@ -549,73 +720,6 @@ components:
           type: string
         text:
           type: string
-    model.unified-graph.edge:
-      type: object
-      properties:
-        source:
-          type: string
-        target:
-          type: string
-        label:
-          type: string
-        kind:
-          type: string
-        lastSeen:
-          type: string
-          format: date-time
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    model.unified-graph.graph:
-      type: object
-      properties:
-        nodes:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/model.unified-graph.node'
-        edges:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.unified-graph.edge'
-    model.unified-graph.node:
-      type: object
-      properties:
-        label:
-          type: string
-        kind:
-          type: string
-        kinds:
-          type: array
-          items:
-            type: string
-        objectId:
-          type: string
-        isTierZero:
-          type: boolean
-        isOwnedObject:
-          type: boolean
-        lastSeen:
-          type: string
-          format: date-time
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    model.bh-graph.item:
-      type: object
-      properties:
-        color:
-          type: string
-        fade:
-          type: boolean
-        data:
-          type: object
-          additionalProperties: true
-        glyphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.bh-graph.glyph'
   parameters:
     header.prefer:
       name: Prefer
@@ -626,110 +730,6 @@ components:
         type: string
         default: wait=30
         pattern: ^wait=(-1|[0-9]+)$
-  responses:
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

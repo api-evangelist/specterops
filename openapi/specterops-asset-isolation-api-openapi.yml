@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: BloodHound AD Base Entities Asset Isolation API
+  title: BloodHound Asset Isolation API
   contact:
     name: BloodHound Enterprise Support
     url: https://bloodhound.specterops.io/
@@ -9,7 +9,7 @@ info:
     name: Apache-2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
   version: v2
-  description: "This is the API that drives BloodHound Enterprise and Community Edition.\nEndpoint availability is denoted using the `Community` and `Enterprise` tags.\n\nContact information listed is for BloodHound Enterprise customers. To get help with\nBloodHound Community Edition, please join our\n[Slack community](https://ghst.ly/BHSlack/).\n\n## Authentication\n\nThe BloodHound API supports two kinds of authentication: JWT bearer tokens and Signed Requests.\nFor quick tests or one-time calls, the JWT used by your browser may be the simplest route. For\nmore secure and long lived API integrations, the recommended option is signed requests.\n\n### JWT Bearer Token\n\nThe API will accept calls using the following header structure in the HTTP request:\n```\nAuthorization: Bearer $JWT_TOKEN\n```\nIf you open the Network tab within your browser, you will see calls against the API made utilizing\nthis structure. JWT bearer tokens are supported by the BloodHound API, however it is recommended\nthey only be used for temporary access. JWT tokens expire after a set amount of time and require\nre-authentication using secret credentials.\n\n### Signed Requests\n\nSigned requests are the recommended form of authentication for the BloodHound API. Not only are\nsigned requests better for long lived integrations, they also provide more security for the\nrequests being sent. They provide authentication of the client, as well as verification of request\nintegrity when received by the server.\n\nSigned requests consist of three main parts: The client token ID, the request timestamp, and a\nbase64 encoded HMAC signature. These three pieces of information are sent with the request using\nthe following header structure:\n\n```\nAuthorization: bhesignature $TOKEN_ID\nRequestDate: $RFC3339_DATETIME\nSignature: $BASE64ENCODED_HMAC_SIGNATURE\n```\n\nTo use signed requests, you will need to generate an API token. Each API token generated in the\nBloodHound API comes with two parts: The Token ID, which is used in the `Authorization` header,\nand the Token Key, which is used as part of the HMAC hashing process. The token ID should be\nconsidered as public (like a username) and the token key should be considered secret (like a\npassword). Once an API token is generated, you can use the key to sign requests.\n\nFor more documentation about how to work with authentication in the API, including examples\nof how to generate an API token in the BloodHound UI, please refer to this support doc:\n[Working with the BloodHound API](https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api).\n\n#### Signed Request Pseudo-code Example\n\nFirst, a digest is initiated with HMAC-SHA-256 using the token key as the digest key:\n```python\ndigester = hmac.new(sha256, api_token_key)\n```\n\nOperationKey is the first HMAC digest link in the signature chain. This prevents replay attacks that\nseek to modify the request method or URI. It is composed of concatenating the request method and\nthe request URI with no delimiter and computing the HMAC digest using the token key as the digest\nsecret:\n```python\n# Example: GET /api/v2/test/resource HTTP/1.1\n# Signature Component: GET/api/v2/test/resource\ndigester.write(request_method + request_uri)\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nDateKey is the next HMAC digest link in the signature chain. This encodes the RFC3339\nformatted datetime value as part of the signature to the hour to prevent replay\nattacks that are older than max two hours. This value is added to the signature chain\nby cutting off all values from the RFC3339 formatted datetime from the hours value\nforward:\n```python\n# Example: 2020-12-01T23:59:60Z\n# Signature Component: 2020-12-01T23\nrequest_datetime = date.now()\ndigester.write(request_datetime[:13])\n\n# Update the digester for further chaining\ndigester = hmac.New(sha256, digester.hash())\n```\n\nBody signing is the last HMAC digest link in the signature chain. This encodes the\nrequest body as part of the signature to prevent replay attacks that seek to modify\nthe payload of a signed request. In the case where there is no body content the\nHMAC digest is computed anyway, simply with no values written to the digester:\n```python\nif request.body is not empty:\n  digester.write(request.body)\n```\n\nFinally, base64 encode the final hash and write the three required headers before\nsending the request:\n```python\nencoded_hash = base64_encode(digester.hash())\nrequest.header.write('Authorization', 'bhesignature ' + token_id)\nrequest.header.write('RequestDate', request_datetime)\nrequest.header.write('Signature', encoded_hash)\n```\n"
+  description: This is the API that drives BloodHound Enterprise and Community Edition.
 servers:
 - url: /
   description: This is the base path for all endpoints, relative to the domain where the API is being hosted.
@@ -454,7 +454,6 @@ paths:
     get:
       operationId: GetAssetGroupCustomMemberCount
       summary: Get asset group custom member count
-      description: Get asset group custom member count
       tags:
       - Asset Isolation
       responses:
@@ -493,9 +492,7 @@ paths:
       operationId: ListAssetGroupMembers
       deprecated: true
       summary: List all asset isolation group members
-      description: '**Deprecated**: This endpoint will no longer be supported in a future release. Please use `GET /api/v2/asset-group-tags/{asset_group_tag_id}/members` or `GET /api/v2/asset-group-tags/{asset_group_tag_id}/selectors/{asset_group_tag_selector_id}/members` instead.
-
-        '
+      description: '**Deprecated**: This endpoint will no longer be supported in a future release. Please use `GET /api/v2/asset-group-tags/{asset_group_tag_id}/members` or `GET /api/v2/asset-group-tags/{asset_group_tag_id}/selectors/{asset_group_tag_selector_id}/members` instead.'
       tags:
       - Asset Isolation
       parameters:
@@ -1885,125 +1882,56 @@ paths:
           $ref: '#/components/responses/internal-server-error'
 components:
   schemas:
-    model.asset-group-tags-certification-response:
+    model.asset-group-collection-entry:
       allOf:
-      - $ref: '#/components/schemas/api.response.pagination'
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
       - type: object
         properties:
-          data:
+          asset_group_collection_id:
+            type: integer
+            format: int64
+            writeOnly: true
+          object_id:
+            type: string
+            readOnly: true
+          node_label:
+            type: string
+            readOnly: true
+          properties:
             type: object
-            properties:
-              members:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      format: int64
-                      description: The graph ID of this node
-                    object_id:
-                      type: string
-                    environment_id:
-                      type: string
-                    primary_kind:
-                      type: string
-                    name:
-                      type: string
-                    asset_group_tag_id:
-                      type: integer
-                      format: int32
-                    created_at:
-                      type: string
-                      format: date-time
-                    certified_by:
-                      type: string
-                    certified:
-                      type: integer
-                      description: 0 = cert pending, 1 = cert revoked, 2 = manual cert, 3 = auto cert
-    api.response.pagination:
-      type: object
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: The total number of results.
-        skip:
-          $ref: '#/components/schemas/api.params.query.skip'
-        limit:
-          $ref: '#/components/schemas/api.params.query.limit'
-    api.params.predicate.filter.boolean:
-      type: string
-      pattern: ^((eq|neq):)?(t|T|TRUE|true|True|f|F|FALSE|false|False)$
-      description: 'Filter results by column boolean value. Valid filter predicates are `eq`, `neq`.
-
-        '
-    api.params.predicate.filter.time:
-      type: string
-      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
-      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
-
-        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
-
-        '
-    model.asset-group-tag:
-      type: object
-      properties:
-        id:
-          type: integer
-        type:
-          type: integer
-        kind_id:
-          type: integer
-        name:
-          type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        created_by:
-          type: string
-        updated_at:
-          type: string
-          format: date-time
-        updated_by:
-          type: string
-        position:
-          $ref: '#/components/schemas/null.int32'
-        require_certify:
-          $ref: '#/components/schemas/null.boolean'
-        analysis_enabled:
-          $ref: '#/components/schemas/null.boolean'
-        glyph:
-          $ref: '#/components/schemas/null.string'
+            readOnly: true
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    model.asset-group:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          name:
+            type: string
+          tag:
+            type: string
+          system_group:
+            type: boolean
+            readOnly: true
+          selectors:
+            type: array
+            readOnly: true
+            items:
+              $ref: '#/components/schemas/model.asset-group-selector'
+          member_count:
+            type: integer
+            readOnly: true
     api.params.predicate.filter.integer:
       type: string
       pattern: ^((eq|neq|gt|gte|lt|lte):)?-?[0-9]+$
       description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
 
         '
-    model.asset-group-member:
-      type: object
-      properties:
-        asset_group_id:
-          type: integer
-        object_id:
-          type: string
-        primary_kind:
-          type: string
-        kinds:
-          type: array
-          items:
-            type: string
-        environment_id:
-          type: string
-        environment_kind:
-          type: string
-        name:
-          type: string
-        custom_member:
-          type: boolean
     model.asset-group-tag-request:
       type: object
       properties:
@@ -2020,6 +1948,22 @@ components:
           type: integer
         glyph:
           $ref: '#/components/schemas/null.string'
+    model.asset-group-tags-selector-request:
+      allOf:
+      - $ref: '#/components/schemas/model.asset-group-tags-selector-response'
+      - type: object
+        properties:
+          auto_certify:
+            type: integer
+            enum:
+            - 0
+            - 1
+            - 2
+            description: auto_certify must be an input value of 0 (Disabled), 1 (AllMembers), or 2 (SeedsOnly)
+          description:
+            type: string
+          disabled:
+            type: boolean
     model.asset-group-tags-history:
       type: object
       properties:
@@ -2059,79 +2003,14 @@ components:
                       $ref: '#/components/schemas/null.string'
                     note:
                       $ref: '#/components/schemas/null.string'
-    model.asset-group-tag-update:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Only alphanumeric characters, underscores, and spaces are allowed.
-        description:
-          type: string
-        require_certify:
-          type: boolean
-        position:
-          type: integer
-    model.asset-group-tags-member:
+    model.components.int32.id:
       type: object
       properties:
         id:
           type: integer
-        object_id:
-          type: string
-        environment_id:
-          type: string
-        primary_kind:
-          type: string
-        name:
-          type: string
-        properties:
-          type: object
-          additionalProperties: true
-        source:
-          type: integer
-    model.asset-group-collection:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int64.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          entries:
-            type: array
-            readOnly: true
-            items:
-              $ref: '#/components/schemas/model.asset-group-collection-entry'
-    model.asset-group-tags-selector-request:
-      allOf:
-      - $ref: '#/components/schemas/model.asset-group-tags-selector-response'
-      - type: object
-        properties:
-          auto_certify:
-            type: integer
-            enum:
-            - 0
-            - 1
-            - 2
-            description: auto_certify must be an input value of 0 (Disabled), 1 (AllMembers), or 2 (SeedsOnly)
-          description:
-            type: string
-          disabled:
-            type: boolean
-    model.asset-group-selector-spec:
-      type: object
-      properties:
-        selector_name:
-          type: string
-        sid:
-          type: string
-        action:
-          type: string
-          enum:
-          - add
-          - remove
-    api.params.query.limit:
-      type: integer
-      minimum: 0
-      description: The limit of results requested by the client.
+          format: int32
+          readOnly: true
+          description: This is the unique identifier for this object.
     model.asset-group-tags-selector-seed:
       type: object
       properties:
@@ -2144,6 +2023,95 @@ components:
         value:
           description: The string value representing either an objectid or cypher query depending on the selector type.
           type: string
+    model.asset-group-member:
+      type: object
+      properties:
+        asset_group_id:
+          type: integer
+        object_id:
+          type: string
+        primary_kind:
+          type: string
+        kinds:
+          type: array
+          items:
+            type: string
+        environment_id:
+          type: string
+        environment_kind:
+          type: string
+        name:
+          type: string
+        custom_member:
+          type: boolean
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    null.int32:
+      type: object
+      properties:
+        int32:
+          type: integer
+          format: int32
+        valid:
+          description: Valid is true if `int32` is not `null`.
+          type: boolean
+    null.boolean:
+      type: object
+      properties:
+        bool:
+          type: boolean
+        valid:
+          description: Valid is true if `boolean` is not `null`
+          type: boolean
+    null.string.response:
+      type:
+      - string
+      - 'null'
+    api.params.predicate.filter.string-strict:
+      type: string
+      pattern: ^((eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `neq`.
+
+        '
     model.components.int64.id:
       type: object
       properties:
@@ -2152,12 +2120,21 @@ components:
           format: int64
           readOnly: true
           description: This is the unique identifier for this object.
-    api.params.predicate.filter.string:
-      type: string
-      pattern: ^((eq|~eq|neq):)?[^:]+$
-      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
-
-        '
+    model.asset-group-selector:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          asset_group_id:
+            type: integer
+            format: int32
+          name:
+            type: string
+          selector:
+            type: string
+          system_selector:
+            type: boolean
     model.asset-group-tags-selector-response:
       type: object
       properties:
@@ -2198,6 +2175,113 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/model.asset-group-tags-selector-seed'
+    model.asset-group-tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: integer
+        kind_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+        position:
+          $ref: '#/components/schemas/null.int32'
+        require_certify:
+          $ref: '#/components/schemas/null.boolean'
+        analysis_enabled:
+          $ref: '#/components/schemas/null.boolean'
+        glyph:
+          $ref: '#/components/schemas/null.string'
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    api.params.predicate.filter.time:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
+      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
+
+        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    api.params.predicate.filter.integer-strict:
+      type: string
+      pattern: ^((eq|neq):)?-?[0-9]+$
+      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`.
+
+        '
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    model.asset-group-tags-member:
+      type: object
+      properties:
+        id:
+          type: integer
+        object_id:
+          type: string
+        environment_id:
+          type: string
+        primary_kind:
+          type: string
+        name:
+          type: string
+        properties:
+          type: object
+          additionalProperties: true
+        source:
+          type: integer
+    api.params.query.environments:
+      type: array
+      items:
+        type: string
+    model.asset-group-tag-update:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Only alphanumeric characters, underscores, and spaces are allowed.
+        description:
+          type: string
+        require_certify:
+          type: boolean
+        position:
+          type: integer
+    model.asset-group-collection:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          entries:
+            type: array
+            readOnly: true
+            items:
+              $ref: '#/components/schemas/model.asset-group-collection-entry'
     null.string:
       type: object
       properties:
@@ -2206,54 +2290,28 @@ components:
         valid:
           description: Valid is true if `string` is not `null`
           type: boolean
-    api.params.query.sort-by:
-      type: string
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
-
-        See parameter description for details about which columns are sortable.
-
-        '
-    api.error-detail:
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+    model.asset-group-selector-spec:
       type: object
       properties:
-        context:
+        selector_name:
           type: string
-          description: The context in which the error took place
-        message:
+        sid:
           type: string
-          description: A human-readable description of the error
-    null.time:
-      type: object
-      properties:
-        time:
+        action:
           type: string
-          format: date-time
-          description: An RFC-3339 formatted string
-        valid:
-          description: Valid is true if `time` is not `null`.
-          type: boolean
-    api.params.predicate.filter.integer-strict:
-      type: string
-      pattern: ^((eq|neq):)?-?[0-9]+$
-      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`.
-
-        '
-    null.string.response:
-      type: string
-      nullable: true
-    null.int32:
-      type: object
-      properties:
-        int32:
-          type: integer
-          format: int32
-        valid:
-          description: Valid is true if `int32` is not `null`.
-          type: boolean
-    api.params.query.environments:
-      type: array
-      items:
-        type: string
+          enum:
+          - add
+          - remove
+    null.time.response:
+      type:
+      - string
+      - 'null'
+      format: date-time
+      description: An RFC-3339 formatted string
     api.error-wrapper:
       type: object
       description: ''
@@ -2276,154 +2334,129 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-    model.components.timestamps:
-      type: object
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        deleted_at:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/null.time'
-    null.time.response:
-      type: string
-      nullable: true
-      format: date-time
-      description: An RFC-3339 formatted string
-    model.asset-group-collection-entry:
+    model.asset-group-tags-certification-response:
       allOf:
-      - $ref: '#/components/schemas/model.components.int64.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
+      - $ref: '#/components/schemas/api.response.pagination'
       - type: object
         properties:
-          asset_group_collection_id:
-            type: integer
-            format: int64
-            writeOnly: true
-          object_id:
-            type: string
-            readOnly: true
-          node_label:
-            type: string
-            readOnly: true
-          properties:
+          data:
             type: object
-            readOnly: true
-    model.components.int32.id:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          readOnly: true
-          description: This is the unique identifier for this object.
-    null.boolean:
-      type: object
-      properties:
-        bool:
-          type: boolean
-        valid:
-          description: Valid is true if `boolean` is not `null`
-          type: boolean
-    model.asset-group-selector:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          asset_group_id:
-            type: integer
-            format: int32
-          name:
-            type: string
-          selector:
-            type: string
-          system_selector:
-            type: boolean
-    api.params.predicate.filter.string-strict:
+            properties:
+              members:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      description: The graph ID of this node
+                    object_id:
+                      type: string
+                    environment_id:
+                      type: string
+                    primary_kind:
+                      type: string
+                    name:
+                      type: string
+                    asset_group_tag_id:
+                      type: integer
+                      format: int32
+                    created_at:
+                      type: string
+                      format: date-time
+                    certified_by:
+                      type: string
+                    certified:
+                      type: integer
+                      description: 0 = cert pending, 1 = cert revoked, 2 = manual cert, 3 = auto cert
+    api.params.predicate.filter.boolean:
       type: string
-      pattern: ^((eq|neq):)?[^:]+$
-      description: 'Filter results by column string value. Valid filter predicates are `eq`, `neq`.
+      pattern: ^((eq|neq):)?(t|T|TRUE|true|True|f|F|FALSE|false|False)$
+      description: 'Filter results by column boolean value. Valid filter predicates are `eq`, `neq`.
 
         '
-    api.params.query.skip:
-      type: integer
-      minimum: 0
-      description: The number of items to skip in a paginated response.
-    model.asset-group:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          name:
-            type: string
-          tag:
-            type: string
-          system_group:
-            type: boolean
-            readOnly: true
-          selectors:
-            type: array
-            readOnly: true
-            items:
-              $ref: '#/components/schemas/model.asset-group-selector'
-          member_count:
-            type: integer
-            readOnly: true
-  parameters:
-    query.environments:
-      name: environments
-      description: Environment IDs to filter response by
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.query.environments'
-    query.created-at:
-      name: created_at
-      in: query
-      description: Filter results by `created_at` value. See filter schema details for valid predicates.
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
-    query.skip:
-      name: skip
-      description: This query parameter is used for determining the number of objects to skip in pagination.
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.query.skip'
-    query.updated-at:
-      name: updated_at
-      in: query
-      description: Filter results by `updated_at` value. See filter schema details for valid predicates.
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.deleted-at:
-      name: deleted_at
-      in: query
-      description: Filter results by `deleted_at` value. See filter schema details for valid predicates.
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.limit:
-      name: limit
-      description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.query.limit'
   responses:
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
     not-found:
       description: '**Not Found**
 
@@ -2477,86 +2510,52 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
+  parameters:
+    query.environments:
+      name: environments
+      description: Environment IDs to filter response by
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.environments'
+    query.updated-at:
+      name: updated_at
+      in: query
+      description: Filter results by `updated_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.created-at:
+      name: created_at
+      in: query
+      description: Filter results by `created_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.limit:
+      name: limit
+      description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.limit'
+    query.skip:
+      name: skip
+      description: This query parameter is used for determining the number of objects to skip in pagination.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.skip'
+    query.deleted-at:
+      name: deleted_at
+      in: query
+      description: Filter results by `deleted_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`
