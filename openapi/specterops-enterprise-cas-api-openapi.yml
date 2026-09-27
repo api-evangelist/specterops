@@ -135,47 +135,136 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
+  schemas:
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+  parameters:
+    query.entity.type:
+      name: type
+      description: 'The type of return data requested. If no type is provided, query will default to `list`.
+
+        The only supported type is `list`, but the unsupported `graph` type can be used.
+
+        Some entity query endpoints do not support the `graph` type. For those interested in
+
+        using the undocumented graph type parameter, the response type is described in the schema
+
+        `model.bh-graph.graph`.
+
+        '
+      in: query
+      schema:
+        type: string
+        default: list
+        enum:
+        - list
+        - graph
+    path.object-id:
+      name: object_id
+      description: The object id of the entity being operated on.
+      in: path
+      required: true
+      schema:
+        type: string
+        description: The unique object identifier
+    query.entity.skip:
+      name: skip
+      description: The number of entries to skip for pagination. Only available for `type=list`.
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    query.hydrate-counts:
+      description: Include counts of related entities. Default value is `true`.
+      name: counts
+      in: query
+      schema:
+        type: boolean
+        default: true
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+    query.entity.limit:
+      name: limit
+      description: The number of entries to limit in the response. Only available for `type=list`.
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 10
+    query.entity.sort-by:
+      name: sort_by
+      in: query
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available
+
+        for sorting are dependent on the entity object kind.
+
+        '
+      schema:
+        $ref: '#/components/schemas/api.params.query.sort-by'
   responses:
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
     unauthorized:
       description: '**Unauthorized**
 
@@ -197,33 +286,6 @@ components:
             errors:
             - context: login
               message: Unauthorized
-    entity-info-query-results:
-      description: '**OK**
-
-
-        This response is polymorphic and depends on the type of entity being queried and whether
-
-        the `count` param is true or not. All node types will return a `props` field with the graph node
-
-        properties and a `kinds` field with the graph node kinds. If `count=true` the response will also include additional fields with integer counts.
-
-        '
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              data:
-                type: object
-                properties:
-                  kinds:
-                    type: array
-                    items:
-                      type: string
-                  props:
-                    type: object
-                    additionalProperties:
-                      type: object
     too-many-requests:
       description: '**Too Many Requests**
 
@@ -243,6 +305,29 @@ components:
             errors:
             - context: middleware
               message: Too many requests. Please try again later.
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
     not-found:
       description: '**Not Found**
 
@@ -262,6 +347,25 @@ components:
             errors:
             - context: clients
               message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
     related-entity-query-results:
       description: '**OK**
 
@@ -303,16 +407,41 @@ components:
                         type: array
                         items:
                           type: string
-    bad-request:
-      description: '**Bad Request**
+    entity-info-query-results:
+      description: '**OK**
 
-        This could be due to one of the following reasons:
 
-        - JSON payload is missing or malformed
+        This response is polymorphic and depends on the type of entity being queried and whether
 
-        - Path or query parameters are missing or invalid/malformed
+        the `count` param is true or not. All node types will return a `props` field with the graph node
 
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+        properties and a `kinds` field with the graph node kinds. If `count=true` the response will also include additional fields with integer counts.
+
+        '
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  kinds:
+                    type: array
+                    items:
+                      type: string
+                  props:
+                    type: object
+                    additionalProperties:
+                      type: object
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
 
         '
       content:
@@ -320,141 +449,12 @@ components:
           schema:
             $ref: '#/components/schemas/api.error-wrapper'
           example:
-            http_status: 400
+            http_status: 500
             timestamp: '2024-02-19T19:27:43.866Z'
             request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
             errors:
             - context: clients
-              message: The JSON payload could not be unmarshalled.
-  schemas:
-    api.params.query.limit:
-      type: integer
-      minimum: 0
-      description: The limit of results requested by the client.
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    api.params.query.sort-by:
-      type: string
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
-
-        See parameter description for details about which columns are sortable.
-
-        '
-    api.response.pagination:
-      type: object
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: The total number of results.
-        skip:
-          $ref: '#/components/schemas/api.params.query.skip'
-        limit:
-          $ref: '#/components/schemas/api.params.query.limit'
-    api.params.query.skip:
-      type: integer
-      minimum: 0
-      description: The number of items to skip in a paginated response.
-    api.error-wrapper:
-      type: object
-      description: ''
-      properties:
-        http_status:
-          type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
-  parameters:
-    path.object-id:
-      name: object_id
-      description: The object id of the entity being operated on.
-      in: path
-      required: true
-      schema:
-        type: string
-        description: The unique object identifier
-    query.entity.sort-by:
-      name: sort_by
-      in: query
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available
-
-        for sorting are dependent on the entity object kind.
-
-        '
-      schema:
-        $ref: '#/components/schemas/api.params.query.sort-by'
-    query.hydrate-counts:
-      description: Include counts of related entities. Default value is `true`.
-      name: counts
-      in: query
-      schema:
-        type: boolean
-        default: true
-    query.entity.skip:
-      name: skip
-      description: The number of entries to skip for pagination. Only available for `type=list`.
-      in: query
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    query.entity.type:
-      name: type
-      description: 'The type of return data requested. If no type is provided, query will default to `list`.
-
-        The only supported type is `list`, but the unsupported `graph` type can be used.
-
-        Some entity query endpoints do not support the `graph` type. For those interested in
-
-        using the undocumented graph type parameter, the response type is described in the schema
-
-        `model.bh-graph.graph`.
-
-        '
-      in: query
-      schema:
-        type: string
-        default: list
-        enum:
-        - list
-        - graph
-    query.entity.limit:
-      name: limit
-      description: The number of entries to limit in the response. Only available for `type=list`.
-      in: query
-      schema:
-        type: integer
-        minimum: 0
-        default: 10
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
+              message: The request could not be handled due to an unexpected database error.
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

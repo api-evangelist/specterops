@@ -147,210 +147,17 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  responses:
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
   schemas:
-    model.bh-graph.graph:
-      type: object
-      additionalProperties:
-        anyOf:
-        - $ref: '#/components/schemas/model.bh-graph.node'
-        - $ref: '#/components/schemas/model.bh-graph.edge'
-    model.bh-graph.item:
+    model.bh-graph.label:
       type: object
       properties:
-        color:
-          type: string
-        fade:
+        bold:
           type: boolean
-        data:
-          type: object
-          additionalProperties: true
-        glyphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.bh-graph.glyph'
-    model.bh-graph.glyph:
-      type: object
-      properties:
-        angle:
-          type: integer
-        blink:
-          type: boolean
-        border:
-          $ref: '#/components/schemas/model.bh-graph.item-border'
         color:
           type: string
-        fontIcon:
-          $ref: '#/components/schemas/model.bh-graph.font-icon'
-        image:
+        fontFamily:
           type: string
-        label:
-          $ref: '#/components/schemas/model.bh-graph.label'
-        position:
-          type: string
-        radius:
-          type: integer
-        size:
-          type: integer
-    model.bh-graph.edge:
-      allOf:
-      - $ref: '#/components/schemas/model.bh-graph.item'
-      - type: object
-        properties:
-          end1:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          end2:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          flow:
-            type: object
-            properties:
-              velocity:
-                type: integer
-          id1:
-            type: string
-          id2:
-            type: string
-          label:
-            $ref: '#/components/schemas/model.bh-graph.label'
-          lineStyle:
-            type: string
-          width:
-            type: integer
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    model.bh-graph.item-border:
-      type: object
-      properties:
-        color:
+        text:
           type: string
     model.bh-graph.node:
       allOf:
@@ -411,6 +218,12 @@ components:
             type: string
           size:
             type: integer
+    model.bh-graph.graph:
+      type: object
+      additionalProperties:
+        anyOf:
+        - $ref: '#/components/schemas/model.bh-graph.node'
+        - $ref: '#/components/schemas/model.bh-graph.edge'
     api.error-wrapper:
       type: object
       description: ''
@@ -433,16 +246,10 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-    model.bh-graph.label:
+    model.bh-graph.item-border:
       type: object
       properties:
-        bold:
-          type: boolean
         color:
-          type: string
-        fontFamily:
-          type: string
-        text:
           type: string
     model.bh-graph.link-end:
       type: object
@@ -459,6 +266,53 @@ components:
             $ref: '#/components/schemas/model.bh-graph.glyph'
         label:
           $ref: '#/components/schemas/model.bh-graph.label'
+    model.bh-graph.item:
+      type: object
+      properties:
+        color:
+          type: string
+        fade:
+          type: boolean
+        data:
+          type: object
+          additionalProperties: true
+        glyphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.bh-graph.glyph'
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    model.bh-graph.edge:
+      allOf:
+      - $ref: '#/components/schemas/model.bh-graph.item'
+      - type: object
+        properties:
+          end1:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          end2:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          flow:
+            type: object
+            properties:
+              velocity:
+                type: integer
+          id1:
+            type: string
+          id2:
+            type: string
+          label:
+            $ref: '#/components/schemas/model.bh-graph.label'
+          lineStyle:
+            type: string
+          width:
+            type: integer
     model.bh-graph.font-icon:
       type: object
       properties:
@@ -468,13 +322,153 @@ components:
           type: string
         text:
           type: string
+    model.bh-graph.glyph:
+      type: object
+      properties:
+        angle:
+          type: integer
+        blink:
+          type: boolean
+        border:
+          $ref: '#/components/schemas/model.bh-graph.item-border'
+        color:
+          type: string
+        fontIcon:
+          $ref: '#/components/schemas/model.bh-graph.font-icon'
+        image:
+          type: string
+        label:
+          $ref: '#/components/schemas/model.bh-graph.label'
+        position:
+          type: string
+        radius:
+          type: integer
+        size:
+          type: integer
+  responses:
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
   parameters:
-    query.asset-group-tag-id:
-      name: asset_group_tag_id
-      description: The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used.
-      in: query
-      schema:
-        type: integer
     header.prefer:
       name: Prefer
       description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
@@ -484,6 +478,12 @@ components:
         type: string
         default: wait=30
         pattern: ^wait=(-1|[0-9]+)$
+    query.asset-group-tag-id:
+      name: asset_group_tag_id
+      description: The asset group tag id of the zone requested. If not supplied, the asset group tag id associated with 'Tier Zero' and 'Hygiene' is used.
+      in: query
+      schema:
+        type: integer
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

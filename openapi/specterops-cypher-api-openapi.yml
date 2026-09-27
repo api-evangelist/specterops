@@ -563,265 +563,7 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  responses:
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    unsupported-media-type:
-      description: '**Unsupported Media Type**
-
-        Content-Type does not match expected formats.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 415
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: 'invalid content-type: [application/incorrect]; Content type must be application/json or application/zip'
-    no-content:
-      description: '**No Content**
-
-        This response will contain no response body.
-
-        '
-      content:
-        text/plain:
-          schema:
-            type: string
-          example: '[this request has no response data]'
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
   schemas:
-    api.params.query.limit:
-      type: integer
-      minimum: 0
-      description: The limit of results requested by the client.
-    model.unified-graph.edge:
-      type: object
-      properties:
-        source:
-          type: string
-        target:
-          type: string
-        label:
-          type: string
-        kind:
-          type: string
-        lastSeen:
-          type: string
-          format: date-time
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    model.unified-graph.node:
-      type: object
-      properties:
-        label:
-          type: string
-        kind:
-          type: string
-        kinds:
-          type: array
-          items:
-            type: string
-        objectId:
-          type: string
-        isTierZero:
-          type: boolean
-        isOwnedObject:
-          type: boolean
-        lastSeen:
-          type: string
-          format: date-time
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    model.components.uuid:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: This is the unique identifier for this object.
-    null.time:
-      type: object
-      properties:
-        time:
-          type: string
-          format: date-time
-          description: An RFC-3339 formatted string
-        valid:
-          description: Valid is true if `time` is not `null`.
-          type: boolean
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    api.params.query.sort-by:
-      type: string
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
-
-        See parameter description for details about which columns are sortable.
-
-        '
-    model.components.timestamps:
-      type: object
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        deleted_at:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/null.time'
-    model.saved-queries-permissions.response:
-      type: object
-      properties:
-        shared_to_user_ids:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.components.uuid'
-        query_id:
-          type: integer
-          format: int64
-        public:
-          type: boolean
     model.components.int64.id:
       type: object
       properties:
@@ -830,54 +572,6 @@ components:
           format: int64
           readOnly: true
           description: This is the unique identifier for this object.
-    api.params.predicate.filter.string:
-      type: string
-      pattern: ^((eq|~eq|neq):)?[^:]+$
-      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
-
-        '
-    model.saved-query:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int64.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          user_id:
-            type: string
-            format: uuid
-            readOnly: true
-          name:
-            type: string
-          query:
-            type: string
-          description:
-            type: string
-    api.response.pagination:
-      type: object
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: The total number of results.
-        skip:
-          $ref: '#/components/schemas/api.params.query.skip'
-        limit:
-          $ref: '#/components/schemas/api.params.query.limit'
-    model.saved-queries-permissions:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int64.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          shared_to_user_id:
-            readOnly: true
-            allOf:
-            - $ref: '#/components/schemas/null.uuid'
-          query_id:
-            type: integer
-            format: int64
-          public:
-            type: boolean
     model.unified-graph.graph.w.property.keys:
       type: object
       properties:
@@ -918,14 +612,15 @@ components:
       type: integer
       minimum: 0
       description: The number of items to skip in a paginated response.
-    null.uuid:
+    null.time:
       type: object
       properties:
-        uuid:
+        time:
           type: string
-          format: uuid
+          format: date-time
+          description: An RFC-3339 formatted string
         valid:
-          description: Valid is true if `uuid` is not `null`.
+          description: Valid is true if `time` is not `null`.
           type: boolean
     api.error-wrapper:
       type: object
@@ -949,6 +644,160 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
+    model.unified-graph.edge:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        label:
+          type: string
+        kind:
+          type: string
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    model.saved-query:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          user_id:
+            type: string
+            format: uuid
+            readOnly: true
+          name:
+            type: string
+          query:
+            type: string
+          description:
+            type: string
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    model.unified-graph.node:
+      type: object
+      properties:
+        label:
+          type: string
+        kind:
+          type: string
+        kinds:
+          type: array
+          items:
+            type: string
+        objectId:
+          type: string
+        isTierZero:
+          type: boolean
+        isOwnedObject:
+          type: boolean
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    model.saved-queries-permissions.response:
+      type: object
+      properties:
+        shared_to_user_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.components.uuid'
+        query_id:
+          type: integer
+          format: int64
+        public:
+          type: boolean
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    model.components.uuid:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    model.saved-queries-permissions:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          shared_to_user_id:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/null.uuid'
+          query_id:
+            type: integer
+            format: int64
+          public:
+            type: boolean
+    null.uuid:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        valid:
+          description: Valid is true if `uuid` is not `null`.
+          type: boolean
   parameters:
     query.limit:
       name: limit
@@ -971,6 +820,157 @@ components:
         type: string
         default: wait=30
         pattern: ^wait=(-1|[0-9]+)$
+  responses:
+    unsupported-media-type:
+      description: '**Unsupported Media Type**
+
+        Content-Type does not match expected formats.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 415
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: 'invalid content-type: [application/incorrect]; Content type must be application/json or application/zip'
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    no-content:
+      description: '**No Content**
+
+        This response will contain no response body.
+
+        '
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: '[this request has no response data]'
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

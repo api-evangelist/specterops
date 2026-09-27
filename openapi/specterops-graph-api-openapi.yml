@@ -355,47 +355,268 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
+  schemas:
+    model.bh-graph.label:
+      type: object
+      properties:
+        bold:
+          type: boolean
+        color:
+          type: string
+        fontFamily:
+          type: string
+        text:
+          type: string
+    model.bh-graph.node:
+      allOf:
+      - $ref: '#/components/schemas/model.bh-graph.item'
+      - type: object
+        properties:
+          border:
+            type: object
+            properties:
+              color:
+                type: string
+              lineStyle:
+                type: string
+              width:
+                type: integer
+          coordinates:
+            type: object
+            properties:
+              lat:
+                type: integer
+              lng:
+                type: integer
+          cutout:
+            type: boolean
+          fontIcon:
+            $ref: '#/components/schemas/model.bh-graph.font-icon'
+          halos:
+            type: array
+            items:
+              type: object
+              properties:
+                color:
+                  type: string
+                radius:
+                  type: integer
+                width:
+                  type: integer
+          image:
+            type: string
+          label:
+            type: object
+            properties:
+              backgroundColor:
+                type: string
+              bold:
+                type: boolean
+              center:
+                type: boolean
+              color:
+                type: string
+              fontFamily:
+                type: string
+              fontSize:
+                type: integer
+              text:
+                type: string
+          shape:
+            type: string
+          size:
+            type: integer
+    model.bh-graph.graph:
+      type: object
+      additionalProperties:
+        anyOf:
+        - $ref: '#/components/schemas/model.bh-graph.node'
+        - $ref: '#/components/schemas/model.bh-graph.edge'
+    model.unified-graph.graph:
+      type: object
+      properties:
+        nodes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/model.unified-graph.node'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.unified-graph.edge'
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    model.unified-graph.edge:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        label:
+          type: string
+        kind:
+          type: string
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    model.bh-graph.item-border:
+      type: object
+      properties:
+        color:
+          type: string
+    model.bh-graph.link-end:
+      type: object
+      properties:
+        arrow:
+          type: boolean
+        backOff:
+          type: integer
+        color:
+          type: string
+        glyphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.bh-graph.glyph'
+        label:
+          $ref: '#/components/schemas/model.bh-graph.label'
+    model.bh-graph.item:
+      type: object
+      properties:
+        color:
+          type: string
+        fade:
+          type: boolean
+        data:
+          type: object
+          additionalProperties: true
+        glyphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.bh-graph.glyph'
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    model.unified-graph.node:
+      type: object
+      properties:
+        label:
+          type: string
+        kind:
+          type: string
+        kinds:
+          type: array
+          items:
+            type: string
+        objectId:
+          type: string
+        isTierZero:
+          type: boolean
+        isOwnedObject:
+          type: boolean
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    api.params.predicate.filter.contains:
+      type: string
+      pattern: ^(in|nin):(\w+)(,\s*\w+)*$
+      description: "The contains predicate checks a property against the values in a given comma separated list.\n- `in` checks if the property matches an element in the given comma separated list.\n  - `in:Contains,GetChangesAll,MemberOf`\n- `nin` checks if the property does not match an element in the given comma separated list.\n  - `nin:LocalToComputer,MemberOfLocalGroup`\n"
+    model.bh-graph.edge:
+      allOf:
+      - $ref: '#/components/schemas/model.bh-graph.item'
+      - type: object
+        properties:
+          end1:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          end2:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          flow:
+            type: object
+            properties:
+              velocity:
+                type: integer
+          id1:
+            type: string
+          id2:
+            type: string
+          label:
+            $ref: '#/components/schemas/model.bh-graph.label'
+          lineStyle:
+            type: string
+          width:
+            type: integer
+    model.bh-graph.font-icon:
+      type: object
+      properties:
+        color:
+          type: string
+        fontFamily:
+          type: string
+        text:
+          type: string
+    model.bh-graph.glyph:
+      type: object
+      properties:
+        angle:
+          type: integer
+        blink:
+          type: boolean
+        border:
+          $ref: '#/components/schemas/model.bh-graph.item-border'
+        color:
+          type: string
+        fontIcon:
+          $ref: '#/components/schemas/model.bh-graph.font-icon'
+        image:
+          type: string
+        label:
+          $ref: '#/components/schemas/model.bh-graph.label'
+        position:
+          type: string
+        radius:
+          type: integer
+        size:
+          type: integer
+    api.params.predicate.filter.string-strict:
+      type: string
+      pattern: ^((eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `neq`.
+
+        '
   responses:
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
     unauthorized:
       description: '**Unauthorized**
 
@@ -459,267 +680,46 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
-  schemas:
-    model.bh-graph.graph:
-      type: object
-      additionalProperties:
-        anyOf:
-        - $ref: '#/components/schemas/model.bh-graph.node'
-        - $ref: '#/components/schemas/model.bh-graph.edge'
-    model.bh-graph.item:
-      type: object
-      properties:
-        color:
-          type: string
-        fade:
-          type: boolean
-        data:
-          type: object
-          additionalProperties: true
-        glyphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.bh-graph.glyph'
-    model.unified-graph.graph:
-      type: object
-      properties:
-        nodes:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/model.unified-graph.node'
-        edges:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.unified-graph.edge'
-    model.unified-graph.edge:
-      type: object
-      properties:
-        source:
-          type: string
-        target:
-          type: string
-        label:
-          type: string
-        kind:
-          type: string
-        lastSeen:
-          type: string
-          format: date-time
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    model.unified-graph.node:
-      type: object
-      properties:
-        label:
-          type: string
-        kind:
-          type: string
-        kinds:
-          type: array
-          items:
-            type: string
-        objectId:
-          type: string
-        isTierZero:
-          type: boolean
-        isOwnedObject:
-          type: boolean
-        lastSeen:
-          type: string
-          format: date-time
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    model.bh-graph.glyph:
-      type: object
-      properties:
-        angle:
-          type: integer
-        blink:
-          type: boolean
-        border:
-          $ref: '#/components/schemas/model.bh-graph.item-border'
-        color:
-          type: string
-        fontIcon:
-          $ref: '#/components/schemas/model.bh-graph.font-icon'
-        image:
-          type: string
-        label:
-          $ref: '#/components/schemas/model.bh-graph.label'
-        position:
-          type: string
-        radius:
-          type: integer
-        size:
-          type: integer
-    model.bh-graph.edge:
-      allOf:
-      - $ref: '#/components/schemas/model.bh-graph.item'
-      - type: object
-        properties:
-          end1:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          end2:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          flow:
-            type: object
-            properties:
-              velocity:
-                type: integer
-          id1:
-            type: string
-          id2:
-            type: string
-          label:
-            $ref: '#/components/schemas/model.bh-graph.label'
-          lineStyle:
-            type: string
-          width:
-            type: integer
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    api.params.predicate.filter.contains:
-      type: string
-      pattern: ^(in|nin):(\w+)(,\s*\w+)*$
-      description: "The contains predicate checks a property against the values in a given comma separated list.\n- `in` checks if the property matches an element in the given comma separated list.\n  - `in:Contains,GetChangesAll,MemberOf`\n- `nin` checks if the property does not match an element in the given comma separated list.\n  - `nin:LocalToComputer,MemberOfLocalGroup`\n"
-    model.bh-graph.item-border:
-      type: object
-      properties:
-        color:
-          type: string
-    api.params.predicate.filter.string-strict:
-      type: string
-      pattern: ^((eq|neq):)?[^:]+$
-      description: 'Filter results by column string value. Valid filter predicates are `eq`, `neq`.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
 
         '
-    model.bh-graph.node:
-      allOf:
-      - $ref: '#/components/schemas/model.bh-graph.item'
-      - type: object
-        properties:
-          border:
-            type: object
-            properties:
-              color:
-                type: string
-              lineStyle:
-                type: string
-              width:
-                type: integer
-          coordinates:
-            type: object
-            properties:
-              lat:
-                type: integer
-              lng:
-                type: integer
-          cutout:
-            type: boolean
-          fontIcon:
-            $ref: '#/components/schemas/model.bh-graph.font-icon'
-          halos:
-            type: array
-            items:
-              type: object
-              properties:
-                color:
-                  type: string
-                radius:
-                  type: integer
-                width:
-                  type: integer
-          image:
-            type: string
-          label:
-            type: object
-            properties:
-              backgroundColor:
-                type: string
-              bold:
-                type: boolean
-              center:
-                type: boolean
-              color:
-                type: string
-              fontFamily:
-                type: string
-              fontSize:
-                type: integer
-              text:
-                type: string
-          shape:
-            type: string
-          size:
-            type: integer
-    api.error-wrapper:
-      type: object
-      description: ''
-      properties:
-        http_status:
-          type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
-    model.bh-graph.label:
-      type: object
-      properties:
-        bold:
-          type: boolean
-        color:
-          type: string
-        fontFamily:
-          type: string
-        text:
-          type: string
-    model.bh-graph.link-end:
-      type: object
-      properties:
-        arrow:
-          type: boolean
-        backOff:
-          type: integer
-        color:
-          type: string
-        glyphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.bh-graph.glyph'
-        label:
-          $ref: '#/components/schemas/model.bh-graph.label'
-    model.bh-graph.font-icon:
-      type: object
-      properties:
-        color:
-          type: string
-        fontFamily:
-          type: string
-        text:
-          type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
   parameters:
     header.prefer:
       name: Prefer
