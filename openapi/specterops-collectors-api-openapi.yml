@@ -188,6 +188,62 @@ paths:
           $ref: '#/components/responses/internal-server-error'
 components:
   schemas:
+    model.version-meta:
+      type: object
+      properties:
+        major:
+          type: integer
+        minor:
+          type: integer
+        patch:
+          type: integer
+        prerelease:
+          type: string
+    model.kennel-asset:
+      type: object
+      properties:
+        name:
+          type: string
+        download_url:
+          type: string
+        checksum_download_url:
+          type: string
+        os:
+          type: string
+        arch:
+          type: string
+    enum.client-type:
+      type: string
+      description: This enum describes the collector client type.
+      enum:
+      - sharphound
+      - azurehound
+      - openhound
+    model.kennel-version:
+      type: object
+      properties:
+        version:
+          type: string
+        version_meta:
+          $ref: '#/components/schemas/model.version-meta'
+        release_date:
+          type: string
+          format: date-time
+        release_assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-asset'
+    model.kennel-enterprise-manifest:
+      type: object
+      properties:
+        sharphound_enterprise:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-version'
+        azurehound_enterprise:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-version'
     api.error-detail:
       type: object
       properties:
@@ -206,6 +262,26 @@ components:
           type: string
         deprecated:
           type: boolean
+    model.kennel-manifest:
+      type: object
+      properties:
+        sharphound:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-version'
+        azurehound:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-version'
+    model.collector-manifest:
+      type: object
+      properties:
+        latest:
+          type: string
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.collector-version'
     api.error-wrapper:
       type: object
       description: ''
@@ -228,83 +304,75 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-    model.kennel-manifest:
-      type: object
-      properties:
-        sharphound:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-version'
-        azurehound:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-version'
-    model.collector-manifest:
-      type: object
-      properties:
-        latest:
-          type: string
-        versions:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.collector-version'
-    model.version-meta:
-      type: object
-      properties:
-        major:
-          type: integer
-        minor:
-          type: integer
-        patch:
-          type: integer
-        prerelease:
-          type: string
-    model.kennel-version:
-      type: object
-      properties:
-        version:
-          type: string
-        version_meta:
-          $ref: '#/components/schemas/model.version-meta'
-        release_date:
-          type: string
-          format: date-time
-        release_assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-asset'
-    enum.client-type:
-      type: string
-      description: This enum describes the collector client type.
-      enum:
-      - sharphound
-      - azurehound
-      - openhound
-    model.kennel-enterprise-manifest:
-      type: object
-      properties:
-        sharphound_enterprise:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-version'
-        azurehound_enterprise:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-version'
-    model.kennel-asset:
-      type: object
-      properties:
-        name:
-          type: string
-        download_url:
-          type: string
-        checksum_download_url:
-          type: string
-        os:
-          type: string
-        arch:
-          type: string
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   responses:
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    binary-response:
+      description: '**OK**
+
+        This response will contain binary content.
+
+        '
+      headers:
+        Content-Disposition:
+          schema:
+            type: string
+      content:
+        application/octet-stream:
+          schema:
+            type: string
+            format: binary
+          example: '[this request has a binary response]'
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
     bad-request:
       description: '**Bad Request**
 
@@ -328,27 +396,6 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
     not-found:
       description: '**Not Found**
 
@@ -368,53 +415,6 @@ components:
             errors:
             - context: clients
               message: The requested client could not be found.
-    binary-response:
-      description: '**OK**
-
-        This response will contain binary content.
-
-        '
-      headers:
-        Content-Disposition:
-          schema:
-            type: string
-      content:
-        application/octet-stream:
-          schema:
-            type: string
-            format: binary
-          example: '[this request has a binary response]'
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

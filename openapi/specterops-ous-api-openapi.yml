@@ -161,11 +161,89 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+    query.entity.limit:
+      name: limit
+      description: The number of entries to limit in the response. Only available for `type=list`.
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 10
+    query.entity.type:
+      name: type
+      description: 'The type of return data requested. If no type is provided, query will default to `list`.
+
+        The only supported type is `list`, but the unsupported `graph` type can be used.
+
+        Some entity query endpoints do not support the `graph` type. For those interested in
+
+        using the undocumented graph type parameter, the response type is described in the schema
+
+        `model.bh-graph.graph`.
+
+        '
+      in: query
+      schema:
+        type: string
+        default: list
+        enum:
+        - list
+        - graph
+    query.hydrate-counts:
+      description: Include counts of related entities. Default value is `true`.
+      name: counts
+      in: query
+      schema:
+        type: boolean
+        default: true
+    path.object-id:
+      name: object_id
+      description: The object id of the entity being operated on.
+      in: path
+      required: true
+      schema:
+        type: string
+        description: The unique object identifier
+    query.entity.skip:
+      name: skip
+      description: The number of entries to skip for pagination. Only available for `type=list`.
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    query.entity.sort-by:
+      name: sort_by
+      in: query
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available
+
+        for sorting are dependent on the entity object kind.
+
+        '
+      schema:
+        $ref: '#/components/schemas/api.params.query.sort-by'
   schemas:
-    api.params.query.skip:
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.params.query.limit:
       type: integer
       minimum: 0
-      description: The number of items to skip in a paginated response.
+      description: The limit of results requested by the client.
     api.error-wrapper:
       type: object
       description: ''
@@ -188,10 +266,19 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-    api.params.query.limit:
+    api.params.query.skip:
       type: integer
       minimum: 0
-      description: The limit of results requested by the client.
+      description: The number of items to skip in a paginated response.
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
     api.response.pagination:
       type: object
       properties:
@@ -203,93 +290,6 @@ components:
           $ref: '#/components/schemas/api.params.query.skip'
         limit:
           $ref: '#/components/schemas/api.params.query.limit'
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    api.params.query.sort-by:
-      type: string
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
-
-        See parameter description for details about which columns are sortable.
-
-        '
-  parameters:
-    query.entity.type:
-      name: type
-      description: 'The type of return data requested. If no type is provided, query will default to `list`.
-
-        The only supported type is `list`, but the unsupported `graph` type can be used.
-
-        Some entity query endpoints do not support the `graph` type. For those interested in
-
-        using the undocumented graph type parameter, the response type is described in the schema
-
-        `model.bh-graph.graph`.
-
-        '
-      in: query
-      schema:
-        type: string
-        default: list
-        enum:
-        - list
-        - graph
-    path.object-id:
-      name: object_id
-      description: The object id of the entity being operated on.
-      in: path
-      required: true
-      schema:
-        type: string
-        description: The unique object identifier
-    query.entity.skip:
-      name: skip
-      description: The number of entries to skip for pagination. Only available for `type=list`.
-      in: query
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    query.hydrate-counts:
-      description: Include counts of related entities. Default value is `true`.
-      name: counts
-      in: query
-      schema:
-        type: boolean
-        default: true
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
-    query.entity.limit:
-      name: limit
-      description: The number of entries to limit in the response. Only available for `type=list`.
-      in: query
-      schema:
-        type: integer
-        minimum: 0
-        default: 10
-    query.entity.sort-by:
-      name: sort_by
-      in: query
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order. Columns available
-
-        for sorting are dependent on the entity object kind.
-
-        '
-      schema:
-        $ref: '#/components/schemas/api.params.query.sort-by'
   responses:
     unauthorized:
       description: '**Unauthorized**
@@ -312,86 +312,6 @@ components:
             errors:
             - context: login
               message: Unauthorized
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
     related-entity-query-results:
       description: '**OK**
 
@@ -433,6 +353,69 @@ components:
                         type: array
                         items:
                           type: string
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
     entity-info-query-results:
       description: '**OK**
 
@@ -460,14 +443,12 @@ components:
                     type: object
                     additionalProperties:
                       type: object
-    internal-server-error:
-      description: '**Internal Server Error**
+    not-found:
+      description: '**Not Found**
 
-        This is usually the result of either an unexpected database or application error.
+        This error typically comes from operations where a valid ID was passed to the request
 
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
+        to look up an entity but the entity could not be found.
 
         '
       content:
@@ -475,12 +456,31 @@ components:
           schema:
             $ref: '#/components/schemas/api.error-wrapper'
           example:
-            http_status: 500
+            http_status: 404
             timestamp: '2024-02-19T19:27:43.866Z'
             request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
             errors:
             - context: clients
-              message: The request could not be handled due to an unexpected database error.
+              message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

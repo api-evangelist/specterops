@@ -564,14 +564,42 @@ paths:
           $ref: '#/components/responses/internal-server-error'
 components:
   schemas:
-    model.components.int64.id:
+    null.time:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
           readOnly: true
-          description: This is the unique identifier for this object.
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
     model.unified-graph.graph.w.property.keys:
       type: object
       properties:
@@ -608,20 +636,14 @@ components:
                 - type: boolean
                 - type: array
                 - type: object
-    api.params.query.skip:
-      type: integer
-      minimum: 0
-      description: The number of items to skip in a paginated response.
-    null.time:
+    model.components.int64.id:
       type: object
       properties:
-        time:
-          type: string
-          format: date-time
-          description: An RFC-3339 formatted string
-        valid:
-          description: Valid is true if `time` is not `null`.
-          type: boolean
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: This is the unique identifier for this object.
     api.error-wrapper:
       type: object
       description: ''
@@ -644,43 +666,48 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-    model.unified-graph.edge:
+    model.components.uuid:
       type: object
       properties:
-        source:
+        id:
           type: string
-        target:
-          type: string
-        label:
-          type: string
-        kind:
-          type: string
-        lastSeen:
-          type: string
-          format: date-time
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    api.params.query.limit:
+          format: uuid
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.params.query.skip:
       type: integer
       minimum: 0
-      description: The limit of results requested by the client.
-    model.components.timestamps:
+      description: The number of items to skip in a paginated response.
+    null.uuid:
       type: object
       properties:
-        created_at:
+        uuid:
           type: string
-          format: date-time
-          readOnly: true
-        updated_at:
+          format: uuid
+        valid:
+          description: Valid is true if `uuid` is not `null`.
+          type: boolean
+    api.error-detail:
+      type: object
+      properties:
+        context:
           type: string
-          format: date-time
-          readOnly: true
-        deleted_at:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/null.time'
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    model.saved-queries-permissions.response:
+      type: object
+      properties:
+        shared_to_user_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.components.uuid'
+        query_id:
+          type: integer
+          format: int64
+        public:
+          type: boolean
     api.response.pagination:
       type: object
       properties:
@@ -692,31 +719,6 @@ components:
           $ref: '#/components/schemas/api.params.query.skip'
         limit:
           $ref: '#/components/schemas/api.params.query.limit'
-    model.saved-query:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int64.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          user_id:
-            type: string
-            format: uuid
-            readOnly: true
-          name:
-            type: string
-          query:
-            type: string
-          description:
-            type: string
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
     model.unified-graph.node:
       type: object
       properties:
@@ -741,39 +743,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    model.saved-queries-permissions.response:
-      type: object
-      properties:
-        shared_to_user_ids:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.components.uuid'
-        query_id:
-          type: integer
-          format: int64
-        public:
-          type: boolean
-    api.params.predicate.filter.string:
-      type: string
-      pattern: ^((eq|~eq|neq):)?[^:]+$
-      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
-
-        '
-    model.components.uuid:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: This is the unique identifier for this object.
-    api.params.query.sort-by:
-      type: string
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
-
-        See parameter description for details about which columns are sortable.
-
-        '
     model.saved-queries-permissions:
       allOf:
       - $ref: '#/components/schemas/model.components.int64.id'
@@ -789,16 +758,56 @@ components:
             format: int64
           public:
             type: boolean
-    null.uuid:
+    model.saved-query:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          user_id:
+            type: string
+            format: uuid
+            readOnly: true
+          name:
+            type: string
+          query:
+            type: string
+          description:
+            type: string
+    model.unified-graph.edge:
       type: object
       properties:
-        uuid:
+        source:
           type: string
-          format: uuid
-        valid:
-          description: Valid is true if `uuid` is not `null`.
-          type: boolean
+        target:
+          type: string
+        label:
+          type: string
+        kind:
+          type: string
+        lastSeen:
+          type: string
+          format: date-time
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
   parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
     query.limit:
       name: limit
       description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
@@ -811,15 +820,6 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/api.params.query.skip'
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
   responses:
     unsupported-media-type:
       description: '**Unsupported Media Type**
@@ -859,25 +859,6 @@ components:
             errors:
             - context: login
               message: Unauthorized
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
     no-content:
       description: '**No Content**
 
@@ -889,6 +870,27 @@ components:
           schema:
             type: string
           example: '[this request has no response data]'
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
     bad-request:
       description: '**Bad Request**
 
@@ -912,6 +914,25 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
     not-found:
       description: '**Not Found**
 
@@ -950,27 +971,6 @@ components:
             errors:
             - context: clients
               message: You do not have permission to access this resource
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`
