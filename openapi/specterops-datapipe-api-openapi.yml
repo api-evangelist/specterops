@@ -166,54 +166,6 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
-  schemas:
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    api.error-wrapper:
-      type: object
-      description: ''
-      properties:
-        http_status:
-          type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
-    enum.datapipe-status:
-      type: string
-      enum:
-      - idle
-      - ingesting
-      - analyzing
   responses:
     too-many-requests:
       description: '**Too Many Requests**
@@ -255,25 +207,6 @@ components:
             errors:
             - context: login
               message: Unauthorized
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
     internal-server-error:
       description: '**Internal Server Error**
 
@@ -314,6 +247,25 @@ components:
             errors:
             - context: clients
               message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
     no-content:
       description: '**No Content**
 
@@ -325,6 +277,54 @@ components:
           schema:
             type: string
           example: '[this request has no response data]'
+  schemas:
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    enum.datapipe-status:
+      type: string
+      enum:
+      - idle
+      - ingesting
+      - analyzing
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

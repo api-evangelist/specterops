@@ -188,51 +188,6 @@ paths:
           $ref: '#/components/responses/internal-server-error'
 components:
   schemas:
-    model.version-meta:
-      type: object
-      properties:
-        major:
-          type: integer
-        minor:
-          type: integer
-        patch:
-          type: integer
-        prerelease:
-          type: string
-    model.kennel-asset:
-      type: object
-      properties:
-        name:
-          type: string
-        download_url:
-          type: string
-        checksum_download_url:
-          type: string
-        os:
-          type: string
-        arch:
-          type: string
-    enum.client-type:
-      type: string
-      description: This enum describes the collector client type.
-      enum:
-      - sharphound
-      - azurehound
-      - openhound
-    model.kennel-version:
-      type: object
-      properties:
-        version:
-          type: string
-        version_meta:
-          $ref: '#/components/schemas/model.version-meta'
-        release_date:
-          type: string
-          format: date-time
-        release_assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-asset'
     model.kennel-enterprise-manifest:
       type: object
       properties:
@@ -244,24 +199,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/model.kennel-version'
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    model.collector-version:
-      type: object
-      properties:
-        version:
-          type: string
-        sha256sum:
-          type: string
-        deprecated:
-          type: boolean
     model.kennel-manifest:
       type: object
       properties:
@@ -273,15 +210,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/model.kennel-version'
-    model.collector-manifest:
-      type: object
-      properties:
-        latest:
-          type: string
-        versions:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.collector-version'
     api.error-wrapper:
       type: object
       description: ''
@@ -304,17 +232,100 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
+    model.kennel-version:
+      type: object
+      properties:
+        version:
+          type: string
+        version_meta:
+          $ref: '#/components/schemas/model.version-meta'
+        release_date:
+          type: string
+          format: date-time
+        release_assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-asset'
+    enum.client-type:
+      type: string
+      description: This enum describes the collector client type.
+      enum:
+      - sharphound
+      - azurehound
+      - openhound
+    model.version-meta:
+      type: object
+      properties:
+        major:
+          type: integer
+        minor:
+          type: integer
+        patch:
+          type: integer
+        prerelease:
+          type: string
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    model.kennel-asset:
+      type: object
+      properties:
+        name:
+          type: string
+        download_url:
+          type: string
+        checksum_download_url:
+          type: string
+        os:
+          type: string
+        arch:
+          type: string
+    model.collector-version:
+      type: object
+      properties:
+        version:
+          type: string
+        sha256sum:
+          type: string
+        deprecated:
+          type: boolean
+    model.collector-manifest:
+      type: object
+      properties:
+        latest:
+          type: string
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.collector-version'
   responses:
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
     internal-server-error:
       description: '**Internal Server Error**
 
@@ -352,14 +363,12 @@ components:
             type: string
             format: binary
           example: '[this request has a binary response]'
-    unauthorized:
-      description: '**Unauthorized**
+    not-found:
+      description: '**Not Found**
 
-        This endpoint failed an authentication requirement. Either the client tried to access
+        This error typically comes from operations where a valid ID was passed to the request
 
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
+        to look up an entity but the entity could not be found.
 
         '
       content:
@@ -367,12 +376,12 @@ components:
           schema:
             $ref: '#/components/schemas/api.error-wrapper'
           example:
-            http_status: 401
+            http_status: 404
             timestamp: '2024-02-19T19:27:43.866Z'
             request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
             errors:
-            - context: login
-              message: Unauthorized
+            - context: clients
+              message: The requested client could not be found.
     bad-request:
       description: '**Bad Request**
 
@@ -396,25 +405,16 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

@@ -420,154 +420,268 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  schemas:
-    null.time:
-      type: object
-      properties:
-        time:
-          type: string
-          format: date-time
-          description: An RFC-3339 formatted string
-        valid:
-          description: Valid is true if `time` is not `null`.
-          type: boolean
-    api.params.query.sort-by:
-      type: string
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+  responses:
+    too-many-requests:
+      description: '**Too Many Requests**
 
-        See parameter description for details about which columns are sortable.
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
 
         '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+  parameters:
+    query.clients.job.last-ingest:
+      name: last_ingest
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.clients.job.domain-controller:
+      name: domain_controller
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.string'
+    query.clients.job.dc-registry-collection:
+      name: dc_registry_collection
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+    query.limit:
+      name: limit
+      description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.limit'
+    query.clients.hydrate-domains:
+      name: hydrate_domains
+      description: When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s.
+      in: query
+      schema:
+        type: boolean
+        default: true
+    query.clients.job.ca-registry-collection:
+      name: ca_registry_collection
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+    query.clients.job.client-id:
+      name: client_id
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.uuid'
+    query.clients.job.status:
+      name: status
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.string'
+    query.clients.job.ad-structure-collection:
+      name: ad_structure_collection
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+    query.clients.job.cert-services-collection:
+      name: cert_services_collection
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+    query.clients.job.event-title:
+      name: event_title
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.string'
+    query.updated-at:
+      name: updated_at
+      in: query
+      description: Filter results by `updated_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.skip:
+      name: skip
+      description: This query parameter is used for determining the number of objects to skip in pagination.
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.query.skip'
+    query.clients.job.end-time:
+      name: end_time
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.clients.job.local-group-collection:
+      name: local_group_collection
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+    query.clients.job.log-path:
+      name: log_path
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.string'
+    query.clients.hydrate-ous:
+      name: hydrate_ous
+      description: When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s.
+      in: query
+      schema:
+        type: boolean
+        default: true
+    query.clients.job.session-collection:
+      name: session_collection
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
+    query.clients.job.execution-time:
+      name: execution_time
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.clients.job.event-id:
+      name: event_id
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.integer'
+    query.clients.job.start-time:
+      name: start_time
+      in: query
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.deleted-at:
+      name: deleted_at
+      in: query
+      description: Filter results by `deleted_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    query.created-at:
+      name: created_at
+      in: query
+      description: Filter results by `created_at` value. See filter schema details for valid predicates.
+      schema:
+        $ref: '#/components/schemas/api.params.predicate.filter.time'
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+  schemas:
     api.params.query.limit:
       type: integer
       minimum: 0
       description: The limit of results requested by the client.
-    model.components.timestamps:
-      type: object
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        deleted_at:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/null.time'
-    model.components.base-ad-entity:
-      type: object
-      properties:
-        objectid:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        exists:
-          type:
-          - boolean
-          - 'null'
-    api.params.predicate.filter.uuid:
-      type: string
-      pattern: ^((eq|neq):)?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$
-      description: 'Filter results by column string-formatted uuid value. Valid filter predicates are `eq`, `neq`.
-
-        '
-    model.components.int64.id:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          readOnly: true
-          description: This is the unique identifier for this object.
-    enum.job-status:
-      type: integer
-      description: 'This enum describes the current status of a Job. Values are:
-
-        - `-1` Invalid
-
-        - `0` Ready
-
-        - `1` Running
-
-        - `2` Complete
-
-        - `3` Canceled
-
-        - `4` Timed Out
-
-        - `5` Failed
-
-        - `6` Ingesting
-
-        - `7` Analyzing
-
-        - `8` Partially Complete
-
-        '
-      enum:
-      - -1
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-    api.error-wrapper:
-      type: object
-      description: ''
-      properties:
-        http_status:
-          type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
-    null.int32:
-      type: object
-      properties:
-        int32:
-          type: integer
-          format: int32
-        valid:
-          description: Valid is true if `int32` is not `null`.
-          type: boolean
-    model.ou-details:
-      allOf:
-      - $ref: '#/components/schemas/model.components.base-ad-entity'
-      - type: object
-        properties:
-          distinguishedname:
-            type:
-            - string
-            - 'null'
-          type:
-            type:
-            - string
-            - 'null'
-    api.params.query.skip:
-      type: integer
-      minimum: 0
-      description: The number of items to skip in a paginated response.
     model.client-scheduled-job-display:
       allOf:
       - $ref: '#/components/schemas/model.components.int64.id'
@@ -621,6 +735,61 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/model.domain-collection-result'
+    model.components.base-ad-entity:
+      type: object
+      properties:
+        objectid:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        exists:
+          type:
+          - boolean
+          - 'null'
+    model.components.int64.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: This is the unique identifier for this object.
+    api.params.predicate.filter.string:
+      type: string
+      pattern: ^((eq|~eq|neq):)?[^:]+$
+      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
+
+        '
+    api.params.predicate.filter.time:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
+      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
+
+        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+        '
+    api.params.predicate.filter.uuid:
+      type: string
+      pattern: ^((eq|neq):)?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$
+      description: 'Filter results by column string-formatted uuid value. Valid filter predicates are `eq`, `neq`.
+
+        '
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
     api.error-detail:
       type: object
       properties:
@@ -630,91 +799,6 @@ components:
         message:
           type: string
           description: A human-readable description of the error
-    api.params.predicate.filter.time:
-      type: string
-      pattern: ^((eq|neq|gt|gte|lt|lte):)?[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?([Zz]|-[0-9]{2}:[0-9]{2})$
-      description: 'Filter results by column timestamp value formatted as an RFC-3339 string.
-
-        Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
-
-        '
-    api.params.predicate.filter.integer:
-      type: string
-      pattern: ^((eq|neq|gt|gte|lt|lte):)?-?[0-9]+$
-      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
-
-        '
-    api.params.predicate.filter.boolean:
-      type: string
-      pattern: ^((eq|neq):)?(t|T|TRUE|true|True|f|F|FALSE|false|False)$
-      description: 'Filter results by column boolean value. Valid filter predicates are `eq`, `neq`.
-
-        '
-    model.domain-collection-result:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int64.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          job_id:
-            type: integer
-            format: int64
-          domain_name:
-            description: Name of the domain that was enumerated
-            type: string
-          success:
-            description: A boolean value indicating whether the domain enumeration succeeded
-            type: boolean
-          message:
-            description: A status message for a domain enumeration result
-            type: string
-          user_count:
-            description: A count of users enumerated
-            type: integer
-          group_count:
-            description: A count of groups enumerated
-            type: integer
-          computer_count:
-            description: A count of computers enumerated
-            type: integer
-          gpo_count:
-            description: A count of gpos enumerated
-            type: integer
-          ou_count:
-            description: A count of ous enumerated
-            type: integer
-          container_count:
-            description: A count of containers enumerated
-            type: integer
-          aiaca_count:
-            description: A count of aiacas enumerated
-            type: integer
-          rootca_count:
-            description: A count of rootcas enumerated
-            type: integer
-          enterpriseca_count:
-            description: A count of enterprisecas enumerated
-            type: integer
-          ntauthstore_count:
-            description: A count of ntauthstores enumerated
-            type: integer
-          certtemplate_count:
-            description: A count of certtemplates enumerated
-            type: integer
-          deleted_count:
-            description: A count of deleted objects enumerated
-            type: integer
-    api.response.pagination:
-      type: object
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: The total number of results.
-        skip:
-          $ref: '#/components/schemas/api.params.query.skip'
-        limit:
-          $ref: '#/components/schemas/api.params.query.limit'
     model.client-scheduled-job:
       allOf:
       - $ref: '#/components/schemas/model.components.int64.id'
@@ -789,6 +873,123 @@ components:
             readOnly: true
             items:
               $ref: '#/components/schemas/model.domain-collection-result'
+    model.ou-details:
+      allOf:
+      - $ref: '#/components/schemas/model.components.base-ad-entity'
+      - type: object
+        properties:
+          distinguishedname:
+            type:
+            - string
+            - 'null'
+          type:
+            type:
+            - string
+            - 'null'
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    api.params.predicate.filter.boolean:
+      type: string
+      pattern: ^((eq|neq):)?(t|T|TRUE|true|True|f|F|FALSE|false|False)$
+      description: 'Filter results by column boolean value. Valid filter predicates are `eq`, `neq`.
+
+        '
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    enum.job-status:
+      type: integer
+      description: 'This enum describes the current status of a Job. Values are:
+
+        - `-1` Invalid
+
+        - `0` Ready
+
+        - `1` Running
+
+        - `2` Complete
+
+        - `3` Canceled
+
+        - `4` Timed Out
+
+        - `5` Failed
+
+        - `6` Ingesting
+
+        - `7` Analyzing
+
+        - `8` Partially Complete
+
+        '
+      enum:
+      - -1
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+    model.domain-details:
+      allOf:
+      - $ref: '#/components/schemas/model.components.base-ad-entity'
+      - type: object
+        properties:
+          type:
+            type: string
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
     null.string:
       type: object
       properties:
@@ -797,276 +998,75 @@ components:
         valid:
           description: Valid is true if `string` is not `null`
           type: boolean
-    api.params.predicate.filter.string:
-      type: string
-      pattern: ^((eq|~eq|neq):)?[^:]+$
-      description: 'Filter results by column string value. Valid filter predicates are `eq`, `~eq`, `neq`.
-
-        '
-    model.domain-details:
+    model.domain-collection-result:
       allOf:
-      - $ref: '#/components/schemas/model.components.base-ad-entity'
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
       - type: object
         properties:
-          type:
+          job_id:
+            type: integer
+            format: int64
+          domain_name:
+            description: Name of the domain that was enumerated
             type: string
-  parameters:
-    query.clients.job.execution-time:
-      name: execution_time
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
-    query.clients.job.client-id:
-      name: client_id
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.uuid'
-    query.clients.job.event-id:
-      name: event_id
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.integer'
-    query.created-at:
-      name: created_at
-      in: query
-      description: Filter results by `created_at` value. See filter schema details for valid predicates.
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.clients.job.local-group-collection:
-      name: local_group_collection
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
-    query.clients.job.ad-structure-collection:
-      name: ad_structure_collection
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
-    query.clients.job.status:
-      name: status
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.string'
-    query.clients.job.dc-registry-collection:
-      name: dc_registry_collection
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
-    query.clients.job.last-ingest:
-      name: last_ingest
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.clients.job.ca-registry-collection:
-      name: ca_registry_collection
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
-    query.clients.job.log-path:
-      name: log_path
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.string'
-    query.clients.hydrate-domains:
-      name: hydrate_domains
-      description: When a value of `true` is passed, any Domains associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same Domains will only return as a list of `objectid`s.
-      in: query
-      schema:
-        type: boolean
-        default: true
-    query.clients.job.event-title:
-      name: event_title
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.string'
-    query.clients.hydrate-ous:
-      name: hydrate_ous
-      description: When a value of `true` is passed, any OUs associated with scheduled and finished jobs for each client will have expanded properties including `name` and `type`. When a value of `false` is passed, these same OUs will only return as a list of `objectid`s.
-      in: query
-      schema:
-        type: boolean
-        default: true
-    query.clients.job.start-time:
-      name: start_time
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.clients.job.cert-services-collection:
-      name: cert_services_collection
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
-    query.clients.job.domain-controller:
-      name: domain_controller
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.string'
-    query.clients.job.end-time:
-      name: end_time
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.clients.job.session-collection:
-      name: session_collection
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.boolean'
-    query.limit:
-      name: limit
-      description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.query.limit'
-    query.updated-at:
-      name: updated_at
-      in: query
-      description: Filter results by `updated_at` value. See filter schema details for valid predicates.
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.deleted-at:
-      name: deleted_at
-      in: query
-      description: Filter results by `deleted_at` value. See filter schema details for valid predicates.
-      schema:
-        $ref: '#/components/schemas/api.params.predicate.filter.time'
-    query.skip:
-      name: skip
-      description: This query parameter is used for determining the number of objects to skip in pagination.
-      in: query
-      schema:
-        $ref: '#/components/schemas/api.params.query.skip'
-  responses:
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
+          success:
+            description: A boolean value indicating whether the domain enumeration succeeded
+            type: boolean
+          message:
+            description: A status message for a domain enumeration result
+            type: string
+          user_count:
+            description: A count of users enumerated
+            type: integer
+          group_count:
+            description: A count of groups enumerated
+            type: integer
+          computer_count:
+            description: A count of computers enumerated
+            type: integer
+          gpo_count:
+            description: A count of gpos enumerated
+            type: integer
+          ou_count:
+            description: A count of ous enumerated
+            type: integer
+          container_count:
+            description: A count of containers enumerated
+            type: integer
+          aiaca_count:
+            description: A count of aiacas enumerated
+            type: integer
+          rootca_count:
+            description: A count of rootcas enumerated
+            type: integer
+          enterpriseca_count:
+            description: A count of enterprisecas enumerated
+            type: integer
+          ntauthstore_count:
+            description: A count of ntauthstores enumerated
+            type: integer
+          certtemplate_count:
+            description: A count of certtemplates enumerated
+            type: integer
+          deleted_count:
+            description: A count of deleted objects enumerated
+            type: integer
+    api.params.predicate.filter.integer:
+      type: string
+      pattern: ^((eq|neq|gt|gte|lt|lte):)?-?[0-9]+$
+      description: 'Filter results by column integer value. Valid filter predicates are `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
 
         '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
+    null.int32:
+      type: object
+      properties:
+        int32:
+          type: integer
+          format: int32
+        valid:
+          description: Valid is true if `int32` is not `null`.
+          type: boolean
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

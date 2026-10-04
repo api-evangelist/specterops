@@ -368,43 +368,134 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  schemas:
-    null.time:
-      type: object
-      properties:
-        time:
-          type: string
-          format: date-time
-          description: An RFC-3339 formatted string
-        valid:
-          description: Valid is true if `time` is not `null`.
-          type: boolean
-    api.params.query.sort-by:
-      type: string
-      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+  responses:
+    too-many-requests:
+      description: '**Too Many Requests**
 
-        See parameter description for details about which columns are sortable.
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
 
         '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+  schemas:
     api.params.query.limit:
       type: integer
       minimum: 0
       description: The limit of results requested by the client.
-    model.components.timestamps:
-      type: object
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        deleted_at:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/null.time'
     model.ad-data-quality-stat:
       allOf:
       - $ref: '#/components/schemas/model.components.int32.id'
@@ -450,191 +541,6 @@ components:
           run_id:
             type: string
             format: uuid
-    api.error-wrapper:
-      type: object
-      description: ''
-      properties:
-        http_status:
-          type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
-    model.data-quality-aggregation:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          run_id:
-            type: string
-          extension_id:
-            type: integer
-            format: int32
-          environment_kind_id:
-            type: integer
-            format: int32
-          metric_type:
-            type: string
-            enum:
-            - node
-            - relationship
-          metric_name:
-            type: string
-          metric_value:
-            type: number
-            format: double
-          kind_id:
-            description: The kind ID for the counted node kind. Present when `metric_type` is `node`; otherwise null.
-            type:
-            - integer
-            - 'null'
-            format: int32
-    model.data-quality-stat:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          extension_id:
-            type: integer
-          environment_kind_id:
-            type: integer
-          environment_id:
-            type: string
-          metric_type:
-            type: string
-            enum:
-            - node
-            - relationship
-          metric_name:
-            type: string
-          metric_value:
-            type: number
-            format: double
-          kind_id:
-            description: The kind ID for the counted node kind. Present when `metric_type` is `node`; otherwise null.
-            type:
-            - integer
-            - 'null'
-            format: int32
-          run_id:
-            type: string
-            format: uuid
-    api.params.query.skip:
-      type: integer
-      minimum: 0
-      description: The number of items to skip in a paginated response.
-    model.azure-data-quality-stat:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          tenantid:
-            type: string
-            format: uuid
-          users:
-            type: integer
-          groups:
-            type: integer
-          apps:
-            type: integer
-          service_principals:
-            type: integer
-          devices:
-            type: integer
-          management_groups:
-            type: integer
-          subscriptions:
-            type: integer
-          resource_groups:
-            type: integer
-          vms:
-            type: integer
-          key_vaults:
-            type: integer
-          relationships:
-            type: integer
-          run_id:
-            type: string
-            format: uuid
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    model.azure-data-quality-aggregation:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          tenants:
-            type: integer
-          users:
-            type: integer
-          groups:
-            type: integer
-          apps:
-            type: integer
-          service_principals:
-            type: integer
-          devices:
-            type: integer
-          management_groups:
-            type: integer
-          subscriptions:
-            type: integer
-          resource_groups:
-            type: integer
-          vms:
-            type: integer
-          key_vaults:
-            type: integer
-          relationships:
-            type: integer
-          run_id:
-            type: string
-            format: uuid
-    api.response.time-window:
-      type: object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp to describe the beginning of a time range
-        end:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp to describe the end of a time range
-    api.response.pagination:
-      type: object
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: The total number of results.
-        skip:
-          $ref: '#/components/schemas/api.params.query.skip'
-        limit:
-          $ref: '#/components/schemas/api.params.query.limit'
     model.ad-data-quality-aggregation:
       allOf:
       - $ref: '#/components/schemas/model.components.int32.id'
@@ -680,6 +586,49 @@ components:
           run_id:
             type: string
             format: uuid
+    model.azure-data-quality-aggregation:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          tenants:
+            type: integer
+          users:
+            type: integer
+          groups:
+            type: integer
+          apps:
+            type: integer
+          service_principals:
+            type: integer
+          devices:
+            type: integer
+          management_groups:
+            type: integer
+          subscriptions:
+            type: integer
+          resource_groups:
+            type: integer
+          vms:
+            type: integer
+          key_vaults:
+            type: integer
+          relationships:
+            type: integer
+          run_id:
+            type: string
+            format: uuid
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
     api.response.data-quality-platform-aggregate:
       allOf:
       - $ref: '#/components/schemas/api.response.pagination'
@@ -692,6 +641,79 @@ components:
               oneOf:
               - $ref: '#/components/schemas/model.ad-data-quality-aggregation'
               - $ref: '#/components/schemas/model.azure-data-quality-aggregation'
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+    model.data-quality-stat:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          extension_id:
+            type: integer
+          environment_kind_id:
+            type: integer
+          environment_id:
+            type: string
+          metric_type:
+            type: string
+            enum:
+            - node
+            - relationship
+          metric_name:
+            type: string
+          metric_value:
+            type: number
+            format: double
+          kind_id:
+            description: The kind ID for the counted node kind. Present when `metric_type` is `node`; otherwise null.
+            type:
+            - integer
+            - 'null'
+            format: int32
+          run_id:
+            type: string
+            format: uuid
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
+    api.params.query.sort-by:
+      type: string
+      description: 'Sort by column. Can be used multiple times; prepend a hyphen for descending order.
+
+        See parameter description for details about which columns are sortable.
+
+        '
+    api.response.time-window:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp to describe the beginning of a time range
+        end:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp to describe the end of a time range
     model.components.int32.id:
       type: object
       properties:
@@ -700,16 +722,108 @@ components:
           format: int32
           readOnly: true
           description: This is the unique identifier for this object.
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    model.azure-data-quality-stat:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          tenantid:
+            type: string
+            format: uuid
+          users:
+            type: integer
+          groups:
+            type: integer
+          apps:
+            type: integer
+          service_principals:
+            type: integer
+          devices:
+            type: integer
+          management_groups:
+            type: integer
+          subscriptions:
+            type: integer
+          resource_groups:
+            type: integer
+          vms:
+            type: integer
+          key_vaults:
+            type: integer
+          relationships:
+            type: integer
+          run_id:
+            type: string
+            format: uuid
+    model.data-quality-aggregation:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          run_id:
+            type: string
+          extension_id:
+            type: integer
+            format: int32
+          environment_kind_id:
+            type: integer
+            format: int32
+          metric_type:
+            type: string
+            enum:
+            - node
+            - relationship
+          metric_name:
+            type: string
+          metric_value:
+            type: number
+            format: double
+          kind_id:
+            description: The kind ID for the counted node kind. Present when `metric_type` is `node`; otherwise null.
+            type:
+            - integer
+            - 'null'
+            format: int32
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
   parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
     query.limit:
       name: limit
       description: This query parameter is used for setting an upper limit of objects returned in paginated responses.
@@ -722,129 +836,15 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/api.params.query.skip'
-  responses:
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

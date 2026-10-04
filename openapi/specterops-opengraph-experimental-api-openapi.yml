@@ -461,89 +461,141 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
+  responses:
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    no-content:
+      description: '**No Content**
+
+        This response will contain no response body.
+
+        '
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: '[this request has no response data]'
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
   schemas:
-    api.response.graph-extensions-info:
-      type: object
-      properties:
-        data:
-          type: object
-          required:
-          - extensions
-          properties:
-            extensions:
-              type: array
-              items:
-                type: object
-                required:
-                - id
-                - name
-                - version
-                - is_builtin
-                - namespace
-                properties:
-                  id:
-                    type: integer
-                    format: int32
-                  name:
-                    type: string
-                  version:
-                    type: string
-                  is_builtin:
-                    type: boolean
-                  namespace:
-                    type: string
-      required:
-      - data
-      example:
-        data:
-          extensions:
-          - id: 1
-            name: Active Directory
-            version: v1.0.0
-            is_builtin: true
-            namespace: AD
-    model.relationship-details-with-info:
-      allOf:
-      - $ref: '#/components/schemas/model.relationship-details'
-      - type: object
-        properties:
-          info:
-            type: array
-            items:
-              allOf:
-              - $ref: '#/components/schemas/model.kind-info-response'
-              - type: object
-                required:
-                - relationship_kind_id
-                properties:
-                  relationship_kind_id:
-                    type: integer
-    model.kind-info-content:
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/model.kind-info-type-markdown'
-    model.kind-info-base:
-      type: object
-      required:
-      - title
-      - position
-      properties:
-        title:
-          type: string
-          example: Entity Panel Section
-        position:
-          type: integer
-          minimum: 1
     model.relationship-details:
       type: object
       required:
@@ -593,28 +645,56 @@ components:
             lastSeen:
               type: string
               format: date-time
-    api.error-wrapper:
+    model.kind-info-base:
       type: object
-      description: ''
+      required:
+      - title
+      - position
       properties:
-        http_status:
+        title:
+          type: string
+          example: Entity Panel Section
+        position:
           type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
+          minimum: 1
+    model.node-details:
+      type: object
+      properties:
+        node_id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 1234567890
+        kinds:
           type: array
           items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
+            type: object
+            required:
+            - name
+            - node_kind_id
+            properties:
+              node_kind_id:
+                type:
+                - integer
+                - 'null'
+                format: int32
+                description: Schema node kind ID, or null if the kind is not registered in schema_node_kinds
+              name:
+                type: string
+                description: The kind name from the graph node
+        properties:
+          type: object
+          properties:
+            objectid:
+              type: string
+            name:
+              type: string
+            displayName:
+              type: string
+            lastSeen:
+              type: string
+              format: date-time
+          additionalProperties: true
     model.graph-extension.kind-info-definition:
       type: object
       description: 'A map of named info panels used in extension definitions.
@@ -656,89 +736,6 @@ components:
         message:
           type: string
           description: A human-readable description of the error
-    model.graph-schema-edge-kinds:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        description:
-          type: string
-        is_traversable:
-          type: boolean
-        schema_name:
-          type: string
-        is_builtin:
-          type: boolean
-    api.params.predicate.filter.boolean:
-      type: string
-      pattern: ^((eq|neq):)?(t|T|TRUE|true|True|f|F|FALSE|false|False)$
-      description: 'Filter results by column boolean value. Valid filter predicates are `eq`, `neq`.
-
-        '
-    model.kind-info-type-markdown:
-      type: object
-      required:
-      - markdown
-      properties:
-        markdown:
-          type: object
-          required:
-          - content
-          properties:
-            content:
-              type: string
-    model.kind-info-response:
-      allOf:
-      - type: object
-        required:
-        - name
-        properties:
-          name:
-            type: string
-            example: panel_section_1
-      - $ref: '#/components/schemas/model.kind-info-base'
-      - $ref: '#/components/schemas/model.kind-info-content'
-    model.node-details:
-      type: object
-      properties:
-        node_id:
-          type: integer
-          format: int64
-          readOnly: true
-          example: 1234567890
-        kinds:
-          type: array
-          items:
-            type: object
-            required:
-            - name
-            - node_kind_id
-            properties:
-              node_kind_id:
-                type:
-                - integer
-                - 'null'
-                format: int32
-                description: Schema node kind ID, or null if the kind is not registered in schema_node_kinds
-              name:
-                type: string
-                description: The kind name from the graph node
-        properties:
-          type: object
-          properties:
-            objectid:
-              type: string
-            name:
-              type: string
-            displayName:
-              type: string
-            lastSeen:
-              type: string
-              format: date-time
-          additionalProperties: true
     model.graph-extension.payload:
       type: object
       properties:
@@ -842,140 +839,143 @@ components:
                     type: string
                   long_remediation:
                     type: string
-  responses:
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
-    no-content:
-      description: '**No Content**
-
-        This response will contain no response body.
+    model.kind-info-type-markdown:
+      type: object
+      required:
+      - markdown
+      properties:
+        markdown:
+          type: object
+          required:
+          - content
+          properties:
+            content:
+              type: string
+    api.params.predicate.filter.boolean:
+      type: string
+      pattern: ^((eq|neq):)?(t|T|TRUE|true|True|f|F|FALSE|false|False)$
+      description: 'Filter results by column boolean value. Valid filter predicates are `eq`, `neq`.
 
         '
-      content:
-        text/plain:
-          schema:
+    model.graph-schema-edge-kinds:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        is_traversable:
+          type: boolean
+        schema_name:
+          type: string
+        is_builtin:
+          type: boolean
+    model.relationship-details-with-info:
+      allOf:
+      - $ref: '#/components/schemas/model.relationship-details'
+      - type: object
+        properties:
+          info:
+            type: array
+            items:
+              allOf:
+              - $ref: '#/components/schemas/model.kind-info-response'
+              - type: object
+                required:
+                - relationship_kind_id
+                properties:
+                  relationship_kind_id:
+                    type: integer
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    api.response.graph-extensions-info:
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+          - extensions
+          properties:
+            extensions:
+              type: array
+              items:
+                type: object
+                required:
+                - id
+                - name
+                - version
+                - is_builtin
+                - namespace
+                properties:
+                  id:
+                    type: integer
+                    format: int32
+                  name:
+                    type: string
+                  version:
+                    type: string
+                  is_builtin:
+                    type: boolean
+                  namespace:
+                    type: string
+      required:
+      - data
+      example:
+        data:
+          extensions:
+          - id: 1
+            name: Active Directory
+            version: v1.0.0
+            is_builtin: true
+            namespace: AD
+    model.kind-info-content:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/model.kind-info-type-markdown'
+    model.kind-info-response:
+      allOf:
+      - type: object
+        required:
+        - name
+        properties:
+          name:
             type: string
-          example: '[this request has no response data]'
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
+            example: panel_section_1
+      - $ref: '#/components/schemas/model.kind-info-base'
+      - $ref: '#/components/schemas/model.kind-info-content'
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

@@ -59,78 +59,7 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
-    path.object-id:
-      name: object_id
-      description: The object id of the entity being operated on.
-      in: path
-      required: true
-      schema:
-        type: string
-        description: The unique object identifier
-  schemas:
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    api.error-wrapper:
-      type: object
-      description: ''
-      properties:
-        http_status:
-          type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
   responses:
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
     too-many-requests:
       description: '**Too Many Requests**
 
@@ -171,12 +100,14 @@ components:
             errors:
             - context: login
               message: Unauthorized
-    forbidden:
-      description: '**Forbidden**
+    internal-server-error:
+      description: '**Internal Server Error**
 
-        This is most commonly caused by an authenticated client trying to
+        This is usually the result of either an unexpected database or application error.
 
-        access a resource that it does not have permission for.
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
 
         '
       content:
@@ -184,12 +115,12 @@ components:
           schema:
             $ref: '#/components/schemas/api.error-wrapper'
           example:
-            http_status: 403
+            http_status: 500
             timestamp: '2024-02-19T19:27:43.866Z'
             request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
             errors:
             - context: clients
-              message: You do not have permission to access this resource
+              message: The request could not be handled due to an unexpected database error.
     bad-request:
       description: '**Bad Request**
 
@@ -213,6 +144,25 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
     not-found:
       description: '**Not Found**
 
@@ -232,6 +182,56 @@ components:
             errors:
             - context: clients
               message: The requested client could not be found.
+  parameters:
+    path.object-id:
+      name: object_id
+      description: The object id of the entity being operated on.
+      in: path
+      required: true
+      schema:
+        type: string
+        description: The unique object identifier
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
+  schemas:
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

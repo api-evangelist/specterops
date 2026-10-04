@@ -171,17 +171,26 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
   responses:
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
     unauthorized:
       description: '**Unauthorized**
 
@@ -203,6 +212,27 @@ components:
             errors:
             - context: login
               message: Unauthorized
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
     bad-request:
       description: '**Bad Request**
 
@@ -226,46 +256,6 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
     not-found:
       description: '**Not Found**
 
@@ -305,6 +295,62 @@ components:
             - context: clients
               message: You do not have permission to access this resource
   schemas:
+    api.params.query.limit:
+      type: integer
+      minimum: 0
+      description: The limit of results requested by the client.
+    model.bh-graph.edge:
+      allOf:
+      - $ref: '#/components/schemas/model.bh-graph.item'
+      - type: object
+        properties:
+          end1:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          end2:
+            $ref: '#/components/schemas/model.bh-graph.link-end'
+          flow:
+            type: object
+            properties:
+              velocity:
+                type: integer
+          id1:
+            type: string
+          id2:
+            type: string
+          label:
+            $ref: '#/components/schemas/model.bh-graph.label'
+          lineStyle:
+            type: string
+          width:
+            type: integer
+    api.params.query.skip:
+      type: integer
+      minimum: 0
+      description: The number of items to skip in a paginated response.
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    model.bh-graph.link-end:
+      type: object
+      properties:
+        arrow:
+          type: boolean
+        backOff:
+          type: integer
+        color:
+          type: string
+        glyphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.bh-graph.glyph'
+        label:
+          $ref: '#/components/schemas/model.bh-graph.label'
     model.bh-graph.font-icon:
       type: object
       properties:
@@ -314,10 +360,60 @@ components:
           type: string
         text:
           type: string
-    api.params.query.limit:
-      type: integer
-      minimum: 0
-      description: The limit of results requested by the client.
+    model.bh-graph.graph:
+      type: object
+      additionalProperties:
+        anyOf:
+        - $ref: '#/components/schemas/model.bh-graph.node'
+        - $ref: '#/components/schemas/model.bh-graph.edge'
+    model.bh-graph.item:
+      type: object
+      properties:
+        color:
+          type: string
+        fade:
+          type: boolean
+        data:
+          type: object
+          additionalProperties: true
+        glyphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.bh-graph.glyph'
+    model.bh-graph.glyph:
+      type: object
+      properties:
+        angle:
+          type: integer
+        blink:
+          type: boolean
+        border:
+          $ref: '#/components/schemas/model.bh-graph.item-border'
+        color:
+          type: string
+        fontIcon:
+          $ref: '#/components/schemas/model.bh-graph.font-icon'
+        image:
+          type: string
+        label:
+          $ref: '#/components/schemas/model.bh-graph.label'
+        position:
+          type: string
+        radius:
+          type: integer
+        size:
+          type: integer
+    api.response.pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: The total number of results.
+        skip:
+          $ref: '#/components/schemas/api.params.query.skip'
+        limit:
+          $ref: '#/components/schemas/api.params.query.limit'
     model.bh-graph.node:
       allOf:
       - $ref: '#/components/schemas/model.bh-graph.item'
@@ -377,61 +473,11 @@ components:
             type: string
           size:
             type: integer
-    model.bh-graph.label:
-      type: object
-      properties:
-        bold:
-          type: boolean
-        color:
-          type: string
-        fontFamily:
-          type: string
-        text:
-          type: string
     model.bh-graph.item-border:
       type: object
       properties:
         color:
           type: string
-    model.bh-graph.edge:
-      allOf:
-      - $ref: '#/components/schemas/model.bh-graph.item'
-      - type: object
-        properties:
-          end1:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          end2:
-            $ref: '#/components/schemas/model.bh-graph.link-end'
-          flow:
-            type: object
-            properties:
-              velocity:
-                type: integer
-          id1:
-            type: string
-          id2:
-            type: string
-          label:
-            $ref: '#/components/schemas/model.bh-graph.label'
-          lineStyle:
-            type: string
-          width:
-            type: integer
-    model.bh-graph.link-end:
-      type: object
-      properties:
-        arrow:
-          type: boolean
-        backOff:
-          type: integer
-        color:
-          type: string
-        glyphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.bh-graph.glyph'
-        label:
-          $ref: '#/components/schemas/model.bh-graph.label'
     api.error-wrapper:
       type: object
       description: ''
@@ -454,73 +500,27 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-    api.params.query.skip:
-      type: integer
-      minimum: 0
-      description: The number of items to skip in a paginated response.
-    model.bh-graph.glyph:
+    model.bh-graph.label:
       type: object
       properties:
-        angle:
-          type: integer
-        blink:
+        bold:
           type: boolean
-        border:
-          $ref: '#/components/schemas/model.bh-graph.item-border'
         color:
           type: string
-        fontIcon:
-          $ref: '#/components/schemas/model.bh-graph.font-icon'
-        image:
+        fontFamily:
           type: string
-        label:
-          $ref: '#/components/schemas/model.bh-graph.label'
-        position:
+        text:
           type: string
-        radius:
-          type: integer
-        size:
-          type: integer
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
-    model.bh-graph.graph:
-      type: object
-      additionalProperties:
-        anyOf:
-        - $ref: '#/components/schemas/model.bh-graph.node'
-        - $ref: '#/components/schemas/model.bh-graph.edge'
-    api.response.pagination:
-      type: object
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: The total number of results.
-        skip:
-          $ref: '#/components/schemas/api.params.query.skip'
-        limit:
-          $ref: '#/components/schemas/api.params.query.limit'
-    model.bh-graph.item:
-      type: object
-      properties:
-        color:
-          type: string
-        fade:
-          type: boolean
-        data:
-          type: object
-          additionalProperties: true
-        glyphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.bh-graph.glyph'
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`
