@@ -2,6 +2,20 @@
   "repo": "specterops",
   "feeds": [
     {
+      "source": "https://specterops.io/blog/",
+      "feed_url": "https://specterops.io/blog/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
+      "source": "https://specterops.io/feed/podcast/the-state-of-apm/",
+      "feed_url": "https://specterops.io/feed/podcast/the-state-of-apm/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api",
       "feed_url": "https://bloodhound.specterops.io/integrations/bloodhound-api/working-with-api",
       "title": "",
@@ -10,5 +24,5 @@
     }
   ],
   "post_count": 0,
-  "fetched": "2026-10-03T12:30:02Z"
+  "fetched": "2026-10-10T13:15:00Z"
 }
