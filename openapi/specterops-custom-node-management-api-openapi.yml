@@ -231,7 +231,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/api.error-wrapper'
 components:
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   schemas:
+    model.custom-node:
+      type: object
+      properties:
+        id:
+          type: integer
+        kindName:
+          type: string
+        config:
+          $ref: '#/components/schemas/model.custom-node.config'
     api.error-wrapper:
       type: object
       description: ''
@@ -266,15 +285,6 @@ components:
               type: string
             color:
               type: string
-    model.custom-node:
-      type: object
-      properties:
-        id:
-          type: integer
-        kindName:
-          type: string
-        config:
-          $ref: '#/components/schemas/model.custom-node.config'
     api.error-detail:
       type: object
       properties:
@@ -285,6 +295,25 @@ components:
           type: string
           description: A human-readable description of the error
   responses:
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
     unauthorized:
       description: '**Unauthorized**
 
@@ -306,27 +335,6 @@ components:
             errors:
             - context: login
               message: Unauthorized
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
     bad-request:
       description: '**Bad Request**
 
@@ -350,12 +358,14 @@ components:
             errors:
             - context: clients
               message: The JSON payload could not be unmarshalled.
-    not-found:
-      description: '**Not Found**
+    internal-server-error:
+      description: '**Internal Server Error**
 
-        This error typically comes from operations where a valid ID was passed to the request
+        This is usually the result of either an unexpected database or application error.
 
-        to look up an entity but the entity could not be found.
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
 
         '
       content:
@@ -363,22 +373,12 @@ components:
           schema:
             $ref: '#/components/schemas/api.error-wrapper'
           example:
-            http_status: 404
+            http_status: 500
             timestamp: '2024-02-19T19:27:43.866Z'
             request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
             errors:
             - context: clients
-              message: The requested client could not be found.
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
+              message: The request could not be handled due to an unexpected database error.
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

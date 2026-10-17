@@ -188,17 +188,39 @@ paths:
           $ref: '#/components/responses/internal-server-error'
 components:
   schemas:
-    model.kennel-enterprise-manifest:
+    model.kennel-asset:
       type: object
       properties:
-        sharphound_enterprise:
+        name:
+          type: string
+        download_url:
+          type: string
+        checksum_download_url:
+          type: string
+        os:
+          type: string
+        arch:
+          type: string
+    model.version-meta:
+      type: object
+      properties:
+        major:
+          type: integer
+        minor:
+          type: integer
+        patch:
+          type: integer
+        prerelease:
+          type: string
+    model.collector-manifest:
+      type: object
+      properties:
+        latest:
+          type: string
+        versions:
           type: array
           items:
-            $ref: '#/components/schemas/model.kennel-version'
-        azurehound_enterprise:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-version'
+            $ref: '#/components/schemas/model.collector-version'
     model.kennel-manifest:
       type: object
       properties:
@@ -210,6 +232,47 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/model.kennel-version'
+    model.kennel-enterprise-manifest:
+      type: object
+      properties:
+        sharphound_enterprise:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-version'
+        azurehound_enterprise:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-version'
+    model.kennel-version:
+      type: object
+      properties:
+        version:
+          type: string
+        version_meta:
+          $ref: '#/components/schemas/model.version-meta'
+        release_date:
+          type: string
+          format: date-time
+        release_assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/model.kennel-asset'
+    model.collector-version:
+      type: object
+      properties:
+        version:
+          type: string
+        sha256sum:
+          type: string
+        deprecated:
+          type: boolean
+    enum.client-type:
+      type: string
+      description: This enum describes the collector client type.
+      enum:
+      - sharphound
+      - azurehound
+      - openhound
     api.error-wrapper:
       type: object
       description: ''
@@ -232,38 +295,6 @@ components:
           items:
             $ref: '#/components/schemas/api.error-detail'
           description: The error(s) that occurred from processing the request
-    model.kennel-version:
-      type: object
-      properties:
-        version:
-          type: string
-        version_meta:
-          $ref: '#/components/schemas/model.version-meta'
-        release_date:
-          type: string
-          format: date-time
-        release_assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.kennel-asset'
-    enum.client-type:
-      type: string
-      description: This enum describes the collector client type.
-      enum:
-      - sharphound
-      - azurehound
-      - openhound
-    model.version-meta:
-      type: object
-      properties:
-        major:
-          type: integer
-        minor:
-          type: integer
-        patch:
-          type: integer
-        prerelease:
-          type: string
     api.error-detail:
       type: object
       properties:
@@ -273,38 +304,36 @@ components:
         message:
           type: string
           description: A human-readable description of the error
-    model.kennel-asset:
-      type: object
-      properties:
-        name:
-          type: string
-        download_url:
-          type: string
-        checksum_download_url:
-          type: string
-        os:
-          type: string
-        arch:
-          type: string
-    model.collector-version:
-      type: object
-      properties:
-        version:
-          type: string
-        sha256sum:
-          type: string
-        deprecated:
-          type: boolean
-    model.collector-manifest:
-      type: object
-      properties:
-        latest:
-          type: string
-        versions:
-          type: array
-          items:
-            $ref: '#/components/schemas/model.collector-version'
+  parameters:
+    header.prefer:
+      name: Prefer
+      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
+      in: header
+      required: false
+      schema:
+        type: string
+        default: wait=30
+        pattern: ^wait=(-1|[0-9]+)$
   responses:
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
     unauthorized:
       description: '**Unauthorized**
 
@@ -326,6 +355,29 @@ components:
             errors:
             - context: login
               message: Unauthorized
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
     internal-server-error:
       description: '**Internal Server Error**
 
@@ -363,58 +415,6 @@ components:
             type: string
             format: binary
           example: '[this request has a binary response]'
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
-  parameters:
-    header.prefer:
-      name: Prefer
-      description: Prefer header, used to specify a custom timeout in seconds using the wait parameter as per RFC7240. Passing in wait=-1 bypasses all timeout limits when the feature is enabled.
-      in: header
-      required: false
-      schema:
-        type: string
-        default: wait=30
-        pattern: ^wait=(-1|[0-9]+)$
   securitySchemes:
     JWTBearerToken:
       description: '`Authorization: Bearer $JWT_TOKEN`

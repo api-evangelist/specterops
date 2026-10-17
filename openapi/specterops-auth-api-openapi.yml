@@ -648,216 +648,7 @@ paths:
         '500':
           $ref: '#/components/responses/internal-server-error'
 components:
-  responses:
-    too-many-requests:
-      description: '**Too Many Requests**
-
-        The client has sent too many requests within a certain time window
-
-        and tripped the rate limiting middleware.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 429
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: middleware
-              message: Too many requests. Please try again later.
-    unauthorized:
-      description: '**Unauthorized**
-
-        This endpoint failed an authentication requirement. Either the client tried to access
-
-        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
-
-        credentials or expired token).
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 401
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: login
-              message: Unauthorized
-    internal-server-error:
-      description: '**Internal Server Error**
-
-        This is usually the result of either an unexpected database or application error.
-
-        The client may try modifying or resending the request, but the error is likely not related to the client
-
-        doing something wrong.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 500
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The request could not be handled due to an unexpected database error.
-    bad-request:
-      description: '**Bad Request**
-
-        This could be due to one of the following reasons:
-
-        - JSON payload is missing or malformed
-
-        - Path or query parameters are missing or invalid/malformed
-
-        - The data sent is not valid (ex- sending a `string` in an `integer` field)
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 400
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The JSON payload could not be unmarshalled.
-    not-found:
-      description: '**Not Found**
-
-        This error typically comes from operations where a valid ID was passed to the request
-
-        to look up an entity but the entity could not be found.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 404
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: The requested client could not be found.
-    forbidden:
-      description: '**Forbidden**
-
-        This is most commonly caused by an authenticated client trying to
-
-        access a resource that it does not have permission for.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/api.error-wrapper'
-          example:
-            http_status: 403
-            timestamp: '2024-02-19T19:27:43.866Z'
-            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            errors:
-            - context: clients
-              message: You do not have permission to access this resource
   schemas:
-    null.int64:
-      type: object
-      properties:
-        int64:
-          type: integer
-          format: int64
-        valid:
-          description: Valid is true if `int64` is not `null`.
-          type: boolean
-    model.role:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          name:
-            type: string
-            readOnly: true
-          description:
-            type: string
-            readOnly: true
-          permissions:
-            type: array
-            readOnly: true
-            items:
-              $ref: '#/components/schemas/model.permission'
-    model.components.int64.id:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          readOnly: true
-          description: This is the unique identifier for this object.
-    model.auth-secret:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          digest_method:
-            type: string
-          expires_at:
-            type: string
-            format: date-time
-          totp_activated:
-            type: boolean
-    null.uuid:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        valid:
-          description: Valid is true if `uuid` is not `null`.
-          type: boolean
-    model.auth-provider:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          description: Unique identifier for the SSO provider
-        name:
-          type: string
-          description: Name of the SSO provider
-        type:
-          type: string
-          description: Type of SSO provider (SAML or OIDC)
-        slug:
-          type: string
-          description: URL-friendly identifier for the provider
-        details:
-          oneOf:
-          - $ref: '#/components/schemas/model.oidc-provider'
-          - $ref: '#/components/schemas/model.saml-provider'
-    null.time:
-      type: object
-      properties:
-        time:
-          type: string
-          format: date-time
-          description: An RFC-3339 formatted string
-        valid:
-          description: Valid is true if `time` is not `null`.
-          type: boolean
     model.user:
       allOf:
       - $ref: '#/components/schemas/model.components.uuid'
@@ -907,6 +698,123 @@ components:
           eula_accepted:
             type: boolean
             readOnly: true
+    model.role:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          name:
+            type: string
+            readOnly: true
+          description:
+            type: string
+            readOnly: true
+          permissions:
+            type: array
+            readOnly: true
+            items:
+              $ref: '#/components/schemas/model.permission'
+    enum.client-type:
+      type: string
+      description: This enum describes the collector client type.
+      enum:
+      - sharphound
+      - azurehound
+      - openhound
+    null.time:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: An RFC-3339 formatted string
+        valid:
+          description: Valid is true if `time` is not `null`.
+          type: boolean
+    api.error-detail:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The context in which the error took place
+        message:
+          type: string
+          description: A human-readable description of the error
+    model.auth-provider:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Unique identifier for the SSO provider
+        name:
+          type: string
+          description: Name of the SSO provider
+        type:
+          type: string
+          description: Type of SSO provider (SAML or OIDC)
+        slug:
+          type: string
+          description: URL-friendly identifier for the provider
+        details:
+          oneOf:
+          - $ref: '#/components/schemas/model.oidc-provider'
+          - $ref: '#/components/schemas/model.saml-provider'
+    model.components.timestamps:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/null.time'
+    model.components.int32.id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+          description: This is the unique identifier for this object.
+    null.int64:
+      type: object
+      properties:
+        int64:
+          type: integer
+          format: int64
+        valid:
+          description: Valid is true if `int64` is not `null`.
+          type: boolean
+    null.uuid:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        valid:
+          description: Valid is true if `uuid` is not `null`.
+          type: boolean
+    model.oidc-provider:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          client_id:
+            type: string
+          issuer:
+            type: string
+          sso_provider_id:
+            type: integer
+            format: int32
     model.auth-token:
       allOf:
       - $ref: '#/components/schemas/model.components.uuid'
@@ -936,15 +844,6 @@ components:
             readOnly: true
             allOf:
             - $ref: '#/components/schemas/null.uuid'
-    api.error-detail:
-      type: object
-      properties:
-        context:
-          type: string
-          description: The context in which the error took place
-        message:
-          type: string
-          description: A human-readable description of the error
     model.client-scheduled-job:
       allOf:
       - $ref: '#/components/schemas/model.components.int64.id'
@@ -1019,6 +918,27 @@ components:
             readOnly: true
             items:
               $ref: '#/components/schemas/model.domain-collection-result'
+    model.saml-sign-on-endpoint:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+        idp_url:
+          type: string
+          readOnly: true
+    model.permission:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          authority:
+            type: string
+            readOnly: true
+          name:
+            type: string
+            readOnly: true
     model.client-schedule:
       allOf:
       - $ref: '#/components/schemas/model.components.int32.id'
@@ -1057,51 +977,12 @@ components:
             type: array
             items:
               type: string
-    model.saml-provider:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          name:
-            type: string
-            readOnly: true
-          display_name:
-            type: string
-            readOnly: true
-          idp_issuer_uri:
-            type: string
-            readOnly: true
-          idp_sso_uri:
-            type: string
-            readOnly: true
-          principal_attribute_mappings:
-            type: array
-            readOnly: true
-            items:
-              type: string
-          sp_issuer_uri:
-            type: string
-            readOnly: true
-          sp_sso_uri:
-            type: string
-            readOnly: true
-          sp_metadata_uri:
-            type: string
-            readOnly: true
-          sp_acs_uri:
-            type: string
-            readOnly: true
-          sso_provider_id:
-            readOnly: true
-            allOf:
-            - $ref: '#/components/schemas/null.int32'
-    model.components.uuid:
+    model.components.int64.id:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           readOnly: true
           description: This is the unique identifier for this object.
     enum.job-status:
@@ -1140,144 +1021,19 @@ components:
       - 6
       - 7
       - 8
-    model.components.timestamps:
-      type: object
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        deleted_at:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/null.time'
-    api.response.authenticated-requester:
-      type: object
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/model.user'
-          - $ref: '#/components/schemas/model.client'
-    model.components.int32.id:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          readOnly: true
-          description: This is the unique identifier for this object.
-    model.oidc-provider:
+    model.auth-secret:
       allOf:
       - $ref: '#/components/schemas/model.components.int32.id'
       - $ref: '#/components/schemas/model.components.timestamps'
       - type: object
         properties:
-          client_id:
+          digest_method:
             type: string
-          issuer:
+          expires_at:
             type: string
-          sso_provider_id:
-            type: integer
-            format: int32
-    api.error-wrapper:
-      type: object
-      description: ''
-      properties:
-        http_status:
-          type: integer
-          description: The HTTP status code
-          minimum: 100
-          maximum: 600
-        timestamp:
-          type: string
-          format: date-time
-          description: The RFC-3339 timestamp in which the error response was sent
-        request_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the request that failed
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/api.error-detail'
-          description: The error(s) that occurred from processing the request
-    model.domain-collection-result:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int64.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          job_id:
-            type: integer
-            format: int64
-          domain_name:
-            description: Name of the domain that was enumerated
-            type: string
-          success:
-            description: A boolean value indicating whether the domain enumeration succeeded
+            format: date-time
+          totp_activated:
             type: boolean
-          message:
-            description: A status message for a domain enumeration result
-            type: string
-          user_count:
-            description: A count of users enumerated
-            type: integer
-          group_count:
-            description: A count of groups enumerated
-            type: integer
-          computer_count:
-            description: A count of computers enumerated
-            type: integer
-          gpo_count:
-            description: A count of gpos enumerated
-            type: integer
-          ou_count:
-            description: A count of ous enumerated
-            type: integer
-          container_count:
-            description: A count of containers enumerated
-            type: integer
-          aiaca_count:
-            description: A count of aiacas enumerated
-            type: integer
-          rootca_count:
-            description: A count of rootcas enumerated
-            type: integer
-          enterpriseca_count:
-            description: A count of enterprisecas enumerated
-            type: integer
-          ntauthstore_count:
-            description: A count of ntauthstores enumerated
-            type: integer
-          certtemplate_count:
-            description: A count of certtemplates enumerated
-            type: integer
-          deleted_count:
-            description: A count of deleted objects enumerated
-            type: integer
-    enum.client-type:
-      type: string
-      description: This enum describes the collector client type.
-      enum:
-      - sharphound
-      - azurehound
-      - openhound
-    model.permission:
-      allOf:
-      - $ref: '#/components/schemas/model.components.int32.id'
-      - $ref: '#/components/schemas/model.components.timestamps'
-      - type: object
-        properties:
-          authority:
-            type: string
-            readOnly: true
-          name:
-            type: string
-            readOnly: true
     model.client:
       allOf:
       - $ref: '#/components/schemas/model.components.uuid'
@@ -1338,6 +1094,60 @@ components:
             readOnly: true
             allOf:
             - $ref: '#/components/schemas/enum.client-type'
+    model.domain-collection-result:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int64.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          job_id:
+            type: integer
+            format: int64
+          domain_name:
+            description: Name of the domain that was enumerated
+            type: string
+          success:
+            description: A boolean value indicating whether the domain enumeration succeeded
+            type: boolean
+          message:
+            description: A status message for a domain enumeration result
+            type: string
+          user_count:
+            description: A count of users enumerated
+            type: integer
+          group_count:
+            description: A count of groups enumerated
+            type: integer
+          computer_count:
+            description: A count of computers enumerated
+            type: integer
+          gpo_count:
+            description: A count of gpos enumerated
+            type: integer
+          ou_count:
+            description: A count of ous enumerated
+            type: integer
+          container_count:
+            description: A count of containers enumerated
+            type: integer
+          aiaca_count:
+            description: A count of aiacas enumerated
+            type: integer
+          rootca_count:
+            description: A count of rootcas enumerated
+            type: integer
+          enterpriseca_count:
+            description: A count of enterprisecas enumerated
+            type: integer
+          ntauthstore_count:
+            description: A count of ntauthstores enumerated
+            type: integer
+          certtemplate_count:
+            description: A count of certtemplates enumerated
+            type: integer
+          deleted_count:
+            description: A count of deleted objects enumerated
+            type: integer
     null.int32:
       type: object
       properties:
@@ -1347,6 +1157,35 @@ components:
         valid:
           description: Valid is true if `int32` is not `null`.
           type: boolean
+    api.response.authenticated-requester:
+      type: object
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/model.user'
+          - $ref: '#/components/schemas/model.client'
+    api.error-wrapper:
+      type: object
+      description: ''
+      properties:
+        http_status:
+          type: integer
+          description: The HTTP status code
+          minimum: 100
+          maximum: 600
+        timestamp:
+          type: string
+          format: date-time
+          description: The RFC-3339 timestamp in which the error response was sent
+        request_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the request that failed
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.error-detail'
+          description: The error(s) that occurred from processing the request
     null.string:
       type: object
       properties:
@@ -1355,15 +1194,176 @@ components:
         valid:
           description: Valid is true if `string` is not `null`
           type: boolean
-    model.saml-sign-on-endpoint:
+    model.saml-provider:
+      allOf:
+      - $ref: '#/components/schemas/model.components.int32.id'
+      - $ref: '#/components/schemas/model.components.timestamps'
+      - type: object
+        properties:
+          name:
+            type: string
+            readOnly: true
+          display_name:
+            type: string
+            readOnly: true
+          idp_issuer_uri:
+            type: string
+            readOnly: true
+          idp_sso_uri:
+            type: string
+            readOnly: true
+          principal_attribute_mappings:
+            type: array
+            readOnly: true
+            items:
+              type: string
+          sp_issuer_uri:
+            type: string
+            readOnly: true
+          sp_sso_uri:
+            type: string
+            readOnly: true
+          sp_metadata_uri:
+            type: string
+            readOnly: true
+          sp_acs_uri:
+            type: string
+            readOnly: true
+          sso_provider_id:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/null.int32'
+    model.components.uuid:
       type: object
       properties:
-        name:
+        id:
           type: string
+          format: uuid
           readOnly: true
-        idp_url:
-          type: string
-          readOnly: true
+          description: This is the unique identifier for this object.
+  responses:
+    unauthorized:
+      description: '**Unauthorized**
+
+        This endpoint failed an authentication requirement. Either the client tried to access
+
+        a protected endpoint without being authenticated, or an auth validation failed (ex- invalid
+
+        credentials or expired token).
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 401
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: login
+              message: Unauthorized
+    too-many-requests:
+      description: '**Too Many Requests**
+
+        The client has sent too many requests within a certain time window
+
+        and tripped the rate limiting middleware.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 429
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: middleware
+              message: Too many requests. Please try again later.
+    forbidden:
+      description: '**Forbidden**
+
+        This is most commonly caused by an authenticated client trying to
+
+        access a resource that it does not have permission for.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 403
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: You do not have permission to access this resource
+    not-found:
+      description: '**Not Found**
+
+        This error typically comes from operations where a valid ID was passed to the request
+
+        to look up an entity but the entity could not be found.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 404
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The requested client could not be found.
+    bad-request:
+      description: '**Bad Request**
+
+        This could be due to one of the following reasons:
+
+        - JSON payload is missing or malformed
+
+        - Path or query parameters are missing or invalid/malformed
+
+        - The data sent is not valid (ex- sending a `string` in an `integer` field)
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 400
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The JSON payload could not be unmarshalled.
+    internal-server-error:
+      description: '**Internal Server Error**
+
+        This is usually the result of either an unexpected database or application error.
+
+        The client may try modifying or resending the request, but the error is likely not related to the client
+
+        doing something wrong.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/api.error-wrapper'
+          example:
+            http_status: 500
+            timestamp: '2024-02-19T19:27:43.866Z'
+            request_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            errors:
+            - context: clients
+              message: The request could not be handled due to an unexpected database error.
   parameters:
     header.prefer:
       name: Prefer
