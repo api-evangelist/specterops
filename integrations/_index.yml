@@ -53,3 +53,34 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: specterops-pypi
+  label: PyPI
+  partner: pypi
+  partner_name: PyPI
+  category: official SDK (Python)
+  type: register
+  channel: package-registry
+  evidence: https://pypi.org/project/blood-hound-python-client/
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: PyPI (public registry JSON)
+    spec_file: null
+    language: Python
+    packages:
+    - name: blood-hound-python-client
+      version: 2.0.0
+      released: '2024-10-01'
+      released_field: upload_time
+      lapsed: true
+      page: https://pypi.org/project/blood-hound-python-client/
+      repo_leg: github-org:specterops
+      publisher_leg: email:specterops.io
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
